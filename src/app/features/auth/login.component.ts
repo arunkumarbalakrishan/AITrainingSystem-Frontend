@@ -28,7 +28,7 @@ import { LoginMascotComponent } from './login-mascot.component';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink, LoginMascotComponent],
   templateUrl: './login.component.html',
-  styles: [],
+  styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit, OnDestroy {

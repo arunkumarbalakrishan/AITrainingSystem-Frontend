@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './login-mascot.component.html',
+  styleUrl: './login-mascot.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginMascotComponent {

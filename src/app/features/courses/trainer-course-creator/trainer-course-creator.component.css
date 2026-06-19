@@ -1,0 +1,70 @@
+/* Wizard Steps styling */
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.step-indicator.active {
+  opacity: 1;
+}
+
+.step-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--bs-light);
+  color: var(--bs-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active .step-circle {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.step-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.step-indicator.active .step-label {
+  color: var(--primary-color);
+}
+
+.step-line {
+  height: 2px;
+  width: 50px;
+  background-color: var(--bs-border-color);
+  margin-bottom: 24px;
+  transition: background-color 0.3s ease;
+}
+
+.step-line.active {
+  background-color: var(--primary-color);
+}
+
+.border-dashed {
+  border-style: dashed !important;
+  border-width: 2px !important;
+  border-color: #cbd5e1 !important;
+}
+
+input.form-control, textarea.form-control {
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+}
+input.form-control:focus, textarea.form-control:focus {
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+}

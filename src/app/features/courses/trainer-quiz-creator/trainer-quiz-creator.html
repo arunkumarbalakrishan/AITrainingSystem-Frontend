@@ -1,0 +1,268 @@
+<div class="container py-5 mt-4 animate-fade-in">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Wizard Header -->
+      <div class="text-center mb-5">
+        <h2 class="fw-bold" style="letter-spacing: -0.5px">Trainer Quiz Creator</h2>
+        <p class="text-muted">Attach an assessment to an existing course</p>
+
+        <!-- Progress Steps -->
+        <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+          <div class="step-indicator" [class.active]="true">
+            <div class="step-circle"><i class="bi bi-journal-check"></i></div>
+            <span class="step-label">Select Course</span>
+          </div>
+          <div class="step-line" [class.active]="selectedCourseId !== ''"></div>
+          <div class="step-indicator" [class.active]="selectedCourseId !== ''">
+            <div class="step-circle"><i class="bi bi-ui-checks"></i></div>
+            <span class="step-label">Build Assessment</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="premium-card p-4 p-md-5 mb-4">
+        <h4 class="fw-bold mb-4 border-bottom pb-3">1. Select Course</h4>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold"
+            >Which course is this quiz for? <span class="text-danger ms-1">*</span></label
+          >
+          <select
+            class="form-select form-select-lg border-0 shadow-sm"
+            [(ngModel)]="selectedCourseId"
+          >
+            <option value="" disabled selected>-- Select a Course --</option>
+            <option *ngFor="let course of courses" [value]="course.id || course.Id">
+              {{ course.title || course.Title }}
+            </option>
+          </select>
+          <div *ngIf="courses.length === 0" class="form-text text-warning mt-2">
+            <i class="bi bi-exclamation-triangle me-1"></i> You don't have any courses yet.
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: ADD QUIZZES -->
+      <div class="premium-card p-4 p-md-5" *ngIf="selectedCourseId">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold mb-0">2. Build Assessment</h4>
+        </div>
+
+        <div class="row g-4">
+          <!-- Create Quiz Form -->
+          <div class="col-12">
+            <div class="bg-light p-4 rounded-4 border border-white shadow-sm">
+              <h6 class="fw-bold mb-3 text-primary">New Quiz Configuration</h6>
+
+              <div class="row g-3 mb-4">
+                <div class="col-md-8">
+                  <label class="form-label fw-semibold small"
+                    >Quiz Title <span class="text-danger ms-1">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control border-0 shadow-none"
+                    [(ngModel)]="quizForm.title"
+                    placeholder="e.g. End of Course Final Exam"
+                  />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold small">Passing Score (%)</label>
+                  <input
+                    type="number"
+                    class="form-control border-0 shadow-none"
+                    [(ngModel)]="quizForm.passingScore"
+                    min="1"
+                    max="100"
+                  />
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold small">Description</label>
+                  <textarea
+                    class="form-control border-0 shadow-none"
+                    rows="2"
+                    [(ngModel)]="quizForm.description"
+                    placeholder="Instructions for students..."
+                  ></textarea>
+                </div>
+                <div class="col-12">
+                  <div class="form-check form-switch mt-2">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="isFinalSwitch"
+                      [(ngModel)]="quizForm.isFinal"
+                    />
+                    <label class="form-check-label ms-2 text-muted fw-semibold" for="isFinalSwitch"
+                      >This is a Final Exam (Issues Certificate upon Passing)</label
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question Builder -->
+              <div class="premium-card p-3 bg-white border-0 shadow-sm mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="fw-bold mb-0 text-dark">
+                    {{ editingQuestionIndex !== null ? 'Edit Question' : 'Build Question' }}
+                  </h6>
+                  <button
+                    class="btn btn-sm btn-outline-premium rounded-pill px-3"
+                    (click)="generateQuizWithAI()"
+                    [disabled]="isGeneratingQuiz"
+                  >
+                    <span
+                      *ngIf="isGeneratingQuiz"
+                      class="spinner-border spinner-border-sm me-1"
+                      role="status"
+                    ></span>
+                    <i class="bi bi-magic me-1" *ngIf="!isGeneratingQuiz"></i> Auto-Generate with AI
+                  </button>
+                </div>
+
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="questionForm.text"
+                    placeholder="Question Text (e.g. What does API stand for?)"
+                  />
+                </div>
+
+                <div class="d-flex gap-2 mb-3 align-items-end">
+                  <div class="flex-grow-1">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      [(ngModel)]="optionForm.optionText"
+                      placeholder="Add an option..."
+                    />
+                  </div>
+                  <div class="form-check d-flex align-items-center mb-1">
+                    <input
+                      class="form-check-input mt-0 me-2"
+                      type="checkbox"
+                      [(ngModel)]="optionForm.isCorrect"
+                      id="isCorrectCheck"
+                    />
+                    <label class="form-check-label small text-muted" for="isCorrectCheck"
+                      >Correct Option</label
+                    >
+                  </div>
+                  <button class="btn btn-sm btn-outline-primary" (click)="addOption()">
+                    Add Option
+                  </button>
+                </div>
+
+                <!-- Draft Options List -->
+                <div
+                  *ngIf="currentOptions.length > 0"
+                  class="mb-3 ps-3 border-start border-2 border-primary"
+                >
+                  <div
+                    *ngFor="let opt of currentOptions; let i = index"
+                    class="d-flex justify-content-between align-items-center mb-1 py-1 px-2 rounded"
+                    [class.bg-success-subtle]="opt.isCorrect"
+                    [class.bg-light]="!opt.isCorrect"
+                  >
+                    <span style="font-size: 0.9rem">
+                      <i
+                        class="bi"
+                        [class.bi-check-circle-fill.text-success]="opt.isCorrect"
+                        [class.bi-circle.text-muted]="!opt.isCorrect"
+                      ></i>
+                      {{ opt.optionText }}
+                    </span>
+                    <button class="btn btn-sm btn-link text-danger p-0" (click)="removeOption(i)">
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                  <button
+                    *ngIf="editingQuestionIndex !== null"
+                    class="btn btn-sm btn-outline-secondary rounded-pill px-3"
+                    (click)="cancelEditQuestion()"
+                  >
+                    Cancel Edit
+                  </button>
+                  <button class="btn btn-sm btn-primary rounded-pill px-4" (click)="addQuestion()">
+                    <i
+                      class="bi"
+                      [class.bi-check-lg]="editingQuestionIndex !== null"
+                      [class.bi-plus-lg]="editingQuestionIndex === null"
+                    ></i>
+                    {{
+                      editingQuestionIndex !== null ? 'Update Question' : 'Save Question to Draft'
+                    }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Draft Questions List -->
+              <div *ngIf="questions.length > 0" class="mb-4">
+                <h6 class="fw-bold mb-2 text-muted small text-uppercase">
+                  Drafted Questions ({{ questions.length }})
+                </h6>
+                <div
+                  *ngFor="let q of questions; let i = index"
+                  class="bg-white p-3 rounded mb-2 border animate-fade-in"
+                >
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold">{{ i + 1 }}. {{ q.text }}</span>
+                    <div class="d-flex gap-2">
+                      <button
+                        class="btn btn-sm btn-link text-primary p-0"
+                        (click)="editQuestion(i)"
+                        title="Edit"
+                      >
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                      <button
+                        class="btn btn-sm btn-link text-danger p-0"
+                        (click)="removeQuestion(i)"
+                        title="Delete"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ps-3 mt-2 small text-muted">
+                    <div
+                      *ngFor="let o of q.options"
+                      [class.text-success]="o.isCorrect"
+                      [class.fw-bold]="o.isCorrect"
+                    >
+                      - {{ o.optionText }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between border-top pt-4">
+                <button class="btn btn-light rounded-pill px-4 fw-bold" (click)="goBack()">
+                  Cancel
+                </button>
+                <button
+                  class="btn btn-success px-5 py-2 rounded-pill fw-bold shadow-lg"
+                  (click)="saveQuiz()"
+                  [disabled]="
+                    questions.length === 0 || !quizForm.title || !selectedCourseId || isSubmitting
+                  "
+                >
+                  <span
+                    *ngIf="isSubmitting"
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                  ></span>
+                  Publish Quiz to Course <i class="bi bi-cloud-check ms-2"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

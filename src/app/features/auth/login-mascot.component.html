@@ -1,0 +1,366 @@
+<div
+  class="mascot-container-outer"
+  style="
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  "
+>
+  <!-- Tier 1: Background Parallax Layer (Ambient Glow, Grid, Star clusters) -->
+  <div
+    class="floating-element-layer"
+    [style.transform]="bgParallaxStyle()"
+    style="position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 1"
+  >
+    <div class="mascot-ambient-glow"></div>
+
+    <!-- Floating AI Nodes -->
+    <svg class="floating-element floating-nodes" width="60" height="60" viewBox="0 0 60 60">
+      <circle cx="30" cy="15" r="5" fill="#8B5CF6" />
+      <circle cx="15" cy="40" r="5" fill="#6C63FF" />
+      <circle cx="45" cy="40" r="5" fill="#F59E0B" />
+      <line x1="30" y1="15" x2="15" y2="40" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
+      <line x1="30" y1="15" x2="45" y2="40" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
+      <line x1="15" y1="40" x2="45" y2="40" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
+    </svg>
+  </div>
+
+  <!-- Tier 2: Middle Parallax Layer (Mascot study guide body) -->
+  <div
+    class="mascot-layer"
+    [style.transform]="middleParallaxStyle()"
+    style="
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    "
+  >
+    <div
+      class="mascot-container"
+      [class.cover-eyes]="typingPassword()"
+      [class.happy-state]="formValid() && !sadState() && !celebrate()"
+      [class.sad-state]="sadState()"
+      [class.mascot-celebrate]="celebrate()"
+    >
+      <svg class="mascot-svg-wrapper" viewBox="0 0 320 340">
+        <!-- Floating Shadow -->
+        <ellipse class="mascot-base-shadow" cx="160" cy="315" rx="75" ry="12" />
+
+        <!-- Floating Mascot Body Group -->
+        <g class="mascot-body-float">
+          <!-- Antennas / Ears -->
+          <!-- Left ear/speaker -->
+          <rect x="75" y="115" width="20" height="30" rx="8" fill="url(#metal-grad)" />
+          <circle cx="85" cy="130" r="4" fill="#6C63FF" />
+          <!-- Right ear/speaker -->
+          <rect x="225" y="115" width="20" height="30" rx="8" fill="url(#metal-grad)" />
+          <circle cx="235" cy="130" r="4" fill="#6C63FF" />
+
+          <!-- Antenna center -->
+          <line
+            x1="160"
+            y1="85"
+            x2="160"
+            y2="55"
+            stroke="#CBD5E1"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <circle class="streak-flame-svg" cx="160" cy="50" r="10" fill="#F59E0B" />
+
+          <!-- Torso -->
+          <rect
+            x="105"
+            y="185"
+            width="110"
+            height="85"
+            rx="28"
+            fill="url(#body-grad)"
+            stroke="#6C63FF"
+            stroke-width="2"
+          />
+          <!-- Heartbeat light on chest -->
+          <path
+            d="M 135 225 L 148 225 L 153 215 L 160 235 L 165 220 L 170 225 L 185 225"
+            fill="none"
+            stroke="#F59E0B"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+
+          <!-- Head -->
+          <rect
+            x="90"
+            y="85"
+            width="140"
+            height="100"
+            rx="32"
+            fill="url(#body-grad)"
+            stroke="#6C63FF"
+            stroke-width="2"
+          />
+
+          <!-- Screen Face -->
+          <rect
+            x="105"
+            y="100"
+            width="110"
+            height="70"
+            rx="18"
+            fill="#0F172A"
+            stroke="rgba(108, 99, 255, 0.4)"
+            stroke-width="3"
+          />
+
+          <!-- Graduation Cap directly on Head -->
+          <g transform="translate(0, 5)">
+            <!-- Cap base -->
+            <path
+              d="M 115 80 C 115 88 205 88 205 80"
+              fill="none"
+              stroke="#1E293B"
+              stroke-width="12"
+              stroke-linecap="round"
+            />
+            <!-- Diamond board -->
+            <polygon
+              points="160,50 100,68 160,86 220,68"
+              fill="#1E293B"
+              stroke="#0F172A"
+              stroke-width="2"
+            />
+            <!-- Yellow tassel -->
+            <path
+              d="M 160 68 L 205 76 L 205 92"
+              fill="none"
+              stroke="#F59E0B"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <circle cx="205" cy="94" r="3" fill="#F59E0B" />
+          </g>
+
+          <!-- Eyes & Expressions Container -->
+          <g class="mascot-screen-eyes">
+            <!-- Left Normal Eye -->
+            <circle class="mascot-eye-normal" cx="135" cy="135" r="13" />
+            <circle class="mascot-pupil" cx="135" cy="135" r="6" [style.transform]="pupilStyle()" />
+
+            <!-- Right Normal Eye -->
+            <circle class="mascot-eye-normal" cx="185" cy="135" r="13" />
+            <circle class="mascot-pupil" cx="185" cy="135" r="6" [style.transform]="pupilStyle()" />
+
+            <!-- Happy Eyes -->
+            <path
+              class="mascot-eye-happy"
+              fill="none"
+              stroke="#10B981"
+              stroke-width="5"
+              stroke-linecap="round"
+              d="M 125 138 A 10 10 0 0 1 145 138"
+            />
+            <path
+              class="mascot-eye-happy"
+              fill="none"
+              stroke="#10B981"
+              stroke-width="5"
+              stroke-linecap="round"
+              d="M 175 138 A 10 10 0 0 1 195 138"
+            />
+
+            <!-- Sad/Worried Eyes -->
+            <path
+              class="mascot-eye-sad"
+              fill="none"
+              stroke="#EF4444"
+              stroke-width="4"
+              stroke-linecap="round"
+              d="M 125 130 L 141 140 M 141 130 L 125 140"
+            />
+            <path
+              class="mascot-eye-sad"
+              fill="none"
+              stroke="#EF4444"
+              stroke-width="4"
+              stroke-linecap="round"
+              d="M 179 130 L 195 140 M 195 130 L 179 140"
+            />
+
+            <!-- Shut Eyes (Typing state) -->
+            <line
+              class="mascot-eye-shut"
+              x1="124"
+              y1="135"
+              x2="146"
+              y2="135"
+              stroke="#F59E0B"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+            <line
+              class="mascot-eye-shut"
+              x1="174"
+              y1="135"
+              x2="196"
+              y2="135"
+              stroke="#F59E0B"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+          </g>
+
+          <!-- Left Arm -->
+          <path
+            class="mascot-arm-left"
+            d="M 105 210 Q 75 215 85 240"
+            fill="none"
+            stroke="url(#body-grad)"
+            stroke-width="16"
+            stroke-linecap="round"
+          />
+          <!-- Right Arm -->
+          <path
+            class="mascot-arm-right"
+            d="M 215 210 Q 245 215 235 240"
+            fill="none"
+            stroke="url(#body-grad)"
+            stroke-width="16"
+            stroke-linecap="round"
+          />
+
+          <!-- Left Leg/Thruster -->
+          <path d="M 130 270 L 140 290 L 150 270 Z" fill="url(#metal-grad)" />
+          <!-- Right Leg/Thruster -->
+          <path d="M 170 270 L 180 290 L 190 270 Z" fill="url(#metal-grad)" />
+
+          <!-- Jet flame -->
+          <ellipse cx="140" cy="295" rx="5" ry="10" fill="#EF4444" class="streak-flame-svg" />
+          <ellipse cx="180" cy="295" rx="5" ry="10" fill="#EF4444" class="streak-flame-svg" />
+        </g>
+
+        <!-- SVG Gradients -->
+        <defs>
+          <linearGradient id="body-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FFFFFF" />
+            <stop offset="100%" stop-color="#E2E8F0" />
+          </linearGradient>
+          <linearGradient id="metal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#94A3B8" />
+            <stop offset="100%" stop-color="#475569" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Tier 3: Foreground Parallax Layer (Floating Education elements) -->
+  <div
+    class="floating-items-layer"
+    [style.transform]="fgParallaxStyle()"
+    style="position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 3"
+  >
+    <!-- Floating Graduation Cap -->
+    <svg class="floating-element floating-cap" width="50" height="50" viewBox="0 0 50 50">
+      <polygon points="25,10 5,20 25,30 45,20" fill="#6C63FF" />
+      <path
+        d="M 12,23 L 12,35 C 12,40 38,40 38,35 L 38,23"
+        fill="none"
+        stroke="#6C63FF"
+        stroke-width="4"
+        stroke-linecap="round"
+      />
+      <path
+        d="M 25,30 L 40,32 L 40,42"
+        fill="none"
+        stroke="#F59E0B"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+    </svg>
+
+    <!-- Floating Certificate -->
+    <svg class="floating-element floating-cert" width="50" height="50" viewBox="0 0 50 50">
+      <rect
+        x="5"
+        y="8"
+        width="40"
+        height="34"
+        rx="4"
+        fill="#FFFFFF"
+        stroke="#8B5CF6"
+        stroke-width="3"
+      />
+      <line
+        x1="12"
+        y1="16"
+        x2="38"
+        y2="16"
+        stroke="#8B5CF6"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <line
+        x1="12"
+        y1="24"
+        x2="30"
+        y2="24"
+        stroke="#CBD5E1"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <line
+        x1="12"
+        y1="32"
+        x2="24"
+        y2="32"
+        stroke="#CBD5E1"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <circle cx="34" cy="28" r="4" fill="#F59E0B" />
+    </svg>
+
+    <!-- Floating Books -->
+    <svg class="floating-element floating-book" width="50" height="50" viewBox="0 0 50 50">
+      <!-- Book spine & cover -->
+      <path d="M 8,42 L 38,42 C 41,42 43,40 43,37 L 43,8 C 43,5 41,3 38,3 L 8,3 Z" fill="#F59E0B" />
+      <path
+        d="M 12,42 L 38,42 C 40,42 41,41 41,39 L 41,6 C 41,4 40,3 38,3 L 12,3 Z"
+        fill="#FFFFFF"
+      />
+      <line
+        x1="18"
+        y1="12"
+        x2="32"
+        y2="12"
+        stroke="#F59E0B"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <line
+        x1="18"
+        y1="20"
+        x2="32"
+        y2="20"
+        stroke="#F59E0B"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <line
+        x1="18"
+        y1="28"
+        x2="26"
+        y2="28"
+        stroke="#F59E0B"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+    </svg>
+  </div>
+</div>

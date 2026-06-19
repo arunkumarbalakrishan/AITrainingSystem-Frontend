@@ -1,0 +1,214 @@
+<div class="container py-5 mt-4 animate-fade-in">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Wizard Header -->
+      <div class="text-center mb-5">
+        <h2 class="fw-bold" style="letter-spacing: -0.5px">Trainer Lesson Creator</h2>
+        <p class="text-muted">Add lessons and upload videos to an existing course</p>
+
+        <!-- Progress Steps -->
+        <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+          <div class="step-indicator" [class.active]="true">
+            <div class="step-circle"><i class="bi bi-journal-check"></i></div>
+            <span class="step-label">Select Course</span>
+          </div>
+          <div class="step-line" [class.active]="selectedCourseId !== ''"></div>
+          <div class="step-indicator" [class.active]="selectedCourseId !== ''">
+            <div class="step-circle"><i class="bi bi-collection-play"></i></div>
+            <span class="step-label">Lessons & Media</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 1: SELECT COURSE -->
+      <div class="premium-card p-4 p-md-5 mb-4">
+        <h4 class="fw-bold mb-4 border-bottom pb-3">1. Select Course</h4>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold"
+            >Which course do you want to edit? <span class="text-danger ms-1">*</span></label
+          >
+          <select
+            class="form-select form-select-lg border-0 shadow-sm"
+            [(ngModel)]="selectedCourseId"
+            (change)="onCourseSelected()"
+          >
+            <option value="" disabled selected>-- Select a Course --</option>
+            <option *ngFor="let course of courses" [value]="course.id || course.Id">
+              {{ course.title || course.Title }}
+            </option>
+          </select>
+          <div *ngIf="courses.length === 0" class="form-text text-warning mt-2">
+            <i class="bi bi-exclamation-triangle me-1"></i> You don't have any courses yet.
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: ADD LESSONS & UPLOAD VIDEO -->
+      <div class="premium-card p-4 p-md-5" *ngIf="selectedCourseId">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold mb-0">2. Add Lessons & Videos</h4>
+        </div>
+
+        <!-- Add New Lesson Form -->
+        <div class="bg-light p-4 rounded-4 mb-4 border border-white shadow-sm">
+          <h6 class="fw-bold mb-3 text-primary">Create a New Lesson</h6>
+          <div class="row g-3">
+            <div class="col-md-8">
+              <input
+                type="text"
+                class="form-control border-0 shadow-none"
+                [(ngModel)]="lessonForm.title"
+                placeholder="Lesson Title (e.g. Introduction to Neural Networks)"
+              />
+            </div>
+            <div class="col-md-4">
+              <input
+                type="number"
+                class="form-control border-0 shadow-none"
+                [(ngModel)]="lessonForm.durationInMinutes"
+                placeholder="Duration (Mins)"
+              />
+            </div>
+            <div class="col-12">
+              <textarea
+                class="form-control border-0 shadow-none"
+                rows="2"
+                [(ngModel)]="lessonForm.description"
+                placeholder="Short description of this lesson..."
+              ></textarea>
+            </div>
+            <div class="col-12 d-flex align-items-center justify-content-between">
+              <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id="previewSwitch"
+                  [(ngModel)]="lessonForm.isPreviewFree"
+                />
+                <label class="form-check-label ms-2 text-muted" for="previewSwitch"
+                  >Make preview free?</label
+                >
+              </div>
+              <button
+                class="btn btn-primary px-4 rounded-pill"
+                (click)="addLesson()"
+                [disabled]="isSubmitting || !lessonForm.title"
+              >
+                <span
+                  *ngIf="isSubmitting"
+                  class="spinner-border spinner-border-sm me-1"
+                  role="status"
+                ></span>
+                <i class="bi bi-plus-lg me-1" *ngIf="!isSubmitting"></i> Add Lesson
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- List of Created Lessons with Video Upload UI -->
+        <div *ngIf="lessons.length > 0" class="mb-4">
+          <h6
+            class="fw-bold mb-3 text-muted text-uppercase"
+            style="font-size: 0.8rem; letter-spacing: 1px"
+          >
+            Curriculum Overview
+          </h6>
+
+          <div class="list-group">
+            <div
+              *ngFor="let lesson of lessons; let i = index"
+              class="list-group-item list-group-item-action p-3 mb-2 border-0 rounded-4 shadow-sm d-flex align-items-center justify-content-between"
+              style="background: white"
+            >
+              <div class="d-flex align-items-center gap-3">
+                <div
+                  class="bg-light text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                  style="width: 40px; height: 40px"
+                >
+                  {{ i + 1 }}
+                </div>
+                <div>
+                  <h6 class="mb-1 fw-bold">{{ lesson.title }}</h6>
+                  <small class="text-muted"
+                    ><i class="bi bi-clock me-1"></i>{{ lesson.durationInMinutes }} mins</small
+                  >
+                </div>
+              </div>
+
+              <!-- Media Upload Section for this Lesson -->
+              <div class="d-flex align-items-center gap-2">
+                <ng-container *ngIf="lesson.hasVideo; else uploadBtn">
+                  <span
+                    class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill"
+                  >
+                    <i class="bi bi-check-circle-fill me-1"></i> Video Uploaded
+                  </span>
+                </ng-container>
+                <ng-template #uploadBtn>
+                  <div
+                    class="position-relative overflow-hidden"
+                    *ngIf="uploadingLessonId !== lesson.id"
+                  >
+                    <button class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                      <i class="bi bi-cloud-arrow-up me-1"></i> Upload Video
+                    </button>
+                    <!-- Hidden file input overlaid on button -->
+                    <input
+                      type="file"
+                      accept="video/mp4,video/x-m4v,video/*"
+                      (change)="onFileSelected($event, lesson.id)"
+                      style="
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        min-width: 100%;
+                        min-height: 100%;
+                        font-size: 100px;
+                        text-align: right;
+                        filter: alpha(opacity=0);
+                        opacity: 0;
+                        outline: none;
+                        background: white;
+                        cursor: inherit;
+                        display: block;
+                      "
+                    />
+                  </div>
+                  <button
+                    class="btn btn-primary btn-sm rounded-pill px-3"
+                    disabled
+                    *ngIf="uploadingLessonId === lesson.id"
+                  >
+                    <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                    Uploading...
+                  </button>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="lessons.length === 0"
+          class="text-center py-5 text-muted border border-dashed rounded-4 mb-4"
+        >
+          <i class="bi bi-film fs-1 text-light mb-2 d-block"></i>
+          No lessons added to this course yet.
+        </div>
+
+        <div class="d-flex justify-content-between border-top pt-4">
+          <button class="btn btn-light rounded-pill px-4 fw-bold" (click)="goBack()">Cancel</button>
+          <button
+            class="btn btn-success px-5 py-2 rounded-pill fw-bold shadow-lg"
+            (click)="finishLessons()"
+            [disabled]="lessons.length === 0"
+          >
+            Publish Lessons to Course <i class="bi bi-cloud-check ms-2"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1004 @@
+<div class="main-wrapper">
+  <!-- Sidebar -->
+  <aside
+    class="d-flex flex-column align-items-stretch p-3"
+    style="
+      width: var(--sidebar-width);
+      position: fixed;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-lg);
+      overflow-y: auto;
+    "
+  >
+    <!-- Logo / Branding -->
+    <div
+      class="d-flex align-items-center mb-4 px-2"
+      style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="30"
+        height="30"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="me-2"
+        style="color: var(--sidebar-text)"
+      >
+        <!-- Open Rounded Box Container -->
+        <path
+          d="M 14 5 H 18 C 19.66 5 21 6.34 21 8 V 16 C 21 17.66 19.66 19 18 19 H 10 C 8.34 19 7 17.66 7 16 V 15"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+
+        <!-- Large Sparkle Star -->
+        <path
+          d="M 9 3.5 Q 9 7 12.5 7 Q 9 7 9 10.5 Q 9 7 5.5 7 Q 9 7 9 3.5 Z"
+          fill="currentColor"
+          stroke="none"
+        />
+
+        <!-- Left-Top Sparkle Star -->
+        <path
+          d="M 4 3.5 Q 4 5.5 6 5.5 Q 4 5.5 4 7.5 Q 4 5.5 2 5.5 Q 4 5.5 4 3.5 Z"
+          fill="currentColor"
+          stroke="none"
+        />
+
+        <!-- Left-Bottom Sparkle Star -->
+        <path
+          d="M 5 10 Q 5 12 7 12 Q 5 12 5 14 Q 5 12 3 12 Q 5 12 5 10 Z"
+          fill="currentColor"
+          stroke="none"
+        />
+
+        <!-- "AI" text inside the box -->
+        <text
+          x="14"
+          y="14"
+          text-anchor="middle"
+          font-size="6.5"
+          font-weight="900"
+          font-family="'Outfit', 'Segoe UI', sans-serif"
+          stroke="none"
+          fill="currentColor"
+        >
+          AI
+        </text>
+      </svg>
+      <span
+        ><span style="color: var(--primary-color)">AI</span
+        ><span style="color: var(--sidebar-text)">Training</span></span
+      >
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="nav flex-column nav-pills gap-1 flex-grow-1">
+      <a
+        class="nav-link text-white d-flex align-items-center py-2 px-3"
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="me-3"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z"
+          />
+        </svg>
+        Dashboard
+      </a>
+
+      <a
+        class="nav-link text-white d-flex align-items-center py-2 px-3"
+        routerLink="/explore"
+        routerLinkActive="active"
+        style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="me-3"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+        Explore Courses
+      </a>
+
+      <a
+        class="nav-link text-white d-flex align-items-center py-2 px-3"
+        routerLink="/my-courses"
+        routerLinkActive="active"
+        style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="me-3"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        My Courses
+      </a>
+
+      <a
+        class="nav-link text-white d-flex align-items-center py-2 px-3"
+        routerLink="/certificates"
+        routerLinkActive="active"
+        style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="me-3"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+          />
+        </svg>
+        Certificates
+      </a>
+
+      <a
+        class="nav-link text-white d-flex align-items-center py-2 px-3"
+        routerLink="/ai-chat"
+        routerLinkActive="active"
+        style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="me-3"
+          style="color: #a78bfa"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+          />
+        </svg>
+        AI Assistant
+      </a>
+
+      <a
+        class="nav-link text-white d-flex align-items-center py-2 px-3"
+        routerLink="/live-classes"
+        routerLinkActive="active"
+        style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="me-3"
+          style="color: #10b981"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+          />
+        </svg>
+        Live Classes
+      </a>
+
+      <!-- AI Career Tools Toggle -->
+      <div
+        class="d-flex align-items-center justify-content-between px-3 mt-4 mb-2"
+        style="cursor: pointer"
+        (click)="showAiTools = !showAiTools"
+      >
+        <div
+          class="text-uppercase text-muted small fw-bold"
+          style="font-size: 0.75rem; letter-spacing: 0.5px"
+        >
+          AI Career Tools
+        </div>
+        <i
+          class="bi text-muted"
+          [ngClass]="showAiTools ? 'bi-chevron-up' : 'bi-chevron-down'"
+          style="font-size: 0.75rem"
+        ></i>
+      </div>
+
+      <div
+        *ngIf="showAiTools"
+        class="animate-fade-in ps-2 border-start border-secondary ms-3 mb-2"
+        style="border-width: 2px !important"
+      >
+        <a
+          class="nav-link text-white d-flex align-items-center py-2 px-3"
+          routerLink="/resume-analyzer"
+          routerLinkActive="active"
+          style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-file-earmark-person me-3"
+            viewBox="0 0 16 16"
+            style="color: #60a5fa"
+          >
+            <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+            <path
+              d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2v9.255S12 12 8 12s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h5.5v2z"
+            />
+          </svg>
+          Resume Analyzer
+        </a>
+
+        <a
+          class="nav-link text-white d-flex align-items-center py-2 px-3"
+          routerLink="/mock-interview"
+          routerLinkActive="active"
+          style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-mic me-3"
+            viewBox="0 0 16 16"
+            style="color: #f472b6"
+          >
+            <path
+              d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"
+            />
+            <path
+              d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z"
+            />
+          </svg>
+          Mock Interview
+        </a>
+      </div>
+
+      <!-- Trainer Tools Toggle -->
+      <ng-container *ngIf="userRole === 'Trainer' || userRole === 'Admin'">
+        <div
+          class="d-flex align-items-center justify-content-between px-3 mt-3 mb-2"
+          style="cursor: pointer"
+          (click)="showTrainerTools = !showTrainerTools"
+        >
+          <div
+            class="text-uppercase text-muted small fw-bold"
+            style="font-size: 0.75rem; letter-spacing: 0.5px"
+          >
+            Trainer Tools
+          </div>
+          <i
+            class="bi text-muted"
+            [ngClass]="showTrainerTools ? 'bi-chevron-up' : 'bi-chevron-down'"
+            style="font-size: 0.75rem"
+          ></i>
+        </div>
+
+        <div
+          *ngIf="showTrainerTools"
+          class="animate-fade-in ps-2 border-start border-secondary ms-3 mb-2"
+          style="border-width: 2px !important"
+        >
+          <a
+            class="nav-link text-white d-flex align-items-center py-2 px-3"
+            routerLink="/trainer/create-course"
+            routerLinkActive="active"
+            style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              class="me-3"
+              style="color: #10b981"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+            Create Course
+          </a>
+
+          <a
+            class="nav-link text-white d-flex align-items-center py-2 px-3"
+            routerLink="/trainer/create-lesson"
+            routerLinkActive="active"
+            style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              class="me-3"
+              style="color: #60a5fa"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Create Lesson
+          </a>
+
+          <a
+            class="nav-link text-white d-flex align-items-center py-2 px-3"
+            routerLink="/trainer/create-quiz"
+            routerLinkActive="active"
+            style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              class="me-3"
+              style="color: #f59e0b"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+              />
+            </svg>
+            Create Quiz
+          </a>
+        </div>
+      </ng-container>
+
+      <!-- Admin Panel if admin (Separated at the bottom of navigation) -->
+      <ng-container *ngIf="userRole === 'Admin'">
+        <div
+          class="text-uppercase text-muted small fw-bold px-3 mt-4 mb-2"
+          style="font-size: 0.75rem; letter-spacing: 0.5px; color: #ef4444 !important"
+        >
+          Administration
+        </div>
+        <a
+          class="nav-link text-white d-flex align-items-center py-2 px-3"
+          routerLink="/admin"
+          routerLinkActive="active"
+          style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="me-3"
+            style="color: #ef4444"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            />
+          </svg>
+          Admin Panel
+        </a>
+      </ng-container>
+    </nav>
+
+    <!-- Logout -->
+    <div class="mt-auto pt-3 border-top border-secondary">
+      <a
+        (click)="logout()"
+        class="nav-link text-white-50 d-flex align-items-center py-2 px-3"
+        href="javascript:void(0)"
+        style="border-radius: var(--border-radius-sm); transition: all 0.2s"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="me-3"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Content Body -->
+  <div class="content-wrapper">
+    <!-- Premium Floating Glass Header -->
+    <header class="d-flex justify-content-between align-items-center sticky-top mb-4 glass-header">
+      <!-- Left side: Title/Greeting -->
+      <div class="d-flex align-items-center gap-3">
+        <div *ngIf="isDashboard">
+          <h5 class="mb-0 fw-bold text-dark" style="letter-spacing: -0.3px">
+            Hello, {{ userNameDisplay }}!
+          </h5>
+          <small class="text-muted" style="font-size: 0.75rem; font-weight: 500"
+            >Ready to learn something new?</small
+          >
+        </div>
+        <div *ngIf="!isDashboard">
+          <h5 class="mb-0 fw-bold text-dark" style="letter-spacing: -0.3px">
+            {{ getPageTitle() }}
+          </h5>
+        </div>
+      </div>
+
+      <!-- Right side: Actions & Profile -->
+      <div class="d-flex align-items-center gap-3">
+        <!-- Theme Toggle Button -->
+        <button
+          (click)="toggleDarkMode()"
+          class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm"
+          style="
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+          "
+          [title]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+        >
+          <i
+            class="bi"
+            [ngClass]="
+              isDarkMode ? 'bi-sun-fill text-warning' : 'bi-moon-stars-fill text-secondary'
+            "
+            style="font-size: 1.2rem; line-height: 1"
+          ></i>
+        </button>
+
+        <!-- Search Bar -->
+        <div
+          *ngIf="isDashboard"
+          class="d-none d-lg-flex align-items-center bg-white rounded-pill px-3 py-2 shadow-sm"
+          style="width: 280px; border: 1px solid rgba(0, 0, 0, 0.05); transition: all 0.2s"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-search text-muted me-2"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+            />
+          </svg>
+          <input
+            #searchInput
+            type="text"
+            [(ngModel)]="globalSearchQuery"
+            (keyup.enter)="onGlobalSearch()"
+            class="form-control form-control-sm border-0 bg-transparent shadow-none p-0"
+            placeholder="Search for courses... (Ctrl+K)"
+          />
+        </div>
+
+        <!-- Notification Bell -->
+        <div class="position-relative" #notifyContainer>
+          <button
+            (click)="toggleNotifyDropdown()"
+            class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center"
+            style="
+              width: 40px;
+              height: 40px;
+              border: 1px solid var(--border-color);
+              transition: all 0.2s;
+            "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              fill="currentColor"
+              class="bi bi-bell"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"
+              />
+            </svg>
+            <span
+              *ngIf="unreadCount > 0"
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-2 border-white"
+              style="font-size: 0.65rem"
+            >
+              {{ unreadCount }}
+            </span>
+          </button>
+
+          <!-- Notification Dropdown Menu -->
+          <div
+            *ngIf="showNotifyDropdown"
+            class="position-absolute end-0 mt-3 bg-white rounded shadow-lg p-0 animate-fade-in"
+            style="
+              width: 320px;
+              max-height: 400px;
+              overflow-y: auto;
+              z-index: 1050;
+              border: 1px solid var(--border-color);
+            "
+          >
+            <div
+              class="d-flex justify-content-between align-items-center px-3 py-2 bg-light border-bottom rounded-top"
+            >
+              <span class="fw-bold" style="font-size: 0.9rem">Notifications</span>
+              <div class="d-flex align-items-center gap-2">
+                <a
+                  href="javascript:void(0)"
+                  *ngIf="unreadCount > 0"
+                  (click)="markAllAsRead($event)"
+                  class="small text-decoration-none fw-semibold me-2"
+                  style="font-size: 0.75rem; color: var(--primary-color)"
+                  >Mark all as read</a
+                >
+                <span class="badge bg-primary rounded-pill">{{ unreadCount }} new</span>
+              </div>
+            </div>
+            <div class="list-group list-group-flush">
+              <div
+                *ngIf="notifications.length === 0"
+                class="text-center text-muted py-5 d-flex flex-column align-items-center"
+              >
+                <svg
+                  width="70"
+                  height="70"
+                  viewBox="0 0 100 100"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="mb-3 animate-fade-in"
+                  style="animation-delay: 0.1s"
+                >
+                  <circle cx="50" cy="50" r="40" fill="#eef2ff" />
+                  <path
+                    d="M50 25 C35 25 25 35 25 50 C25 65 35 75 50 75 C65 75 75 65 75 50 C75 35 65 25 50 25 Z"
+                    fill="#e0e7ff"
+                  />
+                  <path
+                    d="M40 50 L47 57 L62 42"
+                    stroke="#6366f1"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                  />
+                </svg>
+                <h6 class="fw-bold mb-1" style="color: var(--text-dark); letter-spacing: -0.3px">
+                  You're all caught up!
+                </h6>
+                <small style="font-size: 0.75rem">No new notifications right now.</small>
+              </div>
+              <a
+                *ngFor="let n of notifications"
+                href="javascript:void(0)"
+                class="list-group-item list-group-item-action p-3 d-flex flex-column border-bottom-0"
+                [class.bg-light]="!n.isRead"
+                (click)="markAsRead(n)"
+              >
+                <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                  <span
+                    class="fw-semibold text-truncate"
+                    style="max-width: 170px; font-size: 0.85rem; color: var(--primary-color)"
+                    >{{ n.title || 'Update' }}</span
+                  >
+                  <div class="d-flex align-items-center gap-2">
+                    <small class="text-muted" style="font-size: 0.7rem">{{
+                      n.createdAt | date: 'shortTime'
+                    }}</small>
+                    <button
+                      (click)="markAsRead(n); $event.stopPropagation()"
+                      class="btn btn-sm p-0 border-0 bg-transparent text-secondary hover-primary"
+                      title="Mark as read"
+                    >
+                      <i class="bi bi-check-all" style="font-size: 1.1rem; line-height: 1"></i>
+                    </button>
+                  </div>
+                </div>
+                <p class="mb-0 text-muted text-wrap" style="font-size: 0.8rem; line-height: 1.4">
+                  {{ n.message }}
+                </p>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="width: 1px; height: 30px; background-color: var(--border-color)"
+          class="mx-1"
+        ></div>
+
+        <!-- Profile Avatar Dropdown -->
+        <div class="position-relative" #profileContainer>
+          <div
+            class="d-flex align-items-center gap-2 p-1 pe-2 rounded-pill premium-card"
+            style="cursor: pointer; border: 1px solid var(--border-color); box-shadow: none"
+            (click)="toggleProfileDropdown()"
+          >
+            <img
+              [src]="getAvatarUrl()"
+              class="rounded-circle"
+              width="36"
+              height="36"
+              alt="Avatar"
+              style="object-fit: cover;"
+            />
+            <div class="d-none d-md-block text-start me-2">
+              <div class="fw-bold text-dark" style="font-size: 0.85rem; line-height: 1.2">
+                {{ userNameDisplay }}
+              </div>
+              <small class="text-muted fw-semibold" style="font-size: 0.7rem">{{ userRoleDisplay }}</small>
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              fill="currentColor"
+              class="bi bi-chevron-down text-muted me-1 d-none d-md-block"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+              />
+            </svg>
+          </div>
+
+          <!-- Profile Dropdown Menu -->
+          <div
+            *ngIf="showProfileDropdown"
+            class="position-absolute end-0 mt-2 bg-white border rounded shadow-lg p-2 animate-fade-in"
+            style="width: 220px; z-index: 1050"
+          >
+            <div class="px-3 py-2 mb-2 border-bottom d-md-none">
+              <div class="fw-bold">{{ userNameDisplay }}</div>
+              <small class="text-muted">{{ userRoleDisplay }}</small>
+            </div>
+            <a
+              class="dropdown-item py-2 px-3 rounded mb-1 d-flex align-items-center"
+              routerLink="/dashboard"
+              (click)="showProfileDropdown = false"
+            >
+              <i class="bi bi-grid text-muted me-2"></i>Dashboard
+            </a>
+            <a
+              class="dropdown-item py-2 px-3 rounded mb-1 d-flex align-items-center"
+              routerLink="/profile"
+              (click)="showProfileDropdown = false"
+            >
+              <i class="bi bi-person-circle text-muted me-2"></i>My Profile
+            </a>
+            <a
+              class="dropdown-item py-2 px-3 rounded mb-1 d-flex align-items-center"
+              routerLink="/my-courses"
+              (click)="showProfileDropdown = false"
+            >
+              <i class="bi bi-journal-bookmark text-muted me-2"></i>My Learning
+            </a>
+            <div class="dropdown-divider my-1"></div>
+            <a
+              class="dropdown-item py-2 px-3 rounded d-flex align-items-center text-danger"
+              (click)="logout(); showProfileDropdown = false"
+              href="javascript:void(0)"
+            >
+              <i class="bi bi-box-arrow-right me-2"></i>Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main View Outlet -->
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+
+<!-- Floating AI Assistant Bubble & Mini-Chat Screen -->
+<div
+  class="position-fixed d-flex flex-column align-items-end"
+  cdkDrag
+  cdkDragBoundary="body"
+  style="
+    bottom: 25px;
+    right: 25px;
+    z-index: 1060;
+    font-family: 'Outfit', sans-serif;
+    width: 360px;
+    pointer-events: none;
+  "
+>
+  <!-- Mini Chat Box -->
+  <div
+    *ngIf="showMiniChat"
+    class="card shadow-lg border-0 d-flex flex-column animate-fade-in mb-3 w-100"
+    style="
+      height: 480px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--card-bg);
+      pointer-events: auto;
+    "
+  >
+    <!-- Mini Chat Header -->
+    <div
+      class="p-3 text-white d-flex align-items-center justify-content-between"
+      style="background: linear-gradient(135deg, #1e1b4b, #312e81)"
+    >
+      <div class="d-flex align-items-center gap-2">
+        <div style="font-size: 1.4rem"><i class="bi bi-robot"></i></div>
+        <div>
+          <h6 class="mb-0 fw-bold" style="font-size: 0.9rem; line-height: 1.2">
+            AI Tutor Assistant
+          </h6>
+          <small style="opacity: 0.8; font-size: 0.7rem">Online | Ready to Help</small>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <button
+          class="btn btn-link text-white p-0"
+          (click)="clearMiniChat()"
+          title="Clear Chat History"
+          style="text-decoration: none; opacity: 0.8; transition: opacity 0.2s"
+          onmouseover="this.style.opacity = '1'"
+          onmouseout="this.style.opacity = '0.8'"
+        >
+          <i class="bi bi-trash3" style="font-size: 1.1rem"></i>
+        </button>
+        <button
+          class="btn btn-link text-white p-0"
+          (click)="toggleMiniChat()"
+          title="Close"
+          style="text-decoration: none; opacity: 0.8; transition: opacity 0.2s"
+          onmouseover="this.style.opacity = '1'"
+          onmouseout="this.style.opacity = '0.8'"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            fill="currentColor"
+            class="bi bi-x"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mini Chat Messages Scroll Area -->
+    <div
+      class="flex-grow-1 p-3 overflow-auto"
+      style="background: var(--background-color); height: 350px"
+    >
+      <div *ngIf="miniChatHistory.length === 0" class="text-center text-muted py-5">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="40"
+          height="40"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.5"
+          class="mb-2 text-indigo-400"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+          />
+        </svg>
+        <p class="mb-0" style="font-size: 0.8rem">Ask me anything about your course studies!</p>
+      </div>
+
+      <div
+        *ngFor="let msg of miniChatHistory"
+        class="mb-3 d-flex"
+        [class.justify-content-end]="msg.role === 'user'"
+      >
+        <div
+          class="p-2.5 px-3"
+          style="max-width: 85%; font-size: 0.85rem; line-height: 1.4; border-radius: 14px"
+          [style.background]="msg.role === 'user' ? 'var(--primary-color)' : 'var(--card-bg)'"
+          [style.color]="msg.role === 'user' ? '#fff' : 'var(--text-dark)'"
+          [style.box-shadow]="msg.role === 'user' ? 'none' : 'var(--shadow-sm)'"
+        >
+          <markdown
+            [data]="msg.content"
+            class="markdown-body mb-1"
+            *ngIf="msg.role === 'assistant'"
+          ></markdown>
+          <div
+            *ngIf="msg.role === 'assistant'"
+            class="d-flex justify-content-end pt-1 mt-1"
+            style="opacity: 0.8; border-top: 1px solid rgba(0, 0, 0, 0.05)"
+          >
+            <button
+              class="btn btn-sm btn-link text-primary p-0 d-flex align-items-center"
+              style="text-decoration: none"
+              (click)="copyToClipboard(msg)"
+              title="Copy to clipboard"
+            >
+              <i
+                class="bi me-1"
+                [ngClass]="msg.isCopied ? 'bi-check2-all text-success' : 'bi-clipboard'"
+              ></i>
+              <small [ngClass]="msg.isCopied ? 'text-success' : ''" style="font-size: 0.7rem">{{
+                msg.isCopied ? 'Copied' : 'Copy'
+              }}</small>
+            </button>
+          </div>
+          <span *ngIf="msg.role === 'user'" style="white-space: pre-wrap">{{ msg.content }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="miniChatLoading" class="mb-2 d-flex">
+        <div
+          class="p-2.5 px-3"
+          style="background: var(--card-bg); border-radius: 14px; box-shadow: var(--shadow-sm)"
+        >
+          <div class="typing-indicator p-0 m-0 text-primary">
+            <div class="typing-dot" style="background: currentColor"></div>
+            <div class="typing-dot" style="background: currentColor"></div>
+            <div class="typing-dot" style="background: currentColor"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Chat Input -->
+    <div class="p-2.5 bg-white border-top d-flex gap-2">
+      <input
+        type="text"
+        [(ngModel)]="miniChatInput"
+        (keyup.enter)="sendMiniChat()"
+        class="form-control form-control-sm"
+        placeholder="Ask AI Assistant..."
+        style="
+          border-radius: var(--border-radius-sm);
+          border: 1px solid var(--border-color);
+          font-size: 0.85rem;
+        "
+      />
+      <button
+        (click)="sendMiniChat()"
+        class="btn btn-premium btn-sm px-3"
+        [disabled]="!miniChatInput.trim() || miniChatLoading"
+        style="font-size: 0.8rem"
+      >
+        Send
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Bubble Toggle Button -->
+  <button
+    (click)="toggleMiniChat()"
+    class="btn btn-premium rounded-circle d-flex align-items-center justify-content-center shadow-lg"
+    cdkDragHandle
+    style="
+      width: 60px;
+      height: 60px;
+      border: none;
+      transition: transform 0.2s;
+      font-size: 1.6rem;
+      cursor: move;
+      pointer-events: auto;
+    "
+    title="Ask AI Assistant (Ctrl+M)"
+  >
+    <i *ngIf="!showMiniChat" class="bi bi-robot"></i>
+    <i *ngIf="showMiniChat" class="bi bi-x-lg" style="font-size: 1.2rem"></i>
+  </button>
+</div>
+
+<!-- Scroll to Top Button -->
+<button
+  *ngIf="showScrollToTop"
+  (click)="scrollToTop()"
+  class="btn btn-premium rounded-circle d-flex align-items-center justify-content-center shadow-lg animate-fade-in position-fixed"
+  style="
+    bottom: 30px;
+    right: 100px;
+    z-index: 1050;
+    width: 50px;
+    height: 50px;
+    border: none;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  "
+  title="Scroll to Top"
+>
+  <i class="bi bi-arrow-up-short text-white" style="font-size: 1.8rem; line-height: 1"></i>
+</button>

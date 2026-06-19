@@ -1,0 +1,137 @@
+<div class="container py-5 mt-4 animate-fade-in">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Wizard Header -->
+      <div class="text-center mb-5">
+        <h2 class="fw-bold" style="letter-spacing: -0.5px">Trainer Course Creator</h2>
+        <p class="text-muted">Build your AI course from scratch</p>
+
+        <!-- Progress Steps -->
+        <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+          <div class="step-indicator" [class.active]="currentStep >= 1">
+            <div class="step-circle"><i class="bi bi-journal-text"></i></div>
+            <span class="step-label">Course Details</span>
+          </div>
+          <div class="step-line" [class.active]="currentStep >= 2"></div>
+          <div class="step-indicator" [class.active]="currentStep >= 2">
+            <div class="step-circle"><i class="bi bi-check-circle"></i></div>
+            <span class="step-label">Publish</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 1: COURSE DETAILS -->
+      <div *ngIf="currentStep === 1" class="premium-card p-4 p-md-5">
+        <h4 class="fw-bold mb-4">1. Course Details</h4>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold"
+            >Course Title <span class="text-danger ms-1">*</span></label
+          >
+          <input
+            type="text"
+            class="form-control form-control-lg border-0"
+            [(ngModel)]="courseForm.title"
+            placeholder="e.g. Advanced AI Prompt Engineering"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold"
+            >Description <span class="text-danger ms-1">*</span></label
+          >
+          <textarea
+            class="form-control border-0"
+            rows="4"
+            [(ngModel)]="courseForm.description"
+            placeholder="Describe what students will learn..."
+          ></textarea>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Price (Rs.)</label>
+            <input
+              type="number"
+              class="form-control border-0"
+              [(ngModel)]="courseForm.price"
+              min="0"
+            />
+            <small class="text-muted opacity-75 d-block mt-1">Set to 0 for a free course.</small>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Total Duration (Hours)</label>
+            <input
+              type="number"
+              class="form-control border-0"
+              [(ngModel)]="courseForm.durationInHours"
+              min="0"
+            />
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Thumbnail URL (Optional)</label>
+          <input
+            type="text"
+            class="form-control border-0"
+            [(ngModel)]="courseForm.thumbnailUrl"
+            placeholder="https://example.com/image.jpg"
+          />
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn btn-premium px-5 py-2 fw-bold rounded-pill"
+            (click)="createCourse()"
+            [disabled]="isSubmitting || !courseForm.title"
+          >
+            <span
+              *ngIf="isSubmitting"
+              class="spinner-border spinner-border-sm me-2"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            Save & Continue <i class="bi bi-arrow-right ms-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: PUBLISH -->
+      <div *ngIf="currentStep === 2" class="premium-card p-4 p-md-5 text-center">
+        <div class="mb-4">
+          <i class="bi bi-rocket-takeoff display-1 text-primary"></i>
+        </div>
+        <h3 class="fw-bold mb-3">Course Shell Created!</h3>
+        <p class="text-muted mb-4 mx-auto" style="max-width: 400px">
+          Your course details have been saved. Now you can add Lessons, Videos, and Quizzes to build
+          out the curriculum.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3">
+          <button class="btn btn-light rounded-pill px-4 fw-bold" (click)="currentStep = 1">
+            Back
+          </button>
+          <a
+            class="btn btn-outline-primary px-4 fw-bold rounded-pill shadow-sm"
+            routerLink="/trainer/create-lesson"
+          >
+            <i class="bi bi-collection-play me-2"></i> Add Lessons
+          </a>
+          <a
+            class="btn btn-outline-primary px-4 fw-bold rounded-pill shadow-sm"
+            routerLink="/trainer/create-quiz"
+          >
+            <i class="bi bi-ui-checks me-2"></i> Add Quizzes
+          </a>
+          <button
+            class="btn btn-success px-5 py-2 fw-bold rounded-pill shadow-lg"
+            (click)="finishCourse()"
+          >
+            I'm Done <i class="bi bi-stars ms-2"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

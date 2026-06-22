@@ -25,6 +25,7 @@
 .mascot-body-float {
   animation: mascot-float 4s ease-in-out infinite;
   transform-origin: center bottom;
+  transform-box: fill-box;
 }
 
 @keyframes mascot-float {
@@ -37,6 +38,7 @@
 .mascot-base-shadow {
   fill: rgba(0, 0, 0, 0.4);
   transform-origin: center;
+  transform-box: fill-box;
   animation: shadow-scale 4s ease-in-out infinite;
 }
 
@@ -49,6 +51,7 @@
 /* Jet flame animation */
 .streak-flame-svg {
   transform-origin: center top;
+  transform-box: fill-box;
   animation: jet-burn 0.15s infinite alternate linear;
 }
 
@@ -111,6 +114,8 @@
 /* Celebration bounce/spin */
 .mascot-container.mascot-celebrate .mascot-body-float {
   animation: mascot-spin 0.8s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
 }
 
 @keyframes mascot-spin {

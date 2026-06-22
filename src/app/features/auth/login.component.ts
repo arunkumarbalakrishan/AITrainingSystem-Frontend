@@ -91,11 +91,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges();
     });
 
-    // Simulate skeleton loading time (e.g. 1.2s)
+    // Simulate skeleton loading time (e.g. 200ms)
     setTimeout(() => {
       this.skeletonLoading.set(false);
       this.cdr.detectChanges();
-    }, 1200);
+    }, 200);
 
     // Track mouse moves outside Angular zone for high performance (60 FPS)
     this.ngZone.runOutsideAngular(() => {

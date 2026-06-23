@@ -25,7 +25,7 @@ import confetti from 'canvas-confetti';
         *ngIf="!interviewStarted"
       >
         <div class="col-md-6 col-lg-5">
-          <div class="card shadow border-0">
+          <div class="card premium-card shadow border-0">
             <div class="card-body p-5 text-center">
               <div class="mb-4">
                 <div
@@ -68,7 +68,7 @@ import confetti from 'canvas-confetti';
         *ngIf="interviewStarted && !interviewFinished"
       >
         <div class="col-md-8 mx-auto d-flex flex-column">
-          <div class="card shadow-sm border-0 d-flex flex-column" style="height: 75vh;">
+          <div class="card premium-card shadow-sm border-0 d-flex flex-column" style="height: 75vh;">
             <div
               class="card-header py-3 border-bottom d-flex justify-content-between align-items-center"
               style="background: transparent;"
@@ -83,7 +83,7 @@ import confetti from 'canvas-confetti';
               </button>
             </div>
 
-            <div class="card-body chat-messages overflow-auto p-4 bg-light" #chatScroll>
+            <div class="card-body chat-messages overflow-auto p-4" #chatScroll>
               <div
                 *ngFor="let msg of chatHistory"
                 class="message-wrapper d-flex mb-4"
@@ -103,7 +103,7 @@ import confetti from 'canvas-confetti';
                   [ngClass]="
                     msg.role === 'user'
                       ? 'bg-primary text-white text-end rounded-4 rounded-bottom-0'
-                      : 'bg-light rounded-4 rounded-top-0'
+                      : 'assistant-bubble rounded-4 rounded-top-0 shadow-sm'
                   "
                 >
                   <markdown
@@ -168,7 +168,7 @@ import confetti from 'canvas-confetti';
                   </div>
                 </div>
                 <div
-                  class="message-bubble p-3 bg-light rounded-4 rounded-top-0 shadow-sm d-flex align-items-center"
+                  class="message-bubble p-3 assistant-bubble rounded-4 rounded-top-0 shadow-sm d-flex align-items-center"
                 >
                   <div class="typing-indicator p-0 m-0 text-primary">
                     <div class="typing-dot" style="background: currentColor;"></div>
@@ -224,7 +224,7 @@ import confetti from 'canvas-confetti';
       <!-- Results Phase -->
       <div class="row justify-content-center mt-5" *ngIf="interviewFinished">
         <div class="col-md-8 col-lg-6">
-          <div class="card shadow border-0 overflow-hidden">
+          <div class="card premium-card shadow border-0 overflow-hidden">
             <div class="bg-primary text-white text-center py-5">
               <i class="bi bi-award display-1 mb-3"></i>
               <h2 class="fw-bold">Interview Completed</h2>
@@ -245,8 +245,8 @@ import confetti from 'canvas-confetti';
               <h5 class="fw-bold mb-3">
                 <i class="bi bi-chat-quote text-primary me-2"></i>Detailed Feedback
               </h5>
-              <div class="p-4 bg-light rounded-3 text-dark fs-6" style="line-height: 1.7;">
-                {{ finalResult?.feedback }}
+              <div class="p-4 assistant-bubble rounded-3 fs-6" style="line-height: 1.7;">
+                <markdown [data]="finalResult?.feedback" class="markdown-body"></markdown>
               </div>
 
               <div class="mt-5 text-center d-flex gap-3 justify-content-center flex-wrap">
@@ -275,6 +275,16 @@ import confetti from 'canvas-confetti';
         max-width: 75%;
         font-size: 1.05rem;
         line-height: 1.5;
+      }
+      .assistant-bubble {
+        background: var(--card-bg-hover);
+        color: var(--text-dark);
+        border: 1px solid var(--border-color);
+      }
+      .assistant-bubble .markdown-body,
+      .assistant-bubble p,
+      .assistant-bubble span {
+        color: var(--text-dark) !important;
       }
       .topic-input {
         border: 2px solid rgba(0, 0, 0, 0.08);

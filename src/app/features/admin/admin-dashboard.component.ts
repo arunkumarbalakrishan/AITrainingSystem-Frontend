@@ -6,7 +6,7 @@ import { CourseService } from '../../core/services/course.service';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { CertificateService } from '../../core/services/certificate.service';
 import { ToastrService } from 'ngx-toastr';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'app-admin-dashboard',

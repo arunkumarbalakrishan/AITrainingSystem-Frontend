@@ -60,6 +60,7 @@
    DARK MODE TOKENS
    ============================================================ */
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg-color: #050505;
   --card-bg: #0d1117;
   --card-bg-hover: #161b22;
@@ -248,15 +249,42 @@ main {
    SKELETON LOADING  (dashboard, my-courses, explore)
    ============================================================ */
 .skeleton-box {
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.06) 25%,
-    rgba(0, 0, 0, 0.10) 50%,
-    rgba(0, 0, 0, 0.06) 75%
-  );
-  background-size: 400% 100%;
-  animation: skeleton-shimmer 1.5s infinite ease-in-out;
-  border-radius: 6px;
+  background: linear-gradient(90deg, var(--border-color) 25%, var(--border-color-strong) 50%, var(--border-color) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================================
+   TABLE ADAPTATION FOR DARK MODE
+   ============================================================ */
+[data-theme="dark"] .table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--text-primary);
+  --bs-table-border-color: var(--border-color);
+  --bs-table-striped-bg: rgba(255,255,255,0.02);
+  --bs-table-hover-bg: rgba(255,255,255,0.05);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .table td, 
+[data-theme="dark"] .table th {
+  border-color: var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+}
+
+/* Fix Bootstrap text-dark forcing black text in our dark mode */
+[data-theme="dark"] .text-dark {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .bg-white {
+  background-color: var(--card-bg) !important;
 }
 
 [data-theme="dark"] .skeleton-box {
@@ -348,6 +376,11 @@ main {
   color: var(--text-primary) !important;
 }
 
+[data-theme="dark"] .form-select option {
+  background-color: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+}
+
 [data-theme="dark"] .form-control:focus,
 [data-theme="dark"] .form-select:focus {
   border-color: var(--primary-color) !important;
@@ -361,7 +394,7 @@ main {
 /* ============================================================
    BUTTONS — PRIMARY
    ============================================================ */
-.btn-primary {
+.btn-primary, .btn-premium {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
   color: #050505 !important;
@@ -369,11 +402,29 @@ main {
   transition: all 0.2s ease !important;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-premium:hover {
   background-color: var(--primary-hover) !important;
   border-color: var(--primary-hover) !important;
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(159, 239, 0, 0.3) !important;
+}
+
+/* ============================================================
+   BUTTONS — PREMIUM OUTLINE
+   ============================================================ */
+.btn-premium-outline {
+  border: 1px solid var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  background-color: transparent !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-premium-outline:hover {
+  background-color: var(--primary-color) !important;
+  color: #050505 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(159, 239, 0, 0.2) !important;
 }
 
 /* ============================================================
@@ -728,4 +779,197 @@ main {
 
 .search-clear-btn:hover {
   color: var(--text-primary);
+}
+
+/* ============================================================
+   STRIPE CHECKOUT MODAL
+   ============================================================ */
+.stripe-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 23, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.stripe-modal-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #30313d;
+}
+
+[data-theme="dark"] .stripe-modal-card {
+  background: #1a1f2e;
+  color: #f0f6fc;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.stripe-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e6ebf1;
+}
+
+[data-theme="dark"] .stripe-modal-header {
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+
+.stripe-logo {
+  display: flex;
+  align-items: center;
+}
+
+.stripe-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #a3acb9;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.stripe-close-btn:hover {
+  color: #30313d;
+}
+
+[data-theme="dark"] .stripe-close-btn:hover {
+  color: #f0f6fc;
+}
+
+.stripe-modal-body {
+  padding: 20px;
+}
+
+.stripe-order-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.stripe-summary-label {
+  font-size: 0.85rem;
+  color: #687385;
+  margin-bottom: 4px;
+}
+
+.stripe-summary-amount {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #30313d;
+  letter-spacing: -0.02em;
+}
+
+[data-theme="dark"] .stripe-summary-amount {
+  color: #f0f6fc;
+}
+
+.stripe-course-title {
+  font-size: 0.95rem;
+  color: #687385;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.stripe-form-group {
+  margin-bottom: 12px;
+}
+
+.stripe-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #30313d;
+  margin-bottom: 6px;
+}
+
+[data-theme="dark"] .stripe-label {
+  color: #a0a0a0;
+}
+
+.stripe-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 1rem;
+  color: #30313d;
+  background-color: #ffffff;
+  border: 1px solid #e6ebf1;
+  border-radius: 6px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+
+[data-theme="dark"] .stripe-input {
+  background-color: #0d1117;
+  border-color: rgba(255,255,255,0.1);
+  color: #f0f6fc;
+}
+
+.stripe-input::placeholder {
+  color: #aab7c4;
+}
+
+.stripe-input:focus {
+  border-color: #635bff;
+  box-shadow: 0 0 0 1px #635bff;
+}
+
+.stripe-card-details-box {
+  background: #f7fafc;
+  border: 1px solid #e6ebf1;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+[data-theme="dark"] .stripe-card-details-box {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.08);
+}
+
+.stripe-card-details-box .stripe-label {
+  margin-bottom: 8px;
+}
+
+.stripe-pay-button {
+  width: 100%;
+  background: #635bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+  height: 42px;
+}
+
+.stripe-pay-button:hover:not(:disabled) {
+  background: #5851df;
+}
+
+.stripe-pay-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.stripe-secure-footer {
+  margin-top: 16px;
+  font-size: 0.8rem;
+  color: #687385;
 }

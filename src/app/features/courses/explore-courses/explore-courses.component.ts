@@ -94,29 +94,23 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
               i * 40
             }}ms; border: 1px solid rgba(0,0,0,0.05); overflow: hidden; position: relative;"
           >
-            <div
-              class="position-relative d-flex align-items-center justify-content-center"
-              style="height: 180px; overflow: hidden; background: #f8f9fa;"
-            >
+            <!-- Course Thumbnail -->
+            <div class="position-relative" style="height: 160px; overflow: hidden; border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;">
+              <div class="w-100 h-100 position-absolute" style="background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(0,0,0,0.8) 100%); z-index: 1;"></div>
               <img
                 [src]="getCourseImage(course.title)"
-                [style.object-fit]="isLogo(course.title) ? 'contain' : 'cover'"
-                [style.padding]="isLogo(course.title) ? '2rem' : '0'"
-                class="w-100 h-100"
+                class="w-100 h-100 position-relative"
+                [class.object-fit-contain]="isLogo(course.title)"
+                [class.object-fit-cover]="!isLogo(course.title)"
+                [class.p-4]="isLogo(course.title)"
+                [class.bg-white]="isLogo(course.title)"
+                style="z-index: 0;"
                 alt="Course Thumbnail"
               />
-              <!-- Gradient Overlay -->
-              <div
-                class="position-absolute w-100 h-100"
-                style="top: 0; left: 0; background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.6) 100%); pointer-events: none;"
-              ></div>
-              <!-- Price overlay on image -->
-              <div class="position-absolute" style="bottom: 12px; right: 12px; z-index: 2;">
-                <span
-                  class="badge rounded-pill px-3 py-2 shadow-sm"
-                  style="background: rgba(255,255,255,0.9); color: #0f172a; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.5);"
-                >
-                  {{ course.price > 0 ? 'Rs. ' + course.price : 'Free' }}
+              <!-- Price overlay -->
+              <div class="position-absolute" style="bottom: 12px; right: 12px; z-index: 3;">
+                <span class="badge rounded-pill px-3 py-2 shadow-sm" style="background: rgba(255,255,255,0.95); color: #0f172a; font-size: 0.85rem; font-weight: 700;">
+                  {{ course.price > 0 ? ('Rs. ' + course.price) : 'Free' }}
                 </span>
               </div>
             </div>
@@ -198,52 +192,7 @@ export class ExploreCoursesComponent implements OnInit {
   selectedCategory = '';
   loading = true;
 
-  getCourseImage(title: string): string {
-    if (!title)
-      return 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800';
-    const t = title.toLowerCase();
-    if (t.includes('java') && !t.includes('javascript'))
-      return 'https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg';
-    if (t.includes('asp.net') || t.includes('.net') || t.includes('c#'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/e/ee/.NET_Core_Logo.svg';
-    if (t.includes('python'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg';
-    if (t.includes('angular'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Angular_full_color_logo.svg';
-    if (t.includes('react'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg';
-    if (t.includes('node') || t.includes('express'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg';
-    if (t.includes('sql') || t.includes('database'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png';
-    if (t.includes('javascript') || t.includes('js'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg';
 
-    // Fallback professional tech images
-    const fallbacks = [
-      'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/270694/pexels-photo-270694.jpeg?auto=compress&cs=tinysrgb&w=800',
-    ];
-    return fallbacks[title.length % fallbacks.length];
-  }
-
-  isLogo(title: string): boolean {
-    if (!title) return false;
-    const t = title.toLowerCase();
-    return (
-      t.includes('java') ||
-      t.includes('.net') ||
-      t.includes('c#') ||
-      t.includes('python') ||
-      t.includes('angular') ||
-      t.includes('react') ||
-      t.includes('node') ||
-      t.includes('sql') ||
-      t.includes('js') ||
-      t.includes('database')
-    );
-  }
 
   ngOnInit() {
     this.courseService.getCourses().subscribe({
@@ -307,5 +256,51 @@ export class ExploreCoursesComponent implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  getCourseImage(title: string): string {
+    if (!title)
+      return 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800';
+    const t = title.toLowerCase();
+    if (t.includes('java') && !t.includes('javascript'))
+      return 'https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg';
+    if (t.includes('asp.net') || t.includes('.net') || t.includes('c#'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/e/ee/.NET_Core_Logo.svg';
+    if (t.includes('python'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg';
+    if (t.includes('angular'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Angular_full_color_logo.svg';
+    if (t.includes('react'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg';
+    if (t.includes('node') || t.includes('express'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg';
+    if (t.includes('sql') || t.includes('database'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png';
+    if (t.includes('javascript') || t.includes('js'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg';
+
+    const fallbacks = [
+      'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/270694/pexels-photo-270694.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ];
+    return fallbacks[title.length % fallbacks.length];
+  }
+
+  isLogo(title: string): boolean {
+    if (!title) return false;
+    const t = title.toLowerCase();
+    return (
+      t.includes('java') ||
+      t.includes('.net') ||
+      t.includes('c#') ||
+      t.includes('python') ||
+      t.includes('angular') ||
+      t.includes('react') ||
+      t.includes('node') ||
+      t.includes('sql') ||
+      t.includes('js') ||
+      t.includes('database')
+    );
   }
 }

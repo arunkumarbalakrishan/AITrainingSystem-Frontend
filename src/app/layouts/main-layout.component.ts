@@ -181,6 +181,29 @@ export class MainLayoutComponent implements OnInit {
     this.userName = this.authService.getUserName();
     this.userRole = this.authService.getUserRole();
 
+    // Start SignalR Connection if authenticated
+    if (this.authService.isAuthenticated()) {
+      const token = this.authService.getToken();
+      if (token) {
+        this.notifyService.startConnection(token);
+        
+        // Listen for real-time notifications
+        this.notifyService.realTimeNotification$.subscribe((notif: any) => {
+          // Check if it already exists to avoid duplicates
+          if (!this.notifications.some(n => n.id === notif.id)) {
+            this.notifications.unshift(notif);
+            this.unreadCount = this.notifications.filter(n => !n.isRead).length;
+            this.toastr.success(notif.message, notif.title || 'New Notification', {
+              timeOut: 8000,
+              progressBar: true,
+              closeButton: true,
+            });
+            this.cdr.detectChanges();
+          }
+        });
+      }
+    }
+
     // Dynamic Title Update & Notification Reload
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       const pageTitle = this.getPageTitle();

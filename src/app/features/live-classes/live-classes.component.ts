@@ -167,9 +167,8 @@ import { Subscription, interval } from 'rxjs';
                   </div>
 
                   <div class="d-flex gap-2 mt-2">
-                    <a
-                      [href]="item.meetingLink"
-                      target="_blank"
+                    <button
+                      (click)="joinMeeting(item)"
                       class="btn flex-grow-1 d-flex align-items-center justify-content-center gap-2 fw-semibold"
                       [ngClass]="
                         item.isActive || item.isSoon
@@ -182,7 +181,7 @@ import { Subscription, interval } from 'rxjs';
                       <span>{{
                         item.isActive || item.isSoon ? 'Join Live Class' : 'Meeting Details'
                       }}</span>
-                    </a>
+                    </button>
                     <button
                       *ngIf="isTrainer || isAdmin"
                       (click)="deleteLiveClass(item.id)"
@@ -483,6 +482,18 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
           this.toastr.error('Failed to delete live class.');
         },
       });
+    }
+  }
+
+  joinMeeting(item: any) {
+    if (item.isActive || item.isSoon) {
+      if (item.meetingLink) {
+        window.open(item.meetingLink, '_blank');
+      } else {
+        this.toastr.error('Meeting link is not available yet.');
+      }
+    } else {
+      this.toastr.info('The meeting link will be available shortly before the session starts.', 'Not Active Yet');
     }
   }
 

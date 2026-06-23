@@ -25,7 +25,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
       <div class="row">
         <!-- Input Area -->
         <div class="col-lg-6 mb-4">
-          <div class="card shadow-sm border-0 h-100 bg-light">
+          <div class="card premium-card shadow-sm border-0 h-100">
             <div
               class="card-header border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center"
               style="background: transparent;"
@@ -37,7 +37,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
             <div class="card-body d-flex flex-column">
               <!-- Drag and Drop Zone -->
               <div
-                class="dropzone-container mb-3 position-relative"
+                class="dropzone-container mb-3 position-relative d-flex flex-column flex-grow-1"
                 [class.drag-active]="isDragging"
                 (dragover)="onDragOver($event)"
                 (dragleave)="onDragLeave($event)"
@@ -75,7 +75,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
 
                 <textarea
                   [(ngModel)]="resumeText"
-                  class="form-control resume-textarea"
+                  class="form-control resume-textarea flex-grow-1"
                   [class.has-content]="resumeText.length > 0"
                   placeholder="Paste your resume content here..."
                   [disabled]="isLoading"
@@ -112,7 +112,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
 
         <!-- Results Area -->
         <div class="col-lg-6 mb-4">
-          <div class="card shadow-sm border-0 h-100 bg-light" *ngIf="!result && !isLoading">
+          <div class="card premium-card shadow-sm border-0 h-100" *ngIf="!result && !isLoading">
             <div
               class="card-body d-flex flex-column align-items-center justify-content-center text-center p-5 text-muted"
             >
@@ -127,7 +127,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
             </div>
           </div>
 
-          <div class="card shadow-sm border-0 h-100 bg-light" *ngIf="result">
+          <div class="card premium-card shadow-sm border-0 h-100" *ngIf="result">
             <div
               class="card-header pt-4 pb-0 border-bottom-0 d-flex justify-content-between align-items-center"
               style="background: transparent;"
@@ -140,7 +140,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
             <div class="card-body">
               <div class="mb-4">
                 <h6 class="fw-bold text-uppercase text-muted small mb-2">AI Critique</h6>
-                <div class="p-3 rounded" style="background: var(--background-color);">
+                <div class="p-3 rounded analysis-panel">
                   <markdown [data]="result.critique" class="markdown-body"></markdown>
                 </div>
               </div>
@@ -148,7 +148,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <h6 class="fw-bold text-uppercase text-muted small mb-2">Strengths</h6>
-                  <div class="p-3 rounded h-100" style="background: var(--background-color);">
+                  <div class="p-3 rounded h-100 analysis-panel">
                     <ul class="list-group list-group-flush mb-0">
                       <li
                         class="list-group-item bg-transparent px-0 border-0 py-1"
@@ -164,7 +164,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
                 </div>
                 <div class="col-md-6 mb-3">
                   <h6 class="fw-bold text-uppercase text-muted small mb-2">Suggested Courses</h6>
-                  <div class="p-3 rounded h-100" style="background: var(--background-color);">
+                  <div class="p-3 rounded h-100 analysis-panel">
                     <ul class="list-group list-group-flush mb-0">
                       <li
                         class="list-group-item bg-transparent px-0 border-0 py-1"
@@ -187,8 +187,19 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
   `,
   styles: [
     `
+      .analysis-panel {
+        background: var(--card-bg-hover);
+        color: var(--text-dark);
+        border: 1px solid var(--border-color);
+      }
+      .analysis-panel .markdown-body,
+      .analysis-panel p,
+      .analysis-panel li {
+        color: var(--text-dark) !important;
+      }
       .resume-textarea {
-        height: 450px;
+        min-height: 450px;
+        height: 100%;
         resize: none;
         font-size: 0.95rem;
         line-height: 1.6;
@@ -210,7 +221,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
         color: transparent; /* Hide placeholder when overlay is visible */
       }
       .dropzone-container {
-        height: 450px;
+        min-height: 450px;
         border: 2px dashed rgba(0, 0, 0, 0.15);
         border-radius: 16px;
         background-color: var(--background-color);

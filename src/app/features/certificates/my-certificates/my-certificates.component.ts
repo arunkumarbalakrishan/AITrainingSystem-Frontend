@@ -187,8 +187,8 @@ import { ToastrService } from 'ngx-toastr';
   styles: [
     `
       .aws-cert-card {
-        background: #f4f5f7 !important;
-        border: none !important;
+        background: var(--card-bg) !important;
+        border: 1px solid var(--border-color) !important;
         border-radius: 12px;
         padding: 2.5rem 1rem 2rem 1rem;
         transition:
@@ -197,7 +197,7 @@ import { ToastrService } from 'ngx-toastr';
       }
       .aws-cert-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-md);
       }
       .cert-hexagon {
         width: 130px;
@@ -229,18 +229,17 @@ import { ToastrService } from 'ngx-toastr';
       .download-btn {
         width: 45px;
         height: 45px;
-        background: #ffffff !important;
-        color: #0f172a !important;
-        border: none !important;
+        background: var(--bg-color) !important;
+        color: var(--text-dark) !important;
+        border: 1px solid var(--border-color) !important;
       }
       .download-btn:hover {
-        background: #ffffff !important;
         transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: var(--shadow-sm) !important;
       }
       .aws-cert-card h5,
       .aws-cert-card svg.text-dark {
-        color: #0f172a !important;
+        color: var(--text-dark) !important;
       }
     `,
   ],
@@ -274,51 +273,7 @@ export class MyCertificatesComponent implements OnInit {
     return { issuer: 'AITraining', title: title, subtitle: 'CERTIFICATE', isAws: false };
   }
 
-  getCourseImage(title: string): string {
-    if (!title)
-      return 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800';
-    const t = title.toLowerCase();
-    if (t.includes('java') && !t.includes('javascript'))
-      return 'https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg';
-    if (t.includes('asp.net') || t.includes('.net') || t.includes('c#'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/e/ee/.NET_Core_Logo.svg';
-    if (t.includes('python'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg';
-    if (t.includes('angular'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Angular_full_color_logo.svg';
-    if (t.includes('react'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg';
-    if (t.includes('node') || t.includes('express'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg';
-    if (t.includes('sql') || t.includes('database'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png';
-    if (t.includes('javascript') || t.includes('js'))
-      return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg';
 
-    const fallbacks = [
-      'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/270694/pexels-photo-270694.jpeg?auto=compress&cs=tinysrgb&w=800',
-    ];
-    return fallbacks[title.length % fallbacks.length];
-  }
-
-  isLogo(title: string): boolean {
-    if (!title) return false;
-    const t = title.toLowerCase();
-    return (
-      t.includes('java') ||
-      t.includes('.net') ||
-      t.includes('c#') ||
-      t.includes('python') ||
-      t.includes('angular') ||
-      t.includes('react') ||
-      t.includes('node') ||
-      t.includes('sql') ||
-      t.includes('js') ||
-      t.includes('database')
-    );
-  }
 
   ngOnInit() {
     this.certService.getMyCertificates().subscribe({

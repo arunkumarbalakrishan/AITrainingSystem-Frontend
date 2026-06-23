@@ -248,15 +248,15 @@
         (click)="showAiTools = !showAiTools"
       >
         <div
-          class="text-uppercase text-muted small fw-bold"
-          style="font-size: 0.75rem; letter-spacing: 0.5px"
+          class="text-uppercase small fw-bold"
+          style="font-size: 0.75rem; letter-spacing: 0.5px; color: rgba(255,255,255,0.6);"
         >
           AI Career Tools
         </div>
         <i
-          class="bi text-muted"
+          class="bi"
           [ngClass]="showAiTools ? 'bi-chevron-up' : 'bi-chevron-down'"
-          style="font-size: 0.75rem"
+          style="font-size: 0.75rem; color: rgba(255,255,255,0.6);"
         ></i>
       </div>
 
@@ -322,15 +322,15 @@
           (click)="showTrainerTools = !showTrainerTools"
         >
           <div
-            class="text-uppercase text-muted small fw-bold"
-            style="font-size: 0.75rem; letter-spacing: 0.5px"
+            class="text-uppercase small fw-bold"
+            style="font-size: 0.75rem; letter-spacing: 0.5px; color: rgba(255,255,255,0.6);"
           >
             Trainer Tools
           </div>
           <i
-            class="bi text-muted"
+            class="bi"
             [ngClass]="showTrainerTools ? 'bi-chevron-up' : 'bi-chevron-down'"
-            style="font-size: 0.75rem"
+            style="font-size: 0.75rem; color: rgba(255,255,255,0.6);"
           ></i>
         </div>
 
@@ -952,9 +952,9 @@
       />
       <button
         (click)="sendMiniChat()"
-        class="btn btn-premium btn-sm px-3"
+        class="btn btn-sm px-3 text-white"
         [disabled]="!miniChatInput.trim() || miniChatLoading"
-        style="font-size: 0.8rem"
+        style="background: linear-gradient(135deg, #3b82f6, #2563eb); border: none; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(59,130,246,0.3);"
       >
         Send
       </button>
@@ -964,9 +964,11 @@
   <!-- Floating Bubble Toggle Button -->
   <button
     (click)="toggleMiniChat()"
-    class="btn btn-premium rounded-circle d-flex align-items-center justify-content-center shadow-lg"
+    class="btn rounded-circle d-flex align-items-center justify-content-center text-white"
     cdkDragHandle
     style="
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      box-shadow: 0 8px 24px rgba(59,130,246,0.4);
       width: 60px;
       height: 60px;
       border: none;

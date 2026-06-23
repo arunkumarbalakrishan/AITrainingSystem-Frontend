@@ -453,6 +453,10 @@ import { ToastrService } from 'ngx-toastr';
         border: 1px solid var(--border-color);
         border-top-left-radius: 4px;
       }
+      .message-bubble:not(.user-bubble) .markdown-body,
+      .message-bubble:not(.user-bubble) p {
+        color: var(--text-dark) !important;
+      }
       .loading-bubble {
         background: var(--card-bg);
         border: 1px solid var(--border-color);

@@ -156,6 +156,10 @@ export class AuthService {
     );
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('access_token');
+  }
+
   private decodeToken(token: string): any {
     try {
       const parts = token.split('.');

@@ -47,6 +47,21 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
             [maxTilt]="8"
             [scale]="1.03"
           >
+            <!-- Course Thumbnail -->
+            <div class="position-relative mb-3" style="height: 120px; overflow: hidden; border-radius: var(--border-radius-sm);">
+              <div class="w-100 h-100 position-absolute" style="background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(0,0,0,0.8) 100%); z-index: 1;"></div>
+              <img
+                [src]="getCourseImage(item.courseTitle || item.title)"
+                class="w-100 h-100 position-relative"
+                [class.object-fit-contain]="isLogo(item.courseTitle || item.title)"
+                [class.object-fit-cover]="!isLogo(item.courseTitle || item.title)"
+                [class.p-3]="isLogo(item.courseTitle || item.title)"
+                [class.bg-white]="isLogo(item.courseTitle || item.title)"
+                style="z-index: 0;"
+                alt="Course Thumbnail"
+              />
+            </div>
+
             <div class="d-flex justify-content-between align-items-start mb-2">
               <h6 class="fw-bold mb-0 flex-grow-1">
                 {{ item.courseTitle || item.title || 'Course' }}
@@ -232,6 +247,52 @@ export class MyCoursesComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  getCourseImage(title: string): string {
+    if (!title)
+      return 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800';
+    const t = title.toLowerCase();
+    if (t.includes('java') && !t.includes('javascript'))
+      return 'https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg';
+    if (t.includes('asp.net') || t.includes('.net') || t.includes('c#'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/e/ee/.NET_Core_Logo.svg';
+    if (t.includes('python'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg';
+    if (t.includes('angular'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Angular_full_color_logo.svg';
+    if (t.includes('react'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg';
+    if (t.includes('node') || t.includes('express'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg';
+    if (t.includes('sql') || t.includes('database'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png';
+    if (t.includes('javascript') || t.includes('js'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg';
+
+    const fallbacks = [
+      'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/270694/pexels-photo-270694.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ];
+    return fallbacks[title.length % fallbacks.length];
+  }
+
+  isLogo(title: string): boolean {
+    if (!title) return false;
+    const t = title.toLowerCase();
+    return (
+      t.includes('java') ||
+      t.includes('.net') ||
+      t.includes('c#') ||
+      t.includes('python') ||
+      t.includes('angular') ||
+      t.includes('react') ||
+      t.includes('node') ||
+      t.includes('sql') ||
+      t.includes('js') ||
+      t.includes('database')
+    );
   }
 
   filterByTab() {

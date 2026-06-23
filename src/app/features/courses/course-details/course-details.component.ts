@@ -39,11 +39,20 @@ import Swal from 'sweetalert2';
         <div class="col-lg-8">
           <!-- Hero -->
           <div class="premium-card p-0 mb-4 overflow-hidden">
-            <div
-              class="d-flex align-items-center justify-content-center"
-              style="height: 200px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));"
-            >
-              <h2 class="text-white fw-bold text-center px-4">{{ course.title }}</h2>
+            <!-- Course Image / Video placeholder -->
+            <div class="position-relative w-100 bg-dark" style="height: 350px; overflow: hidden; border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;">
+              <img
+                [src]="getCourseImage(course.title)"
+                class="w-100 h-100 opacity-75"
+                [class.object-fit-contain]="isLogo(course.title)"
+                [class.object-fit-cover]="!isLogo(course.title)"
+                [class.p-5]="isLogo(course.title)"
+                [class.bg-white]="isLogo(course.title)"
+                alt="Course Preview"
+              />
+              <div *ngIf="!isLogo(course.title)" class="position-absolute top-50 start-50 translate-middle text-center" style="z-index: 2;">
+                <h2 class="text-white fw-bold px-4" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">{{ course.title }}</h2>
+              </div>
             </div>
             <div class="p-4">
               <p class="text-muted" style="line-height: 1.7;">{{ course.description }}</p>
@@ -161,8 +170,8 @@ import Swal from 'sweetalert2';
     </div>
 
     <!-- Stripe Checkout Modal Overlay -->
-    <div *ngIf="showStripeModal" class="stripe-modal-overlay">
-      <div class="stripe-modal-card">
+    <div *ngIf="showStripeModal" class="stripe-modal-overlay animate-fade-in">
+      <div class="stripe-modal-card" style="animation: fadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
         <div class="stripe-modal-header">
           <div class="stripe-logo">
             <svg
@@ -207,7 +216,7 @@ import Swal from 'sweetalert2';
               >
                 <i
                   class="bi bi-credit-card stripe-card-icon"
-                  style="position: absolute; left: 14px; top: 12px; font-size: 1.2rem; color: #94a3b8;"
+                  style="position: absolute; left: 14px; top: 10px; font-size: 1.2rem; color: #94a3b8;"
                 ></i>
                 <input
                   type="text"
@@ -247,7 +256,7 @@ import Swal from 'sweetalert2';
               </div>
             </div>
 
-            <div class="stripe-form-group mt-3">
+            <div class="stripe-form-group">
               <label class="stripe-label">Name on Card</label>
               <input
                 type="text"
@@ -259,23 +268,30 @@ import Swal from 'sweetalert2';
               />
             </div>
 
-            <button type="submit" [disabled]="stripeProcessing" class="stripe-pay-button">
-              <span
-                *ngIf="stripeProcessing"
-                class="spinner-border spinner-border-sm me-2"
-                role="status"
-              ></span>
+            <button type="submit" [disabled]="stripeProcessing" class="stripe-pay-button position-relative overflow-hidden">
+              <div *ngIf="stripeProcessing" class="position-absolute w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center" style="background: rgba(99, 91, 255, 0.9);">
+                <div class="spinner-border spinner-border-sm text-white" role="status"></div>
+              </div>
               {{ stripeProcessing ? 'Processing...' : 'Pay Rs. ' + course.price }}
             </button>
           </form>
 
-          <div class="stripe-secure-footer">
-            <i class="bi bi-shield-fill-check me-1"></i> Secure payment processed by Stripe.
+          <div class="stripe-secure-footer d-flex align-items-center justify-content-center gap-2">
+            <i class="bi bi-shield-fill-check text-success" [class.text-muted]="stripeProcessing"></i> 
+            <span [class.text-muted]="!stripeProcessing" [class.fw-semibold]="stripeProcessing" [class.text-success]="stripeProcessing">
+              {{ stripeProcessing ? 'Verifying payment securely...' : 'Secure payment processed by Stripe.' }}
+            </span>
           </div>
         </div>
       </div>
     </div>
   `,
+  styles: [`
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  `]
 })
 export class CourseDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -376,6 +392,54 @@ export class CourseDetailsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {};
+
+  getCourseImage(title: string): string {
+    if (!title)
+      return 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800';
+    const t = title.toLowerCase();
+    if (t.includes('java') && !t.includes('javascript'))
+      return 'https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg';
+    if (t.includes('asp.net') || t.includes('.net') || t.includes('c#'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/e/ee/.NET_Core_Logo.svg';
+    if (t.includes('python'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg';
+    if (t.includes('angular'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Angular_full_color_logo.svg';
+    if (t.includes('react'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg';
+    if (t.includes('node') || t.includes('express'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg';
+    if (t.includes('sql') || t.includes('database'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png';
+    if (t.includes('javascript') || t.includes('js'))
+      return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg';
+
+    const fallbacks = [
+      'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/270694/pexels-photo-270694.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ];
+    return fallbacks[title.length % fallbacks.length];
+  }
+
+  isLogo(title: string): boolean {
+    if (!title) return false;
+    const t = title.toLowerCase();
+    return (
+      t.includes('java') ||
+      t.includes('.net') ||
+      t.includes('c#') ||
+      t.includes('python') ||
+      t.includes('angular') ||
+      t.includes('react') ||
+      t.includes('node') ||
+      t.includes('sql') ||
+      t.includes('js') ||
+      t.includes('database')
+    );
+  }
+
   formatCVC() {
     this.stripeCVC = this.stripeCVC.replace(/\D/g, '');
   }
@@ -400,8 +464,21 @@ export class CourseDetailsComponent implements OnInit {
           this.router.navigate(['/my-courses']);
         },
         error: (err) => {
+          console.error("Stripe Mock Payment Error:", err);
           this.stripeProcessing = false;
-          this.toastr.error(err.error?.message || 'Payment failed');
+          
+          let errorMsg = 'Payment failed';
+          if (err.error && typeof err.error === 'object') {
+             errorMsg = err.error.message || err.error.Message || err.error.title || 'Payment failed on server';
+          } else if (err.status === 0) {
+             errorMsg = 'Cannot connect to server. Did you accept the SSL cert in Swagger?';
+          } else if (err.status === 401) {
+             errorMsg = 'Your session expired. Please login again.';
+          } else if (err.message) {
+             errorMsg = err.message;
+          }
+          
+          this.toastr.error(errorMsg);
         },
       });
     }, 1200);

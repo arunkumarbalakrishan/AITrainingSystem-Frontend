@@ -565,7 +565,7 @@
         <!-- Notification Bell -->
         <div class="position-relative" #notifyContainer>
           <button
-            (click)="toggleNotifyDropdown()"
+            (click)="toggleNotifyDropdown(); $event.stopPropagation()"
             class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center"
             style="
               width: 40px;
@@ -598,7 +598,7 @@
           <!-- Notification Dropdown Menu -->
           <div
             *ngIf="showNotifyDropdown"
-            class="position-absolute end-0 mt-3 bg-white rounded shadow-lg p-0 animate-fade-in"
+            class="position-absolute end-0 mt-3 notification-dropdown rounded shadow-lg p-0 animate-fade-in"
             style="
               width: 320px;
               max-height: 400px;
@@ -699,7 +699,7 @@
           <div
             class="d-flex align-items-center gap-2 p-1 pe-2 rounded-pill premium-card"
             style="cursor: pointer; border: 1px solid var(--border-color); box-shadow: none"
-            (click)="toggleProfileDropdown()"
+            (click)="toggleProfileDropdown(); $event.stopPropagation()"
           >
             <img
               [src]="getAvatarUrl()"
@@ -733,7 +733,7 @@
           <!-- Profile Dropdown Menu -->
           <div
             *ngIf="showProfileDropdown"
-            class="position-absolute end-0 mt-2 bg-white border rounded shadow-lg p-2 animate-fade-in"
+            class="position-absolute end-0 mt-2 profile-dropdown border rounded shadow-lg p-2 animate-fade-in"
             style="width: 220px; z-index: 1050"
           >
             <div class="px-3 py-2 mb-2 border-bottom d-md-none">

@@ -8,22 +8,29 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
       <div>
-        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2" style="font-size: 1.15rem; letter-spacing: -0.2px;">
           <i class="bi bi-compass text-primary"></i> Completion Progress
         </h5>
         
         <!-- Circular Progress Chart -->
         <div class="position-relative d-flex justify-content-center align-items-center my-4">
           <svg width="150" height="150" viewBox="0 0 150 150" class="progress-ring">
+            <defs>
+              <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#3b82f6" />
+                <stop offset="60%" stop-color="#60a5fa" />
+                <stop offset="100%" [attr.stop-color]="getColor(completionPercentage)" />
+              </linearGradient>
+            </defs>
             <circle 
               cx="75" cy="75" r="65" 
-              stroke="rgba(255, 255, 255, 0.05)" 
-              stroke-width="12" 
+              stroke="rgba(255, 255, 255, 0.04)" 
+              stroke-width="10" 
               fill="transparent" />
             <circle 
               cx="75" cy="75" r="65" 
-              [attr.stroke]="getColor(completionPercentage)" 
-              stroke-width="12" 
+              stroke="url(#progressGrad)" 
+              stroke-width="10" 
               stroke-linecap="round"
               fill="transparent" 
               [attr.stroke-dasharray]="strokeDasharray"
@@ -35,44 +42,82 @@ import { CommonModule } from '@angular/common';
             <h2 class="fw-bold text-white mb-0 mt-1" style="font-size: 2.2rem; letter-spacing: -1px;">
               {{ completionPercentage }}%
             </h2>
-            <small class="text-secondary fw-semibold text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px;">
+            <small [style.color]="getColor(completionPercentage)" class="fw-semibold text-uppercase" style="font-size: 0.65rem; letter-spacing: 1.5px;">
               {{ getStatusLabel(completionPercentage) }}
             </small>
           </div>
         </div>
 
-        <p class="text-secondary small mb-4 text-center">
+        <p class="text-secondary small mb-4 text-center px-2">
           Complete your profile milestones to unlock personalized AI content recommendations.
         </p>
       </div>
 
       <!-- Actionable Checklist -->
       <div class="completion-checklist border-top pt-3 border-light border-opacity-10">
-        <h6 class="fw-bold text-white small mb-3 text-uppercase" style="letter-spacing: 1px;">
-          Suggestions to Complete
-        </h6>
         
-        <div class="d-flex flex-column gap-2.5">
-          @for (item of checklist(); track item.label) {
-            <div class="d-flex align-items-center justify-content-between p-2 rounded checklist-item" 
-                 [class.completed]="item.done">
-              <div class="d-flex align-items-center gap-2.5">
-                <div class="circle-check d-flex align-items-center justify-content-center">
-                  @if (item.done) {
-                    <i class="bi bi-check-lg text-primary fw-bold" style="font-size: 0.9rem;"></i>
-                  } @else {
+        <!-- Pending Items (Suggestions to Complete) -->
+        <div *ngIf="pendingItems().length > 0" class="mb-4">
+          <h6 class="fw-bold text-white small mb-3 text-uppercase d-flex align-items-center justify-content-between" style="letter-spacing: 1.2px; font-size: 0.72rem;">
+            <span>Suggestions to Complete</span>
+            <span class="badge bg-dark border border-light border-opacity-10 text-secondary rounded-pill px-2 py-0.5" style="font-size: 0.65rem;">
+              {{ pendingItems().length }} remaining
+            </span>
+          </h6>
+          
+          <div class="d-flex flex-column gap-2">
+            @for (item of pendingItems(); track item.label) {
+              <div class="d-flex align-items-center justify-content-between p-2.5 rounded checklist-item pending">
+                <div class="d-flex align-items-center gap-2.5">
+                  <div class="circle-check pending d-flex align-items-center justify-content-center">
                     <div class="circle-dot"></div>
-                  }
+                  </div>
+                  <span class="text-light small text-label">
+                    {{ item.label }}
+                  </span>
                 </div>
-                <span class="text-light small text-label" [class.text-decoration-line-through]="item.done" [class.opacity-50]="item.done">
-                  {{ item.label }}
+                <span class="badge bg-dark-accent border border-light border-opacity-10 text-primary-accent" style="font-size: 0.72rem;">
+                  +{{ item.weight }}%
                 </span>
               </div>
-              <span class="badge bg-dark border border-light border-opacity-10 text-secondary" style="font-size: 0.75rem;">
-                +{{ item.weight }}%
-              </span>
-            </div>
-          }
+            }
+          </div>
+        </div>
+
+        <!-- Completed Items -->
+        <div *ngIf="completedItems().length > 0" [class.mt-3]="pendingItems().length > 0">
+          <h6 class="fw-bold text-secondary small mb-2.5 text-uppercase" style="letter-spacing: 1.2px; font-size: 0.68rem;">
+            Completed Milestones
+          </h6>
+          
+          <div class="d-flex flex-column gap-2">
+            @for (item of completedItems(); track item.label) {
+              <div class="d-flex align-items-center justify-content-between p-2.5 rounded checklist-item completed opacity-75">
+                <div class="d-flex align-items-center gap-2.5">
+                  <div class="circle-check completed d-flex align-items-center justify-content-center">
+                    <i class="bi bi-check-lg text-primary fw-bold" style="font-size: 0.8rem;"></i>
+                  </div>
+                  <span class="text-secondary small text-label">
+                    {{ item.label }}
+                  </span>
+                </div>
+                <span class="badge bg-success-soft text-success border-0 px-2 py-1" style="font-size: 0.7rem; font-weight: 600;">
+                  <i class="bi bi-patch-check-fill me-1"></i>+{{ item.weight }}%
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- All completed celebration state -->
+        <div *ngIf="pendingItems().length === 0" class="text-center py-4 animate-fade-in">
+          <div class="glow-icon-container mb-3">
+            <i class="bi bi-patch-check-fill text-primary" style="font-size: 2.2rem; line-height: 1;"></i>
+          </div>
+          <h6 class="fw-bold text-white mb-1.5" style="letter-spacing: -0.2px;">Profile 100% Complete!</h6>
+          <p class="text-secondary small mb-0 px-3">
+            Awesome job! You have fully unlocked all personalized AI recommendations and features.
+          </p>
         </div>
       </div>
     </div>
@@ -80,47 +125,95 @@ import { CommonModule } from '@angular/common';
   styles: [`
     .glass-card {
       background: rgba(13, 17, 23, 0.7);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 20px;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .glass-card:hover {
       border-color: rgba(159, 239, 0, 0.25);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
     }
     .progress-ring-circle {
-      transition: stroke-dashoffset 0.6s ease;
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: drop-shadow(0 0 6px rgba(159, 239, 0, 0.2));
     }
     .checklist-item {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.015);
       border: 1px solid rgba(255, 255, 255, 0.04);
-      transition: all 0.25s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .checklist-item.pending:hover {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+      transform: translateX(4px);
     }
     .checklist-item.completed {
-      background: rgba(159, 239, 0, 0.03);
-      border-color: rgba(159, 239, 0, 0.08);
+      background: rgba(159, 239, 0, 0.01);
+      border-color: rgba(159, 239, 0, 0.03);
     }
     .circle-check {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
       transition: all 0.25s ease;
     }
+    .checklist-item.pending .circle-check {
+      border-color: rgba(255, 255, 255, 0.25);
+    }
     .checklist-item.completed .circle-check {
-      border-color: var(--primary-color);
-      background: rgba(159, 239, 0, 0.1);
+      border-color: #9FEF00 !important;
+      background: rgba(159, 239, 0, 0.08);
     }
     .circle-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.4);
+      transition: all 0.25s ease;
+    }
+    .checklist-item.pending:hover .circle-dot {
+      background: #9FEF00;
+      box-shadow: 0 0 8px #9FEF00;
     }
     .text-label {
       font-weight: 500;
-      transition: all 0.25s ease;
+      letter-spacing: -0.1px;
+    }
+    .bg-dark-accent {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+    .text-primary-accent {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .bg-success-soft {
+      background-color: rgba(0, 210, 106, 0.08);
+    }
+    .text-success {
+      color: #00D26A !important;
+    }
+    .glow-icon-container {
+      display: inline-block;
+      padding: 12px;
+      border-radius: 50%;
+      background: rgba(159, 239, 0, 0.08);
+      border: 1px solid rgba(159, 239, 0, 0.15);
+      box-shadow: 0 0 20px rgba(159, 239, 0, 0.1);
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+    @keyframes pulseGlow {
+      0% { transform: scale(1); box-shadow: 0 0 20px rgba(159, 239, 0, 0.1); }
+      50% { transform: scale(1.05); box-shadow: 0 0 28px rgba(159, 239, 0, 0.2); }
+      100% { transform: scale(1); box-shadow: 0 0 20px rgba(159, 239, 0, 0.1); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   `]
 })
@@ -138,6 +231,9 @@ export class ProfileCompletionComponent {
       { label: 'Earn your first Certificate', weight: 20, done: !!this.completionData.hasCertificates }
     ];
   });
+
+  pendingItems = computed(() => this.checklist().filter(item => !item.done));
+  completedItems = computed(() => this.checklist().filter(item => item.done));
 
   // Calculate percentage dynamically
   get completionPercentage(): number {

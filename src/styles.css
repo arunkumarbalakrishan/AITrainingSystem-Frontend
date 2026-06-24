@@ -164,6 +164,382 @@ main {
   padding: 28px 32px;
 }
 
+/* Profile page: override light bg to dark when in dark theme so components render correctly */
+html[data-theme="dark"] main:has(app-profile) {
+  background-color: #080b10;
+}
+html[data-theme="dark"] .content-wrapper:has(app-profile) {
+  background-color: #080b10;
+}
+/* Header goes dark on profile page in dark mode */
+html[data-theme="dark"] .content-wrapper:has(app-profile) .glass-header {
+  background: rgba(13, 17, 23, 0.92) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+}
+html[data-theme="dark"] .content-wrapper:has(app-profile) .glass-header h5,
+html[data-theme="dark"] .content-wrapper:has(app-profile) .glass-header .text-dark,
+html[data-theme="dark"] .content-wrapper:has(app-profile) .glass-header .fw-bold {
+  color: #f0f6fc !important;
+}
+html[data-theme="dark"] .content-wrapper:has(app-profile) .glass-header .text-muted {
+  color: #8b949e !important;
+}
+html[data-theme="dark"] .content-wrapper:has(app-profile) .glass-header .btn-light {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #f0f6fc !important;
+}
+html[data-theme="dark"] .content-wrapper:has(app-profile) .glass-header .btn-light:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+html[data-theme="dark"] .content-wrapper:has(app-profile) .glass-header .premium-card {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ============================================================
+   LIGHT MODE OVERRIDES FOR THE PROFILE PAGE
+   ============================================================ */
+html:not([data-theme="dark"]) .profile-premium-theme {
+  --bg-color: #f0f4f8;
+  --card-bg-color: rgba(255, 255, 255, 0.85);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+}
+
+html:not([data-theme="dark"]) .profile-premium-theme .glass-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #111827 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+}
+
+html:not([data-theme="dark"]) .profile-premium-theme .glass-card:hover {
+  border-color: rgba(159, 239, 0, 0.4) !important;
+}
+
+/* Override text-white and text-light classes on profile page in light mode */
+html:not([data-theme="dark"]) .profile-premium-theme .text-white {
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .text-light {
+  color: #1f2937 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .text-secondary {
+  color: #6b7280 !important;
+}
+
+/* Tab Navigation styles in light mode */
+html:not([data-theme="dark"]) .profile-premium-theme .profile-nav-tabs-wrapper {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .btn-nav-tab:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .btn-nav-tab.active {
+  background: rgba(159, 239, 0, 0.15) !important;
+  color: #4c8c00 !important;
+  border-color: rgba(159, 239, 0, 0.4) !important;
+  box-shadow: 0 2px 10px rgba(159, 239, 0, 0.15) !important;
+}
+
+/* Checklist items and internal details */
+html:not([data-theme="dark"]) .profile-premium-theme .checklist-item {
+  background: rgba(0, 0, 0, 0.015) !important;
+  border-color: rgba(0, 0, 0, 0.04) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .checklist-item.pending:hover {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .checklist-item.completed {
+  background: rgba(159, 239, 0, 0.04) !important;
+  border-color: rgba(159, 239, 0, 0.1) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .circle-check.pending {
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .circle-dot {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .circle-check.completed {
+  border-color: #6ab800 !important;
+  background: rgba(159, 239, 0, 0.1) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .circle-check.completed i {
+  color: #6ab800 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .bg-dark-accent {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+  color: #4b5563 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .text-primary-accent {
+  color: #4b5563 !important;
+}
+
+/* Forms, Inputs, select and other card elements */
+html:not([data-theme="dark"]) .profile-premium-theme input:not([type="range"]),
+html:not([data-theme="dark"]) .profile-premium-theme textarea,
+html:not([data-theme="dark"]) .profile-premium-theme select {
+  background-color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme input:focus,
+html:not([data-theme="dark"]) .profile-premium-theme textarea:focus,
+html:not([data-theme="dark"]) .profile-premium-theme select:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 3px rgba(159, 239, 0, 0.15) !important;
+}
+
+/* Event cards and sub elements */
+html:not([data-theme="dark"]) .profile-premium-theme .event-card {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.05) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .event-card:hover {
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Learning goals section */
+html:not([data-theme="dark"]) .profile-premium-theme .bg-black.bg-opacity-40 {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.05) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .progress.bg-black {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Profile header component inner styles */
+html:not([data-theme="dark"]) .profile-premium-theme .header-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .header-card .name-text {
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .header-card .avatar-image {
+  border-color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(159, 239, 0, 0.45), 0 8px 24px rgba(0,0,0,0.15) !important;
+  background-color: #f8fafc !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .header-card .avatar-upload-overlay {
+  border-color: #ffffff !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .header-card .badge-joined {
+  background: rgba(0,0,0,0.04) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  color: #6b7280 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .header-card .pinned-section {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .header-card .pinned-section .badge {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .header-card .pinned-section .badge span {
+  color: #111827 !important;
+}
+
+/* Glass Buttons in Light Mode */
+html:not([data-theme="dark"]) .profile-premium-theme .btn-glass {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .btn-glass:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #000000 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .btn-glass.text-danger {
+  color: #ff4d4f !important;
+  border-color: rgba(255, 77, 79, 0.3) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .btn-glass.text-danger:hover {
+  background: rgba(255, 77, 79, 0.1) !important;
+  color: #ff4d4f !important;
+}
+
+/* Stat Cards in Light Mode */
+html:not([data-theme="dark"]) .profile-premium-theme .stat-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #111827 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .stat-card:hover {
+  border-color: rgba(159, 239, 0, 0.4) !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .stat-card .value-glowing {
+  color: #111827 !important;
+  text-shadow: none !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .stat-card .text-secondary {
+  color: #6b7280 !important;
+}
+
+/* Badge / Achievement Cards in Light Mode */
+html:not([data-theme="dark"]) .profile-premium-theme .badge-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .badge-card:hover {
+  background: #ffffff !important;
+  border-color: rgba(159, 239, 0, 0.4) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .badge-card.locked {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.04) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .badge-card .badge-icon-outer {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .badge-card:not(.locked) .badge-icon-outer {
+  background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, transparent 70%) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .badge-card.locked .badge-icon-outer {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #9ca3af !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .badge-card .text-white {
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .badge-card .text-secondary {
+  color: #6b7280 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .badge-card .progress.bg-black {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Skills tags & chips input wrapper in Light Mode */
+html:not([data-theme="dark"]) .profile-premium-theme .skills-input-wrapper {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .skills-input-wrapper input {
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .skills-input-wrapper input::placeholder {
+  color: #9ca3af !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .skill-chip {
+  background: rgba(159, 239, 0, 0.15) !important;
+  border-color: rgba(159, 239, 0, 0.3) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .skill-chip span {
+  color: #3f6600 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .skill-chip button {
+  color: #555555 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .skill-chip button:hover {
+  color: #ff4d4f !important;
+}
+
+/* Social Icon prefixes and inputs in Light Mode */
+html:not([data-theme="dark"]) .profile-premium-theme .social-icon-prefix {
+  background-color: #f1f5f9 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #475569 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .input-group .premium-input {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Modal and badge details popup in Light Mode */
+html:not([data-theme="dark"]) .profile-premium-theme .custom-modal-backdrop {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .custom-modal-content {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .custom-modal-content h5 {
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .custom-modal-content .text-secondary {
+  color: #6b7280 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .custom-modal-content .badge-details-footer {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .custom-modal-content .progress.bg-black {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .custom-modal-content .btn-outline-light {
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  color: #374151 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .custom-modal-content .btn-outline-light:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Background/border resets for light theme compatibility */
+html:not([data-theme="dark"]) .profile-premium-theme .bg-dark,
+html:not([data-theme="dark"]) .profile-premium-theme .bg-black {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .border-light,
+html:not([data-theme="dark"]) .profile-premium-theme .border-opacity-10 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme input[readonly] {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  color: #6b7280 !important;
+}
+
+/* Security and Password checklist compatibility in Light Mode */
+html:not([data-theme="dark"]) .profile-premium-theme .bg-black.bg-opacity-40 {
+  background-color: #f8fafc !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .mfa-setup-box {
+  background-color: #f8fafc !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .bg-black.bg-opacity-40 .text-secondary,
+html:not([data-theme="dark"]) .profile-premium-theme .mfa-setup-box .text-secondary {
+  color: #4b5563 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .bg-black.bg-opacity-40 .text-light,
+html:not([data-theme="dark"]) .profile-premium-theme .mfa-setup-box .text-light {
+  color: #1f2937 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .bg-black.bg-opacity-40 .bi-circle,
+html:not([data-theme="dark"]) .profile-premium-theme .mfa-setup-box .bi-circle {
+  color: #9ca3af !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .toggle-row {
+  background-color: rgba(0, 0, 0, 0.01) !important;
+  border-color: rgba(0, 0, 0, 0.03) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .toggle-row:hover {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.05) !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .btn-password-toggle {
+  background-color: #f1f5f9 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #475569 !important;
+}
+html:not([data-theme="dark"]) .profile-premium-theme .btn-password-toggle:hover {
+  background-color: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
 /* ============================================================
    GLASS HEADER (top nav bar)
    ============================================================ */
@@ -491,12 +867,51 @@ main {
 }
 
 /* ============================================================
-   NOTIFICATION DROPDOWN
+   NOTIFICATION & PROFILE DROPDOWN
    ============================================================ */
+.notification-dropdown,
+.profile-dropdown {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
 [data-theme="dark"] .notification-dropdown,
 [data-theme="dark"] .profile-dropdown {
-  background: var(--card-bg) !important;
-  border-color: var(--border-color) !important;
+  background: #0d1117 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.notification-dropdown .dropdown-item,
+.profile-dropdown .dropdown-item {
+  color: var(--text-primary) !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.notification-dropdown .dropdown-item:hover,
+.profile-dropdown .dropdown-item:hover {
+  background-color: var(--card-bg-hover) !important;
+}
+
+[data-theme="dark"] .notification-dropdown .dropdown-item:hover,
+[data-theme="dark"] .profile-dropdown .dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Glassmorphic/dark theme support for when profile page override is active */
+.content-wrapper:has(app-profile) .notification-dropdown,
+.content-wrapper:has(app-profile) .profile-dropdown {
+  background: #0d1117 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.content-wrapper:has(app-profile) .notification-dropdown .dropdown-item,
+.content-wrapper:has(app-profile) .profile-dropdown .dropdown-item {
+  color: #f0f6fc !important;
+}
+
+.content-wrapper:has(app-profile) .notification-dropdown .dropdown-item:hover,
+.content-wrapper:has(app-profile) .profile-dropdown .dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
 }
 
 /* ============================================================

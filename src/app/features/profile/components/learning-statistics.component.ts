@@ -27,83 +27,6 @@ import { CommonModule } from '@angular/common';
       }
 
     </div>
-
-    <!-- AI Usage & Deep Analytics Panel -->
-    <div class="glass-card p-4 mb-4">
-      <h5 class="fw-bold mb-4 text-white d-flex align-items-center gap-2 border-bottom border-light border-opacity-10 pb-3">
-        <i class="bi bi-robot text-primary"></i> AI Assistant Usage Analytics
-      </h5>
-
-      <div class="row g-4">
-        
-        <!-- AI Chats Used -->
-        <div class="col-md-3">
-          <div class="ai-stat-item p-3 rounded-4 bg-black bg-opacity-40 border border-light border-opacity-5 text-center">
-            <div class="ai-icon mx-auto bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mb-2.5">
-              <i class="bi bi-chat-left-dots-fill"></i>
-            </div>
-            <h4 class="fw-bold text-white mb-0">{{ stats.aiChatsUsed || 0 }}</h4>
-            <span class="text-secondary small">AI Assistant Chats</span>
-          </div>
-        </div>
-
-        <!-- Recommendations Accepted -->
-        <div class="col-md-3">
-          <div class="ai-stat-item p-3 rounded-4 bg-black bg-opacity-40 border border-light border-opacity-5 text-center">
-            <div class="ai-icon mx-auto bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center mb-2.5">
-              <i class="bi bi-hand-thumbs-up-fill"></i>
-            </div>
-            <h4 class="fw-bold text-white mb-0">{{ stats.recommendationsAccepted || 0 }}</h4>
-            <span class="text-secondary small">Suggestions Accepted</span>
-          </div>
-        </div>
-
-        <!-- Study Plans Generated -->
-        <div class="col-md-3">
-          <div class="ai-stat-item p-3 rounded-4 bg-black bg-opacity-40 border border-light border-opacity-5 text-center">
-            <div class="ai-icon mx-auto bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center mb-2.5">
-              <i class="bi bi-calendar-check-fill"></i>
-            </div>
-            <h4 class="fw-bold text-white mb-0">{{ stats.studyPlansGenerated || 0 }}</h4>
-            <span class="text-secondary small">AI Study Plans Created</span>
-          </div>
-        </div>
-
-        <!-- AI Study Hours -->
-        <div class="col-md-3">
-          <div class="ai-stat-item p-3 rounded-4 bg-black bg-opacity-40 border border-light border-opacity-5 text-center">
-            <div class="ai-icon mx-auto bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center mb-2.5">
-              <i class="bi bi-hourglass-split"></i>
-            </div>
-            <h4 class="fw-bold text-white mb-0">{{ stats.aiLearningHours || 0 }} hrs</h4>
-            <span class="text-secondary small">AI-Guided Study Time</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Advanced completion rates and mini logs -->
-      <div class="mt-4 pt-3 border-top border-light border-opacity-5">
-        <div class="row align-items-center">
-          <div class="col-md-6 mb-3 mb-md-0">
-            <span class="text-secondary small fw-bold d-block mb-1.5">AI Recommendations Match Accuracy</span>
-            <div class="progress bg-black bg-opacity-40" style="height: 8px; border-radius: 4px;">
-              <div class="progress-bar bg-primary" role="progressbar" style="width: 94%;" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <small class="text-secondary opacity-60 mt-1 d-block">94% profile relevancy match rating</small>
-          </div>
-
-          <div class="col-md-6">
-            <span class="text-secondary small fw-bold d-block mb-1.5">Active Target Course Completion Pace</span>
-            <div class="progress bg-black bg-opacity-40" style="height: 8px; border-radius: 4px;">
-              <div class="progress-bar bg-success" role="progressbar" style="width: 78%;" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <small class="text-secondary opacity-60 mt-1 d-block">Study speed is 1.2x faster than average cohort pace</small>
-          </div>
-        </div>
-      </div>
-
-    </div>
   `,
   styles: [`
     .stat-card {
@@ -144,25 +67,6 @@ import { CommonModule } from '@angular/common';
         flex: 0 0 50%;
         max-width: 50%;
       }
-    }
-    .glass-card {
-      background: rgba(13, 17, 23, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-    }
-    .ai-stat-item {
-      transition: all 0.25s ease;
-    }
-    .ai-stat-item:hover {
-      transform: scale(1.03);
-      border-color: rgba(159, 239, 0, 0.15) !important;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-    .ai-icon {
-      width: 44px;
-      height: 44px;
-      font-size: 1.25rem;
     }
   `]
 })

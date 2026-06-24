@@ -46,67 +46,67 @@ import { AccountPreferencesComponent } from './components/account-preferences.co
     <div class="profile-premium-theme container py-4 mt-2 mb-5">
       
       <!-- Profile Header Banner -->
-      <app-profile-header 
-        [profile]="profileData" 
-        [avatarUrl]="avatarUrl()" 
-        [coverUrl]="coverUrl()" 
-        [pinnedCertificates]="pinnedCertificates()"
-        (avatarChanged)="uploadAvatar($event)"
-        (avatarRemoved)="removeAvatar()"
-        (coverChanged)="uploadCover($event)"
-        (coverRemoved)="removeCover()"
-        (unpinCertificate)="onPinCertificate($event)">
-      </app-profile-header>
+      <div class="position-relative mb-4">
+        <app-profile-header 
+          [profile]="profileData" 
+          [avatarUrl]="avatarUrl()" 
+          [coverUrl]="coverUrl()" 
+          [pinnedCertificates]="pinnedCertificates()"
+          (avatarChanged)="uploadAvatar($event)"
+          (avatarRemoved)="removeAvatar()"
+          (coverChanged)="uploadCover($event)"
+          (coverRemoved)="removeCover()"
+          (unpinCertificate)="onPinCertificate($event)">
+        </app-profile-header>
+      </div>
 
-      <!-- Navigation Grid layout -->
-      <div class="row g-4 mt-1">
-        
-        <!-- Sidebar Navigation -->
-        <div class="col-lg-3">
-          <div class="glass-sidebar p-3 d-flex flex-row flex-lg-column gap-2 overflow-x-auto overflow-y-hidden overflow-lg-y-auto w-100">
-            <button class="btn btn-sidebar-tab d-flex align-items-center gap-2.5 px-3 py-2.5 rounded-3 text-start whitespace-nowrap"
-                    [class.active]="activeTab() === 'overview'" (click)="activeTab.set('overview')">
-              <i class="bi bi-grid-1x2-fill"></i>
-              <span>Overview</span>
-            </button>
-            
-            <button class="btn btn-sidebar-tab d-flex align-items-center gap-2.5 px-3 py-2.5 rounded-3 text-start whitespace-nowrap"
-                    [class.active]="activeTab() === 'details'" (click)="activeTab.set('details')">
-              <i class="bi bi-person-bounding-box"></i>
-              <span>Profile Details</span>
-            </button>
-
-            <button class="btn btn-sidebar-tab d-flex align-items-center gap-2.5 px-3 py-2.5 rounded-3 text-start whitespace-nowrap"
-                    [class.active]="activeTab() === 'credentials'" (click)="activeTab.set('credentials')">
-              <i class="bi bi-award-fill"></i>
-              <span>Credentials</span>
-            </button>
-
-            <button class="btn btn-sidebar-tab d-flex align-items-center gap-2.5 px-3 py-2.5 rounded-3 text-start whitespace-nowrap"
-                    [class.active]="activeTab() === 'preferences'" (click)="activeTab.set('preferences')">
-              <i class="bi bi-sliders"></i>
-              <span>Preferences</span>
-            </button>
-
-            <button class="btn btn-sidebar-tab d-flex align-items-center gap-2.5 px-3 py-2.5 rounded-3 text-start whitespace-nowrap"
-                    [class.active]="activeTab() === 'security'" (click)="activeTab.set('security')">
-              <i class="bi bi-shield-lock-fill"></i>
-              <span>Security & Audit</span>
-            </button>
-          </div>
+      <!-- Premium Horizontal Navigation Tabs Bar -->
+      <div class="profile-nav-tabs-wrapper mb-4">
+        <div class="profile-nav-tabs d-flex align-items-center gap-2 overflow-x-auto pb-1">
+          <button class="btn btn-nav-tab d-flex align-items-center gap-2.5 px-4 py-2.5 rounded-3 text-nowrap"
+                  [class.active]="activeTab() === 'overview'" 
+                  (click)="activeTab.set('overview')">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Overview</span>
+          </button>
+          <button class="btn btn-nav-tab d-flex align-items-center gap-2.5 px-4 py-2.5 rounded-3 text-nowrap"
+                  [class.active]="activeTab() === 'details'" 
+                  (click)="activeTab.set('details')">
+            <i class="bi bi-person-bounding-box"></i>
+            <span>Profile Details</span>
+          </button>
+          <button class="btn btn-nav-tab d-flex align-items-center gap-2.5 px-4 py-2.5 rounded-3 text-nowrap"
+                  [class.active]="activeTab() === 'credentials'" 
+                  (click)="activeTab.set('credentials')">
+            <i class="bi bi-award-fill"></i>
+            <span>Credentials</span>
+          </button>
+          <button class="btn btn-nav-tab d-flex align-items-center gap-2.5 px-4 py-2.5 rounded-3 text-nowrap"
+                  [class.active]="activeTab() === 'preferences'" 
+                  (click)="activeTab.set('preferences')">
+            <i class="bi bi-sliders"></i>
+            <span>Preferences</span>
+          </button>
+          <button class="btn btn-nav-tab d-flex align-items-center gap-2.5 px-4 py-2.5 rounded-3 text-nowrap"
+                  [class.active]="activeTab() === 'security'" 
+                  (click)="activeTab.set('security')">
+            <i class="bi bi-shield-lock-fill"></i>
+            <span>Security &amp; Audit</span>
+          </button>
         </div>
+      </div>
 
-        <!-- Active Tab Pane -->
-        <div class="col-lg-9">
-          
+      <!-- Tab Content — full width -->
+      <div class="row">
+        <div class="col-12">
+
           <!-- TAB 1: OVERVIEW -->
           <div *ngIf="activeTab() === 'overview'" class="tab-pane-content d-flex flex-column gap-4 animate-fade-in">
+            <app-learning-statistics [stats]="analyticsData" [role]="userRole"></app-learning-statistics>
+            
             <div class="row g-4">
-              <div class="col-md-7 d-flex flex-column gap-4">
-                <app-learning-statistics [stats]="analyticsData" [role]="userRole"></app-learning-statistics>
-                <app-activity-timeline [events]="timelineData"></app-activity-timeline>
-              </div>
-              <div class="col-md-5 d-flex flex-column gap-4">
+              <!-- Left Column: Completion Progress & Target Goals -->
+              <div class="col-lg-5 d-flex flex-column gap-4">
                 <app-profile-completion [completionData]="completionStats"></app-profile-completion>
                 <app-learning-goals 
                   [goalHours]="weeklyHoursGoal" 
@@ -115,6 +115,11 @@ import { AccountPreferencesComponent } from './components/account-preferences.co
                   [loading]="savingGoals"
                   (save)="onSaveGoals($event)">
                 </app-learning-goals>
+              </div>
+
+              <!-- Right Column: Recent Activity Timeline -->
+              <div class="col-lg-7">
+                <app-activity-timeline [events]="timelineData"></app-activity-timeline>
               </div>
             </div>
           </div>
@@ -126,7 +131,6 @@ import { AccountPreferencesComponent } from './components/account-preferences.co
               [loading]="savingProfile" 
               (save)="onSaveProfile($event)">
             </app-personal-info-form>
-            
             <app-professional-info-form 
               [profile]="profileData" 
               [loading]="savingProfile" 
@@ -140,7 +144,6 @@ import { AccountPreferencesComponent } from './components/account-preferences.co
               [certificates]="certificatesList" 
               (pinToggle)="onPinCertificate($event)">
             </app-certificate-section>
-            
             <app-achievement-section [achievements]="achievementsList"></app-achievement-section>
           </div>
 
@@ -151,13 +154,11 @@ import { AccountPreferencesComponent } from './components/account-preferences.co
               [loading]="savingPrefs" 
               (save)="onSavePreferences($event)">
             </app-ai-preferences>
-
             <app-account-preferences 
               [preferences]="preferencesData" 
               [loading]="savingPrefs" 
               (save)="onSavePreferences($event)">
             </app-account-preferences>
-
             <app-notification-settings 
               [preferences]="preferencesData" 
               [loading]="savingPrefs" 
@@ -171,57 +172,76 @@ import { AccountPreferencesComponent } from './components/account-preferences.co
               [privacy]="privacyData" 
               (securityChanged)="loadSecurityData()">
             </app-security-center>
-            
             <app-active-sessions 
               [sessions]="activeSessions"
               (terminate)="onTerminateSession($event)"
               (terminateAll)="onTerminateAllSessions()">
             </app-active-sessions>
-
             <app-login-history [logs]="loginHistory"></app-login-history>
           </div>
 
         </div>
-
       </div>
 
     </div>
   `,
   styles: [`
-    /* Profile Premium Dark Themes */
+    :host {
+      display: block;
+      background-color: var(--bg-color);
+      min-height: 100%;
+      transition: background-color 0.3s ease;
+    }
+    /* Profile Premium Theme variables */
     .profile-premium-theme {
+      background-color: var(--bg-color);
       --primary-color: #9FEF00;
       --primary-hover-color: #B8FF36;
-      --bg-color: #050505;
-      --card-bg-color: #0D1117;
-      --border-color: rgba(255, 255, 255, 0.08);
-      --text-primary: #FFFFFF;
-      --text-secondary: #A0A0A0;
+      --bg-color: var(--bg-color);
+      --card-bg-color: var(--card-bg);
+      --border-color: var(--border-color);
+      --text-primary: var(--text-primary);
+      --text-secondary: var(--text-secondary);
       --color-success: #00D26A;
       --color-warning: #FFB800;
       --color-danger: #FF4D4F;
+      transition: background-color 0.3s ease;
     }
-    .glass-sidebar {
-      background: rgba(13, 17, 23, 0.7);
-      backdrop-filter: blur(12px);
+    /* Premium horizontal nav tabs bar */
+    .profile-nav-tabs-wrapper {
+      background: rgba(13, 17, 23, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
+      border-radius: 16px;
+      padding: 8px 12px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
-    .btn-sidebar-tab {
+    
+    .profile-nav-tabs {
+      scrollbar-width: none; /* Hide scrollbar for Chrome/Firefox */
+    }
+    .profile-nav-tabs::-webkit-scrollbar {
+      display: none; /* Hide scrollbar for Safari/Chrome */
+    }
+    
+    .btn-nav-tab {
       background: transparent;
-      border: none;
+      border: 1px solid transparent;
       color: var(--text-secondary);
-      font-weight: 500;
-      transition: all 0.25s ease;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
     }
-    .btn-sidebar-tab:hover {
-      background: rgba(255, 255, 255, 0.03);
+    .btn-nav-tab:hover {
+      background: rgba(255, 255, 255, 0.04);
       color: #ffffff;
     }
-    .btn-sidebar-tab.active {
-      background: rgba(159, 239, 0, 0.1) !important;
+    .btn-nav-tab.active {
+      background: rgba(159, 239, 0, 0.12) !important;
       color: var(--primary-color) !important;
-      border: 1px solid rgba(159, 239, 0, 0.2);
+      border-color: rgba(159, 239, 0, 0.3) !important;
+      box-shadow: 0 0 12px rgba(159, 239, 0, 0.15);
     }
     .whitespace-nowrap {
       white-space: nowrap;
@@ -232,13 +252,6 @@ import { AccountPreferencesComponent } from './components/account-preferences.co
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @media (max-width: 991.98px) {
-      .glass-sidebar {
-        flex-direction: row;
-        overflow-x: auto;
-      }
     }
   `]
 })

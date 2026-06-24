@@ -30,7 +30,7 @@ import { ToastrService } from 'ngx-toastr';
 
       <!-- Certificates Table / Grid -->
       <div class="table-responsive">
-        <table class="table premium-table align-middle">
+        <table class="table dark-table align-middle">
           <thead>
             <tr>
               <th scope="col" style="width: 40px;">Pin</th>
@@ -295,31 +295,40 @@ import { ToastrService } from 'ngx-toastr';
     .ps-5-5 {
       padding-left: 2.25rem !important;
     }
-    .premium-table {
+    /* Override Bootstrap white table background */
+    .dark-table {
+      --bs-table-bg: transparent !important;
+      --bs-table-color: #A0A0A0;
+      --bs-table-border-color: rgba(255,255,255,0.04);
+      --bs-table-striped-bg: transparent;
+      --bs-table-hover-bg: rgba(255,255,255,0.015);
       margin-bottom: 0;
       color: #A0A0A0;
     }
-    .premium-table th {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 0.75rem;
-      text-uppercase: true;
+    .dark-table thead tr,
+    .dark-table th {
+      border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+      color: rgba(255,255,255,0.45);
+      font-size: 0.72rem;
+      text-transform: uppercase;
       letter-spacing: 0.5px;
       font-weight: 700;
-      padding: 0.85rem 0.5rem;
+      padding: 0.75rem 0.75rem;
+      background: transparent !important;
     }
-    .premium-table td {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      padding: 1rem 0.5rem;
+    .dark-table td {
+      border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+      padding: 1rem 0.75rem;
       color: #A0A0A0;
+      background: transparent !important;
     }
-    .premium-table tr:hover td {
-      background: rgba(255, 255, 255, 0.015);
+    .dark-table tr:hover td {
+      background: rgba(255,255,255,0.015) !important;
       color: #ffffff;
     }
     .pinned-row td {
-      background: rgba(159, 239, 0, 0.02) !important;
-      border-bottom-color: rgba(159, 239, 0, 0.08) !important;
+      background: rgba(159,239,0,0.02) !important;
+      border-bottom-color: rgba(159,239,0,0.08) !important;
     }
     .btn-pin {
       color: rgba(255, 255, 255, 0.15);

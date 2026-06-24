@@ -337,14 +337,16 @@ import { ProfileService } from '../../../core/services/profile.service';
         </div>
 
         <!-- Deactivate/Delete Account -->
-        <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center p-3 rounded-4 bg-danger bg-opacity-5 border border-danger border-opacity-10 gap-3">
+        <div class="danger-zone-card d-flex flex-column flex-md-row justify-content-md-between align-items-md-center p-3 rounded-4 gap-3">
           <div>
-            <span class="text-danger small fw-bold d-block">Delete Account permanently</span>
-            <small class="text-secondary opacity-60">
+            <span class="text-danger small fw-bold d-block mb-1">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i>Delete Account permanently
+            </span>
+            <small class="text-secondary" style="opacity: 0.7;">
               Once you delete your account, your certificates, scores, and courses are removed forever. This action is irreversible.
             </small>
           </div>
-          <button class="btn btn-sm btn-danger d-flex align-items-center gap-1.5" (click)="openDeleteModal()">
+          <button class="btn btn-sm btn-danger d-flex align-items-center gap-2 flex-shrink-0" (click)="openDeleteModal()">
             <i class="bi bi-trash3-fill"></i>
             <span>Delete Account</span>
           </button>
@@ -466,6 +468,16 @@ import { ProfileService } from '../../../core/services/profile.service';
       width: 100%;
       max-width: 450px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+    .danger-zone-card {
+      background: rgba(255, 77, 79, 0.06);
+      border: 1px solid rgba(255, 77, 79, 0.2);
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+    .danger-zone-card:hover {
+      background: rgba(255, 77, 79, 0.09);
+      border-color: rgba(255, 77, 79, 0.3);
     }
     .animate-zoom-in {
       animation: zoomIn 0.22s ease-out;

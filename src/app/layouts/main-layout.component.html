@@ -14,9 +14,10 @@
     "
   >
     <!-- Logo / Branding -->
-    <div
-      class="d-flex align-items-center mb-4 px-2"
-      style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px"
+    <a
+      routerLink="/"
+      class="d-flex align-items-center mb-4 px-2 text-decoration-none"
+      style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; cursor: pointer;"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -76,12 +77,39 @@
       </svg>
       <span
         ><span style="color: var(--primary-color)">AI</span
-        ><span style="color: var(--sidebar-text)">Training</span></span
+        ><span style="color: var(--sidebar-text)">Training Lab</span></span
       >
-    </div>
+    </a>
 
     <!-- Navigation Menu -->
     <nav class="nav flex-column nav-pills gap-1 flex-grow-1">
+      <!-- Landing Page Link -->
+      <a
+        class="nav-link text-white d-flex align-items-center py-2 px-3 mb-2"
+        routerLink="/"
+        routerLinkActive="active"
+        style="border-radius: var(--border-radius-sm); transition: all 0.2s; background: rgba(255, 255, 255, 0.05);"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="me-3"
+          style="color: var(--primary-color)"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+          />
+        </svg>
+        Landing Page
+      </a>
       <a
         class="nav-link text-white d-flex align-items-center py-2 px-3"
         routerLink="/dashboard"
@@ -513,6 +541,17 @@
 
       <!-- Right side: Actions & Profile -->
       <div class="d-flex align-items-center gap-3">
+        <!-- Subscribe Upgrade Button -->
+        <a
+          [routerLink]="['/']"
+          fragment="pricing"
+          class="btn btn-sm d-none d-md-flex align-items-center gap-2 px-3 py-2 rounded-pill fw-bold header-subscribe-btn text-decoration-none"
+          title="Upgrade to Premium Membership"
+        >
+          <i class="bi bi-star-fill text-warning"></i>
+          Subscribe
+        </a>
+
         <!-- Theme Toggle Button -->
         <button
           (click)="toggleDarkMode()"

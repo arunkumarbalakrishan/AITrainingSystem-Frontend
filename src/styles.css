@@ -1727,6 +1727,7 @@ html:not([data-theme="dark"]) .profile-premium-theme .btn-password-toggle:hover 
 .landing-hero h1 span.gradient-text {
   background: linear-gradient(135deg, #ffffff 30%, #9FEF00 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

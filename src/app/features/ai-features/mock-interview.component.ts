@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, ElementRef, AfterViewChecked, OnInit } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, AfterViewChecked, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
@@ -180,41 +180,45 @@ import confetti from 'canvas-confetti';
             </div>
 
             <div class="card-footer p-3 border-top" style="background: transparent;">
-              <div
-                class="input-group input-group-lg shadow-sm"
-                style="border-radius: 16px; overflow: hidden; border: 2px solid rgba(0,0,0,0.08); transition: all 0.3s;"
-                tabindex="0"
-              >
+              <div class="d-flex align-items-center gap-2">
+                <!-- Microphone Button -->
                 <button
-                  class="btn px-3 border-0"
-                  [ngClass]="isListening ? 'btn-danger pulse-animation' : 'btn-light'"
+                  class="btn d-flex align-items-center justify-content-center flex-shrink-0"
+                  [ngClass]="isListening ? 'btn-danger pulse-animation' : 'btn-light border'"
                   (click)="toggleListening()"
                   [disabled]="isLoading"
                   [title]="isListening ? 'Stop listening' : 'Start speaking'"
+                  style="width: 48px; height: 48px; border-radius: 24px; transition: all 0.2s;"
                 >
                   <i
                     class="bi"
                     [ngClass]="isListening ? 'bi-mic-fill text-white' : 'bi-mic text-primary'"
-                    style="font-size: 1.2rem;"
+                    style="font-size: 1.25rem;"
                   ></i>
                 </button>
-                <textarea
-                  class="form-control fs-6 shadow-none border-0"
-                  [(ngModel)]="chatInput"
-                  (keyup.enter)="sendAnswer($event)"
-                  placeholder="Type your answer or click the mic to speak..."
-                  rows="2"
-                  [disabled]="isLoading"
-                  style="resize: none; padding: 16px;"
-                ></textarea>
-                <button
-                  class="btn btn-primary px-4"
-                  (click)="sendAnswer()"
-                  [disabled]="!chatInput.trim() || isLoading"
-                  style="border-radius: 0;"
-                >
-                  <i class="bi bi-send-fill fs-5"></i>
-                </button>
+
+                <!-- Modern Input Box Wrapper -->
+                <div class="input-box-wrapper d-flex align-items-center flex-grow-1 shadow-sm px-2 py-1">
+                  <textarea
+                    class="form-control chat-textarea border-0 shadow-none bg-transparent"
+                    [(ngModel)]="chatInput"
+                    (keyup.enter)="sendAnswer($event)"
+                    placeholder="Type your answer here..."
+                    rows="1"
+                    [disabled]="isLoading"
+                    style="resize: none; padding: 10px 12px; font-size: 0.95rem; color: var(--text-dark); min-height: 40px; max-height: 120px; line-height: 1.4; outline: none; flex: 1; width: 100%;"
+                  ></textarea>
+                  
+                  <!-- Modern Send Button -->
+                  <button
+                    class="btn btn-send-modern d-flex align-items-center justify-content-center flex-shrink-0 ms-1"
+                    (click)="sendAnswer()"
+                    [disabled]="!chatInput.trim() || isLoading"
+                    style="width: 36px; height: 36px; border-radius: 18px; background: var(--primary-color); border: none; color: white;"
+                  >
+                    <i class="bi bi-arrow-up-short" style="font-size: 1.6rem; line-height: 1;"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -296,9 +300,26 @@ import confetti from 'canvas-confetti';
         box-shadow: 0 0 0 4px rgba(132, 204, 22, 0.15);
         outline: none;
       }
-      .input-group:focus-within {
+      .input-box-wrapper {
+        background: var(--card-bg-hover);
+        border: 2px solid var(--border-color);
+        border-radius: 24px;
+        transition: all 0.3s ease;
+      }
+      .input-box-wrapper:focus-within {
         border-color: var(--primary-color) !important;
         box-shadow: 0 0 0 4px rgba(132, 204, 22, 0.15) !important;
+        background: var(--card-bg);
+      }
+      .btn-send-modern {
+        transition: all 0.2s ease;
+      }
+      .btn-send-modern:hover:not([disabled]) {
+        transform: scale(1.08);
+      }
+      .btn-send-modern:disabled {
+        opacity: 0.4;
+        background: #64748b !important;
       }
       .hover-lift {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -358,6 +379,7 @@ import confetti from 'canvas-confetti';
 export class MockInterviewComponent implements AfterViewChecked, OnInit {
   private aiService = inject(AIService);
   private toastr = inject(ToastrService);
+  private cdr = inject(ChangeDetectorRef);
 
   @ViewChild('chatScroll') private chatScrollContainer!: ElementRef;
 
@@ -448,6 +470,7 @@ export class MockInterviewComponent implements AfterViewChecked, OnInit {
 
     this.interviewStarted = true;
     this.chatHistory = [];
+    this.cdr.detectChanges();
     this.processTurn(null); // Send initial prompt to backend to get the first question
   }
 
@@ -484,18 +507,26 @@ export class MockInterviewComponent implements AfterViewChecked, OnInit {
     const answer = this.chatInput.trim();
     this.chatHistory.push({ role: 'user', content: answer });
     this.chatInput = '';
+    this.cdr.detectChanges();
 
     this.processTurn(answer);
   }
 
   private processTurn(studentAnswer: string | null) {
     this.isLoading = true;
+    this.cdr.detectChanges();
 
     // We send the current history *before* the AI responds
     this.aiService.mockInterviewStep(this.courseTopic, studentAnswer, this.chatHistory).subscribe({
       next: (res: any) => {
-        const result = res.data;
+        const result = res?.data;
         this.isLoading = false;
+
+        if (!result) {
+          this.toastr.error('Received empty response from server.');
+          this.cdr.detectChanges();
+          return;
+        }
 
         if (result.isFinished) {
           this.interviewFinished = true;
@@ -509,8 +540,10 @@ export class MockInterviewComponent implements AfterViewChecked, OnInit {
         } else {
           this.chatHistory.push({ role: 'assistant', content: result.nextQuestionOrFeedback });
         }
+        this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err: any) => {
+        console.error('Mock interview API error:', err);
         this.isLoading = false;
         this.toastr.error('Failed to communicate with AI. Please try again.');
         // Allow user to retry
@@ -518,6 +551,7 @@ export class MockInterviewComponent implements AfterViewChecked, OnInit {
           this.chatHistory.pop();
           this.chatInput = studentAnswer;
         }
+        this.cdr.detectChanges();
       },
     });
   }
@@ -566,6 +600,7 @@ export class MockInterviewComponent implements AfterViewChecked, OnInit {
     this.courseTopic = '';
     this.chatHistory = [];
     this.finalResult = null;
+    this.cdr.detectChanges();
   }
 
   downloadTranscript() {

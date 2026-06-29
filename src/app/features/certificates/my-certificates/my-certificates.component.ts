@@ -33,58 +33,58 @@ import { ToastrService } from 'ngx-toastr';
                 >
                   <!-- AWS Style -->
                   <ng-container *ngIf="hexData.isAws">
-                    <div class="d-flex flex-column align-items-center mb-2">
+                    <div class="d-flex flex-column align-items-center mb-1">
                       <div class="d-flex align-items-center">
                         <span
                           class="text-white fw-bold me-1"
-                          style="font-size: 1.1rem; letter-spacing: -0.5px;"
+                          style="font-size: 0.85rem; letter-spacing: -0.5px;"
                           >aws</span
                         >
                         <div
                           class="bg-warning rounded-1 d-flex align-items-center justify-content-center"
-                          style="width: 12px; height: 12px;"
+                          style="width: 10px; height: 10px;"
                         >
                           <i
                             class="bi bi-check text-white"
-                            style="font-size: 0.8rem; line-height: 1;"
+                            style="font-size: 0.65rem; line-height: 1;"
                           ></i>
                         </div>
                       </div>
                       <span
                         class="text-white"
-                        style="font-size: 0.6rem; letter-spacing: 0.5px; margin-top: -2px;"
+                        style="font-size: 0.45rem; letter-spacing: 0.5px; margin-top: -2px;"
                         >certified</span
                       >
                     </div>
                     <span
                       class="fw-bold text-white lh-sm"
-                      style="font-size: 1.05rem; max-width: 100px; text-wrap: balance;"
+                      style="font-size: 0.8rem; max-width: 70px; text-wrap: balance;"
                     >
                       {{ hexData.title }}
                     </span>
                     <span
-                      class="text-white mt-3 fw-bold text-uppercase"
-                      style="font-size: 0.55rem; letter-spacing: 1.5px;"
+                      class="text-white mt-2 fw-bold text-uppercase"
+                      style="font-size: 0.42rem; letter-spacing: 1px;"
                       >{{ hexData.subtitle }}</span
                     >
                   </ng-container>
 
                   <!-- Default Style -->
                   <ng-container *ngIf="!hexData.isAws">
-                    <div class="d-flex align-items-center mb-2 mt-2">
+                    <div class="d-flex align-items-center mb-1 mt-1">
                       <span
                         class="text-white fw-bold me-1"
-                        style="font-size: 1.1rem; letter-spacing: -0.5px;"
+                        style="font-size: 0.85rem; letter-spacing: -0.5px;"
                         >{{ hexData.issuer }}</span
                       >
                       <i
                         class="bi bi-patch-check-fill text-warning"
-                        style="font-size: 0.95rem;"
+                        style="font-size: 0.75rem;"
                       ></i>
                     </div>
                     <span
-                      class="text-white fw-bold text-uppercase mt-3"
-                      style="font-size: 0.75rem; letter-spacing: 2px;"
+                      class="text-white fw-bold text-uppercase mt-2"
+                      style="font-size: 0.55rem; letter-spacing: 1.5px;"
                       >{{ hexData.subtitle }}</span
                     >
                   </ng-container>
@@ -200,8 +200,8 @@ import { ToastrService } from 'ngx-toastr';
         box-shadow: var(--shadow-md);
       }
       .cert-hexagon {
-        width: 130px;
-        height: 150px;
+        width: 95px;
+        height: 110px;
         background: #cbd5e1;
         position: relative;
         clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
@@ -213,10 +213,10 @@ import { ToastrService } from 'ngx-toastr';
       .cert-hexagon::before {
         content: '';
         position: absolute;
-        top: 6px;
-        left: 6px;
-        right: 6px;
-        bottom: 6px;
+        top: 4px;
+        left: 4px;
+        right: 4px;
+        bottom: 4px;
         background: #232f3e;
         clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         z-index: 0;

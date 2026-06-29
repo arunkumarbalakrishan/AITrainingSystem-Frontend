@@ -18,6 +18,7 @@ import { AuthService } from '../core/services/auth.service';
 import { NotificationService } from '../core/services/notification.service';
 import { AIService } from '../core/services/ai.service';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-main-layout',
@@ -55,9 +56,14 @@ export class MainLayoutComponent implements OnInit {
   showProfileDropdown = false;
   private isFirstNotifLoad = true;
 
-  // Sidebar Dropdown State
+  // Sidebar Dropdown & Mobile Toggle State
   showAiTools = false;
   showTrainerTools = false;
+  isSidebarOpen = false;
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 
   // Theme State
   isDarkMode = false;
@@ -209,6 +215,7 @@ export class MainLayoutComponent implements OnInit {
       const pageTitle = this.getPageTitle();
       this.titleService.setTitle(`${pageTitle} - AITrainingSystem`);
       this.loadNotifications();
+      this.isSidebarOpen = false;
     });
 
     // Set initial title on load
@@ -363,8 +370,23 @@ export class MainLayoutComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
-    this.toastr.info('Logged out successfully');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to log out of your session?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#6C63FF',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, Logout',
+      cancelButtonText: 'Cancel',
+      background: this.isDarkMode ? '#0d1117' : '#ffffff',
+      color: this.isDarkMode ? '#f0f6fc' : '#111827',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.authService.logout();
+        this.toastr.info('Logged out successfully');
+      }
+    });
   }
 
   get isDashboard(): boolean {

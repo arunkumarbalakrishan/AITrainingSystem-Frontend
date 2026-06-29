@@ -91,15 +91,59 @@ import { AnimationService } from '../../core/services/animation.service';
           </button>
           <ng-container *ngIf="isAuthenticated(); else guestButtons">
             <span class="text-white-50 d-none d-md-inline-block me-2">Welcome, <strong class="text-white">{{ getUserName() }}</strong></span>
-            <a (click)="navigateWithTransition('/dashboard')" class="landing-btn-register text-decoration-none cursor-pointer">Go to Dashboard</a>
+            <a (click)="navigateWithTransition('/dashboard')" class="landing-btn-register text-decoration-none cursor-pointer"><span class="d-none d-sm-inline">Go to </span>Dashboard</a>
             <button (click)="logout()" class="landing-btn-login">Logout</button>
           </ng-container>
           <ng-template #guestButtons>
             <a (click)="navigateWithTransition('/login')" class="landing-btn-login text-decoration-none cursor-pointer">Login</a>
             <a (click)="navigateWithTransition('/login', { mode: 'register' })" class="landing-btn-register text-decoration-none cursor-pointer">Register</a>
           </ng-template>
+          <button (click)="toggleMobileMenu()" class="hamburger-btn d-lg-none" aria-label="Toggle Menu">
+            <i class="bi" [class.bi-list]="!isMobileMenuOpen" [class.bi-x-lg]="isMobileMenuOpen"></i>
+          </button>
         </div>
       </header>
+
+      <!-- Mobile Navigation Menu Drawer -->
+      <div class="mobile-menu-drawer" [class.open]="isMobileMenuOpen">
+        <div class="mobile-menu-backdrop" (click)="toggleMobileMenu()"></div>
+        <div class="mobile-menu-content">
+          <div class="mobile-menu-header">
+            <div class="landing-logo">
+              <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="32" height="32" rx="8" fill="#9FEF00"/>
+                <path d="M9 21V11H12.5L16 16.5L19.5 11H23V21H20.5V14.5L17 20H15L11.5 14.5V21H9Z" fill="#050505"/>
+                <text x="14" y="27" font-family="Arial" font-size="8" font-weight="bold" fill="#050505">AI</text>
+              </svg>
+              AITraining <span>Lab</span>
+            </div>
+            <button (click)="toggleMobileMenu()" class="mobile-menu-close-btn" aria-label="Close Menu">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          
+          <nav class="mobile-menu-nav">
+            <a href="#" (click)="toggleMobileMenu()" class="mobile-nav-link" [class.active]="activeSection === 'home'">Home</a>
+            <a href="#features" (click)="toggleMobileMenu()" class="mobile-nav-link" [class.active]="activeSection === 'features'">Features</a>
+            <a href="#demo" (click)="toggleMobileMenu()" class="mobile-nav-link" [class.active]="activeSection === 'demo'">Demo</a>
+            <a href="#courses" (click)="toggleMobileMenu()" class="mobile-nav-link" [class.active]="activeSection === 'courses'">Courses</a>
+            <a href="#pricing" (click)="toggleMobileMenu()" class="mobile-nav-link" [class.active]="activeSection === 'pricing'">Subscribe</a>
+            <a href="#faq" (click)="toggleMobileMenu()" class="mobile-nav-link" [class.active]="activeSection === 'faq'">FAQs</a>
+          </nav>
+          
+          <div class="mobile-menu-footer mt-auto pt-4 border-top border-secondary">
+            <ng-container *ngIf="isAuthenticated(); else mobileGuestButtons">
+              <div class="text-white-50 mb-3 text-center">Welcome, <strong class="text-white">{{ getUserName() }}</strong></div>
+              <a (click)="toggleMobileMenu(); navigateWithTransition('/dashboard')" class="landing-btn-register text-decoration-none cursor-pointer w-100 text-center d-block mb-2">Dashboard</a>
+              <button (click)="toggleMobileMenu(); logout()" class="landing-btn-login w-100 text-center">Logout</button>
+            </ng-container>
+            <ng-template #mobileGuestButtons>
+              <a (click)="toggleMobileMenu(); navigateWithTransition('/login')" class="landing-btn-login text-decoration-none cursor-pointer w-100 text-center d-block mb-2">Login</a>
+              <a (click)="toggleMobileMenu(); navigateWithTransition('/login', { mode: 'register' })" class="landing-btn-register text-decoration-none cursor-pointer w-100 text-center d-block">Register</a>
+            </ng-template>
+          </div>
+        </div>
+      </div>
 
       <!-- Hero Section with Typewriter Heading and Floating Badges -->
       <section class="landing-hero">
@@ -1041,6 +1085,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   isScrolled = false;
   activeSection = 'home';
   isTransitioning = false;
+  isMobileMenuOpen = false;
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
 
   // Typewriter
   typewriterText = 'Software Engineering';

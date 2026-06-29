@@ -17,8 +17,8 @@ import { Subscription, interval } from 'rxjs';
       <div class="row mb-4">
         <div class="col-12">
           <div
-            class="p-5 rounded-4 text-white position-relative overflow-hidden"
-            style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%); box-shadow: var(--shadow-md);"
+            class="live-classes-banner p-5 rounded-4 position-relative overflow-hidden"
+            style="box-shadow: var(--shadow-md);"
           >
             <div class="position-absolute" style="top: -20px; right: -20px; opacity: 0.15;">
               <svg width="250" height="250" fill="currentColor" viewBox="0 0 24 24">
@@ -28,12 +28,12 @@ import { Subscription, interval } from 'rxjs';
               </svg>
             </div>
             <span
-              class="badge bg-white mb-3 fw-bold text-uppercase px-3 py-2"
-              style="font-size: 0.75rem; letter-spacing: 0.5px; color: var(--primary-color);"
+              class="badge mb-3 fw-bold text-uppercase px-3 py-2 live-banner-badge"
+              style="font-size: 0.75rem; letter-spacing: 0.5px;"
               >Live Classroom</span
             >
             <h2 class="fw-bold mb-2">Interactive Scheduled Lectures</h2>
-            <p class="mb-0 text-white-50 max-w-xl">
+            <p class="mb-0 live-banner-desc max-w-xl">
               Learn directly from industry experts, ask questions, and engage in real-time
               discussions with fellow students.
             </p>

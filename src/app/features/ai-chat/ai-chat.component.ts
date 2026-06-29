@@ -19,8 +19,8 @@ import { ToastrService } from 'ngx-toastr';
   template: `
     <div class="chat-gpt-layout">
       <!-- Sidebar (Chat History) -->
-      <div class="chat-sidebar">
-        <button class="btn btn-new-chat mb-4" (click)="newChat()">
+      <div class="chat-sidebar" [class.show-mobile]="showSidebarMobile">
+        <button class="btn btn-new-chat mb-4" (click)="newChat(); showSidebarMobile = false">
           <i class="bi bi-chat-left-text-fill me-2"></i>
           New Chat
         </button>
@@ -33,7 +33,7 @@ import { ToastrService } from 'ngx-toastr';
             *ngFor="let session of history"
             class="history-item d-flex justify-content-between align-items-center"
             [class.active]="activeChatId === session.id"
-            (click)="loadChat(session.id)"
+            (click)="loadChat(session.id); showSidebarMobile = false"
           >
             <div class="d-flex align-items-center gap-2 min-width-0">
               <i class="bi bi-chat-left text-muted small"></i>
@@ -55,23 +55,35 @@ import { ToastrService } from 'ngx-toastr';
         <!-- Header -->
         <div class="chat-header" style="z-index: 10;">
           <div class="d-flex align-items-center justify-content-between w-100">
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3 min-width-0">
               <div class="header-avatar shadow-sm">
                 <i class="bi bi-robot"></i>
               </div>
-              <div>
-                <h5 class="m-0 fw-bold chat-title">AITraining Assistant</h5>
+              <div class="min-width-0">
+                <h5 class="m-0 fw-bold chat-title text-truncate">AITraining Assistant</h5>
                 <span class="badge badge-tutor-status">
                   <span class="status-dot"></span> GPT-4.0 Smart Engine
                 </span>
               </div>
             </div>
-            <div>
+            <div class="d-flex align-items-center gap-2">
               <button
-                (click)="newChat()"
-                class="btn btn-sm btn-light border d-md-none rounded-pill px-3 py-1.5"
+                (click)="showSidebarMobile = !showSidebarMobile"
+                class="btn btn-sm btn-light border d-md-none rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                [class.btn-primary]="showSidebarMobile"
+                [class.text-white]="showSidebarMobile"
+                style="width: 36px; height: 36px; padding: 0;"
+                title="History"
               >
-                <i class="bi bi-plus-lg me-1"></i> New
+                <i class="bi bi-clock-history" style="font-size: 0.95rem; line-height: 1;"></i>
+              </button>
+              <button
+                (click)="newChat(); showSidebarMobile = false"
+                class="btn btn-sm btn-light border d-md-none rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                style="width: 36px; height: 36px; padding: 0;"
+                title="New Chat"
+              >
+                <i class="bi bi-plus-lg" style="font-size: 0.95rem; line-height: 1;"></i>
               </button>
             </div>
           </div>
@@ -156,8 +168,8 @@ import { ToastrService } from 'ngx-toastr';
                 (keyup.enter)="sendChat($event)"
                 placeholder="Ask AI Assistant a question..."
                 rows="1"
-                class="form-control border-0 shadow-none chat-textarea"
-                style="resize: none; background: transparent; padding: 14px 18px; font-size: 0.95rem;"
+                class="chat-textarea"
+                style="resize: none; background: transparent; padding: 14px 18px; font-size: 0.95rem; border: none; outline: none; width: 100%;"
               ></textarea>
               <button
                 (click)="sendChat()"
@@ -190,8 +202,8 @@ import { ToastrService } from 'ngx-toastr';
       }
       .chat-sidebar {
         width: 280px;
-        background: var(--sidebar-bg);
-        color: var(--sidebar-text);
+        background: var(--card-bg);
+        color: var(--text-primary);
         display: flex;
         flex-direction: column;
         padding: 1.5rem 1rem;
@@ -220,7 +232,7 @@ import { ToastrService } from 'ngx-toastr';
       .sidebar-title {
         font-size: 0.72rem;
         font-weight: 700;
-        color: var(--sidebar-text-muted);
+        color: var(--text-secondary);
         text-transform: uppercase;
         letter-spacing: 1.5px;
         margin-bottom: 0.75rem;
@@ -237,18 +249,18 @@ import { ToastrService } from 'ngx-toastr';
         cursor: pointer;
         font-size: 0.88rem;
         transition: all 0.2s ease;
-        color: var(--sidebar-text-muted);
+        color: var(--text-secondary);
         background: transparent;
         border: 1px solid transparent;
       }
       .history-item:hover {
-        background: rgba(132, 204, 22, 0.05);
-        color: var(--primary-color);
+        background: var(--card-bg-hover);
+        color: var(--text-primary);
       }
       .history-item.active {
-        background: rgba(132, 204, 22, 0.1);
-        border-color: rgba(132, 204, 22, 0.2);
-        color: var(--primary-color);
+        background: var(--bg-color);
+        border-color: var(--border-color-strong);
+        color: var(--text-primary);
         font-weight: 600;
       }
       .btn-delete-chat {
@@ -487,10 +499,15 @@ import { ToastrService } from 'ngx-toastr';
       }
       .chat-textarea {
         color: var(--text-dark);
+        border: none !important;
+        outline: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        width: 100%;
       }
       .chat-textarea:focus {
-        outline: none;
-        box-shadow: none;
+        outline: none !important;
+        box-shadow: none !important;
       }
       .btn-send-modern {
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -534,6 +551,50 @@ import { ToastrService } from 'ngx-toastr';
       .chat-messages:hover::-webkit-scrollbar-thumb {
         background: rgba(150, 150, 150, 0.35);
       }
+      @media (max-width: 768px) {
+        .chat-sidebar {
+          display: none !important;
+        }
+        .chat-sidebar.show-mobile {
+          display: flex !important;
+          position: absolute !important;
+          top: 73px !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100% !important;
+          z-index: 100 !important;
+          background: var(--card-bg) !important;
+          border-right: none !important;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+          animation: slide-in-chat-drawer 0.2s ease-out !important;
+        }
+        .chat-gpt-layout {
+          height: calc(100vh - 85px);
+          border-radius: 12px;
+          position: relative;
+        }
+        .chat-header {
+          padding: 1rem !important;
+        }
+        .chat-messages {
+          padding: 1rem !important;
+        }
+        .chat-input-area {
+          padding: 1rem !important;
+        }
+        .message-container {
+          max-width: 95% !important;
+        }
+        .message-bubble {
+          padding: 10px 14px !important;
+          font-size: 0.9rem !important;
+        }
+      }
+      @keyframes slide-in-chat-drawer {
+        from { transform: translateY(-10px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
     `,
   ],
 })
@@ -545,6 +606,7 @@ export class AiChatComponent implements AfterViewChecked {
   @ViewChild('chatScroll') private chatScrollContainer!: ElementRef;
 
   aiLoading = false;
+  showSidebarMobile = false;
   chatHistory: { role: string; content: string }[] = [];
   chatInput = '';
   chatCourseId = '00000000-0000-0000-0000-000000000000'; // Default

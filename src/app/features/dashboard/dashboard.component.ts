@@ -78,33 +78,32 @@ import { AnimationService } from '../../core/services/animation.service';
           </div>
         </div>
       </div>
-
       <!-- Stat Cards -->
-      <div class="row g-3 mb-4 dashboard-widget-animate delay-2" *ngIf="!loading">
+      <div class="row g-2 g-md-3 mb-4 dashboard-widget-animate delay-2" *ngIf="!loading">
         <!-- Enrolled Courses -->
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-6 col-lg-3">
           <div
-            class="premium-card p-3 h-100 hover-lift stat-card"
+            class="premium-card p-2.5 p-md-3 h-100 hover-lift stat-card"
             routerLink="/my-courses"
-            style="cursor: pointer; position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.04);"
+            style="cursor: pointer; position: relative; overflow: hidden;"
           >
             <div class="d-flex align-items-center mb-2 position-relative" style="z-index: 1;">
               <div
-                class="rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm"
-                style="background: #6C63FF; width: 48px; height: 48px;"
+                class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3 shadow-sm flex-shrink-0"
+                style="background: #6C63FF; width: 32px; height: 32px;"
               >
-                <i class="bi bi-book" style="color: white; font-size: 1.3rem;"></i>
+                <i class="bi bi-book" style="color: white; font-size: 0.95rem;"></i>
               </div>
-              <div>
+              <div class="min-width-0">
                 <div
-                  class="text-muted fw-medium text-uppercase"
-                  style="font-size: 0.72rem; letter-spacing: 0.5px;"
+                  class="text-muted fw-semibold text-uppercase text-truncate"
+                  style="font-size: 0.65rem; letter-spacing: 0.5px;"
                 >
-                  Enrolled Courses
+                  Enrolled
                 </div>
                 <div
-                  class="fw-bold text-dark mt-1"
-                  style="font-size: 1.6rem; line-height: 1; letter-spacing: -0.5px;"
+                  class="fw-bold mt-1"
+                  style="font-size: 1.4rem; line-height: 1; letter-spacing: -0.5px; color: var(--text-primary);"
                 >
                   {{ enrolledCount }}
                 </div>
@@ -114,29 +113,29 @@ import { AnimationService } from '../../core/services/animation.service';
         </div>
 
         <!-- Completed Courses -->
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-6 col-lg-3">
           <div
-            class="premium-card p-3 h-100 hover-lift stat-card"
+            class="premium-card p-2.5 p-md-3 h-100 hover-lift stat-card"
             routerLink="/my-courses"
-            style="cursor: pointer; position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.04);"
+            style="cursor: pointer; position: relative; overflow: hidden;"
           >
             <div class="d-flex align-items-center mb-2 position-relative" style="z-index: 1;">
               <div
-                class="rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm"
-                style="background: #10B981; width: 48px; height: 48px;"
+                class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3 shadow-sm flex-shrink-0"
+                style="background: #10B981; width: 32px; height: 32px;"
               >
-                <i class="bi bi-check-circle" style="color: white; font-size: 1.3rem;"></i>
+                <i class="bi bi-check-circle" style="color: white; font-size: 0.95rem;"></i>
               </div>
-              <div>
+              <div class="min-width-0">
                 <div
-                  class="text-muted fw-medium text-uppercase"
-                  style="font-size: 0.72rem; letter-spacing: 0.5px;"
+                  class="text-muted fw-semibold text-uppercase text-truncate"
+                  style="font-size: 0.65rem; letter-spacing: 0.5px;"
                 >
                   Completed
                 </div>
                 <div
-                  class="fw-bold text-dark mt-1"
-                  style="font-size: 1.6rem; line-height: 1; letter-spacing: -0.5px;"
+                  class="fw-bold mt-1"
+                  style="font-size: 1.4rem; line-height: 1; letter-spacing: -0.5px; color: var(--text-primary);"
                 >
                   {{ completedCount }}
                 </div>
@@ -146,29 +145,29 @@ import { AnimationService } from '../../core/services/animation.service';
         </div>
 
         <!-- Certificates Earned -->
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-6 col-lg-3">
           <div
-            class="premium-card p-3 h-100 hover-lift stat-card"
+            class="premium-card p-2.5 p-md-3 h-100 hover-lift stat-card"
             routerLink="/certificates"
-            style="cursor: pointer; position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.04);"
+            style="cursor: pointer; position: relative; overflow: hidden;"
           >
             <div class="d-flex align-items-center mb-2 position-relative" style="z-index: 1;">
               <div
-                class="rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm"
-                style="background: #8B5CF6; width: 48px; height: 48px;"
+                class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3 shadow-sm flex-shrink-0"
+                style="background: #8B5CF6; width: 32px; height: 32px;"
               >
-                <i class="bi bi-award" style="color: white; font-size: 1.3rem;"></i>
+                <i class="bi bi-award" style="color: white; font-size: 0.95rem;"></i>
               </div>
-              <div>
+              <div class="min-width-0">
                 <div
-                  class="text-muted fw-medium text-uppercase"
-                  style="font-size: 0.72rem; letter-spacing: 0.5px;"
+                  class="text-muted fw-semibold text-uppercase text-truncate"
+                  style="font-size: 0.65rem; letter-spacing: 0.5px;"
                 >
                   Certificates
                 </div>
                 <div
-                  class="fw-bold text-dark mt-1"
-                  style="font-size: 1.6rem; line-height: 1; letter-spacing: -0.5px;"
+                  class="fw-bold mt-1"
+                  style="font-size: 1.4rem; line-height: 1; letter-spacing: -0.5px; color: var(--text-primary);"
                 >
                   {{ certificatesCount }}
                 </div>
@@ -178,29 +177,29 @@ import { AnimationService } from '../../core/services/animation.service';
         </div>
 
         <!-- Hours Learned -->
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-6 col-lg-3">
           <div
-            class="premium-card p-3 h-100 hover-lift stat-card"
+            class="premium-card p-2.5 p-md-3 h-100 hover-lift stat-card"
             routerLink="/my-courses"
-            style="cursor: pointer; position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.04);"
+            style="cursor: pointer; position: relative; overflow: hidden;"
           >
             <div class="d-flex align-items-center mb-2 position-relative" style="z-index: 1;">
               <div
-                class="rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm"
-                style="background: #EF4444; width: 48px; height: 48px;"
+                class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3 shadow-sm flex-shrink-0"
+                style="background: #EF4444; width: 32px; height: 32px;"
               >
-                <i class="bi bi-clock" style="color: white; font-size: 1.3rem;"></i>
+                <i class="bi bi-clock" style="color: white; font-size: 0.95rem;"></i>
               </div>
-              <div>
+              <div class="min-width-0">
                 <div
-                  class="text-muted fw-medium text-uppercase"
-                  style="font-size: 0.72rem; letter-spacing: 0.5px;"
+                  class="text-muted fw-semibold text-uppercase text-truncate"
+                  style="font-size: 0.65rem; letter-spacing: 0.5px;"
                 >
-                  Hours Learned
+                  Hours
                 </div>
                 <div
-                  class="fw-bold text-dark mt-1"
-                  style="font-size: 1.6rem; line-height: 1; letter-spacing: -0.5px;"
+                  class="fw-bold mt-1"
+                  style="font-size: 1.4rem; line-height: 1; letter-spacing: -0.5px; color: var(--text-primary);"
                 >
                   {{ hoursCount }}
                 </div>
@@ -211,18 +210,18 @@ import { AnimationService } from '../../core/services/animation.service';
       </div>
 
       <!-- Stat Cards Skeleton -->
-      <div class="row g-3 mb-4" *ngIf="loading">
-        <div class="col-sm-6 col-lg-3" *ngFor="let i of [1, 2, 3, 4]">
+      <div class="row g-2 g-md-3 mb-4" *ngIf="loading">
+        <div class="col-6 col-lg-3" *ngFor="let i of [1, 2, 3, 4]">
           <div
-            class="premium-card p-3 h-100 d-flex align-items-center"
+            class="premium-card p-2.5 p-md-3 h-100 d-flex align-items-center"
             style="border: none; box-shadow: var(--shadow-sm);"
           >
             <div
-              class="skeleton-box rounded-circle me-3 flex-shrink-0"
-              style="width: 44px; height: 44px;"
+              class="skeleton-box rounded-circle me-2 me-md-3 flex-shrink-0"
+              style="width: 32px; height: 32px;"
             ></div>
-            <div class="flex-grow-1">
-              <div class="skeleton-box mb-2" style="height: 12px; width: 60%;"></div>
+            <div class="flex-grow-1 min-width-0">
+              <div class="skeleton-box mb-2" style="height: 10px; width: 60%;"></div>
               <div class="skeleton-box" style="height: 24px; width: 40%; border-radius: 4px;"></div>
             </div>
           </div>

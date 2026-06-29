@@ -30,83 +30,95 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
       </div>
 
       <!-- Quick Metrics Grid -->
-      <div class="row g-4 mb-4">
+      <div class="row g-3 mb-4">
         <!-- Total Users -->
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
           <div
-            class="premium-card p-4 d-flex align-items-center gap-3 hover-lift-subtle"
+            class="premium-card p-3 d-flex align-items-center gap-3 hover-lift-subtle"
             style="border: 1px solid rgba(0,0,0,0.03);"
           >
-            <div class="rounded-3 bg-primary bg-opacity-10 text-primary p-3">
-              <i class="bi bi-people fs-4"></i>
+            <div
+              class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 40px; height: 40px;"
+            >
+              <i class="bi bi-people fs-5"></i>
             </div>
-            <div>
+            <div class="min-width-0">
               <span
-                class="text-muted small fw-medium text-uppercase"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;"
+                class="text-muted small fw-bold text-uppercase d-block"
+                style="font-size: 0.7rem; letter-spacing: 0.5px; line-height: 1.1;"
                 >Total Users</span
               >
-              <h3 class="fw-bold mb-0 text-dark">{{ totalUsersCount }}</h3>
+              <h5 class="fw-bold mb-0 text-dark mt-1" style="line-height: 1.1; font-size: 1.25rem;">{{ totalUsersCount }}</h5>
             </div>
           </div>
         </div>
 
         <!-- Total Courses -->
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
           <div
-            class="premium-card p-4 d-flex align-items-center gap-3 hover-lift-subtle"
+            class="premium-card p-3 d-flex align-items-center gap-3 hover-lift-subtle"
             style="border: 1px solid rgba(0,0,0,0.03);"
           >
-            <div class="rounded-3 bg-success bg-opacity-10 text-success p-3">
-              <i class="bi bi-journal-code fs-4"></i>
+            <div
+              class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 40px; height: 40px;"
+            >
+              <i class="bi bi-journal-code fs-5"></i>
             </div>
-            <div>
+            <div class="min-width-0">
               <span
-                class="text-muted small fw-medium text-uppercase"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;"
+                class="text-muted small fw-bold text-uppercase d-block"
+                style="font-size: 0.7rem; letter-spacing: 0.5px; line-height: 1.1;"
                 >Total Courses</span
               >
-              <h3 class="fw-bold mb-0 text-dark">{{ totalCoursesCount }}</h3>
+              <h5 class="fw-bold mb-0 text-dark mt-1" style="line-height: 1.1; font-size: 1.25rem;">{{ totalCoursesCount }}</h5>
             </div>
           </div>
         </div>
 
         <!-- Total Revenue -->
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
           <div
-            class="premium-card p-4 d-flex align-items-center gap-3 hover-lift-subtle"
+            class="premium-card p-3 d-flex align-items-center gap-3 hover-lift-subtle"
             style="border: 1px solid rgba(0,0,0,0.03);"
           >
-            <div class="rounded-3 bg-warning bg-opacity-10 text-warning p-3">
-              <i class="bi bi-cash-stack fs-4"></i>
+            <div
+              class="rounded-circle bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 40px; height: 40px;"
+            >
+              <i class="bi bi-cash-stack fs-5"></i>
             </div>
-            <div>
+            <div class="min-width-0">
               <span
-                class="text-muted small fw-medium text-uppercase"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;"
+                class="text-muted small fw-bold text-uppercase d-block"
+                style="font-size: 0.7rem; letter-spacing: 0.5px; line-height: 1.1;"
                 >Total Revenue</span
               >
-              <h3 class="fw-bold mb-0 text-dark">Rs. {{ adminReports?.totalRevenue || 0 }}</h3>
+              <h5 class="fw-bold mb-0 text-dark mt-1" style="line-height: 1.1; font-size: 1.25rem;">Rs. {{ adminReports?.totalRevenue || 0 }}</h5>
             </div>
           </div>
         </div>
 
         <!-- Completion Rate -->
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
           <div
-            class="premium-card p-4 d-flex align-items-center gap-3 hover-lift-subtle"
+            class="premium-card p-3 d-flex align-items-center gap-3 hover-lift-subtle"
             style="border: 1px solid rgba(0,0,0,0.03);"
           >
-            <div class="rounded-3 bg-danger bg-opacity-10 text-danger p-3">
-              <i class="bi bi-trophy fs-4"></i>
+            <div
+              class="rounded-circle bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 40px; height: 40px;"
+            >
+              <i class="bi bi-trophy fs-5"></i>
             </div>
-            <div>
+            <div class="min-width-0">
               <span
-                class="text-muted small fw-medium text-uppercase"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;"
+                class="text-muted small fw-bold text-uppercase d-block"
+                style="font-size: 0.7rem; letter-spacing: 0.5px; line-height: 1.1;"
                 >Certificates</span
               >
-              <h3 class="fw-bold mb-0 text-dark">{{ getCertificateCount() }}</h3>
+              <h5 class="fw-bold mb-0 text-dark mt-1" style="line-height: 1.1; font-size: 1.25rem;">{{ getCertificateCount() }}</h5>
             </div>
           </div>
         </div>
@@ -294,16 +306,18 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
       </div>
 
       <!-- Admin Tabs Navigation -->
-      <div class="d-flex gap-3 mb-4 flex-wrap bg-light p-2 rounded-pill d-inline-flex border">
-        <button
-          *ngFor="let tab of tabs"
-          (click)="setTab(tab)"
-          class="btn px-4 py-2 fw-semibold custom-tab-btn"
-          [class.active-tab]="activeTab === tab"
-          style="border-radius: 30px; transition: all 0.3s; font-size: 0.9rem; border: none;"
-        >
-          {{ tab }}
-        </button>
+      <div class="tabs-scroll-container">
+        <div class="tabs-nav-wrapper">
+          <button
+            *ngFor="let tab of tabs"
+            (click)="setTab(tab)"
+            class="btn px-4 py-2 fw-semibold custom-tab-btn text-nowrap flex-shrink-0"
+            [class.active-tab]="activeTab === tab"
+            style="border-radius: 24px; transition: all 0.25s; font-size: 0.88rem; border: none;"
+          >
+            {{ tab }}
+          </button>
+        </div>
       </div>
 
       <!-- Spinner for Reports -->
@@ -352,26 +366,26 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
           </div>
 
           <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" style="min-width: 650px;">
               <thead>
                 <tr>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 180px;">
                     Name
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 220px;">
                     Email
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 130px;">
                     Role
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 100px;">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let user of getFilteredUsers()" class="table-row-hover">
-                  <td>
+                  <td style="min-width: 180px;">
                     <div class="d-flex align-items-center gap-3">
                       <div
                         class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex justify-content-center align-items-center fw-bold"
@@ -379,11 +393,11 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                       >
                         {{ user.fullName.charAt(0) }}
                       </div>
-                      <span class="fw-semibold text-dark">{{ user.fullName }}</span>
+                      <span class="fw-semibold text-dark text-nowrap">{{ user.fullName }}</span>
                     </div>
                   </td>
-                  <td class="text-muted" style="font-size: 0.9rem;">{{ user.email }}</td>
-                  <td>
+                  <td class="text-muted text-nowrap" style="font-size: 0.88rem; min-width: 220px;">{{ user.email }}</td>
+                  <td style="min-width: 130px;">
                     <select
                       [value]="user.role"
                       (change)="onRoleChange(user, $event)"
@@ -414,7 +428,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                       </option>
                     </select>
                   </td>
-                  <td>
+                  <td style="min-width: 100px;">
                     <button
                       (click)="deleteUser(user)"
                       class="btn btn-sm btn-light text-danger px-3 py-1 fw-medium hover-lift border"
@@ -437,40 +451,40 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
       <div *ngIf="activeTab === 'Courses' && !reportsLoading">
         <div class="premium-card p-4">
           <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" style="min-width: 650px;">
               <thead>
                 <tr>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 280px;">
                     Title
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 100px;">
                     Price
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 120px;">
                     Published
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 100px;">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let course of courses" class="table-row-hover">
-                  <td>
+                  <td style="min-width: 280px;">
                     <div class="d-flex align-items-center gap-3">
                       <div
-                        class="rounded bg-success bg-opacity-10 text-success d-flex justify-content-center align-items-center"
+                        class="rounded bg-success bg-opacity-10 text-success d-flex justify-content-center align-items-center flex-shrink-0"
                         style="width: 40px; height: 40px;"
                       >
                         <i class="bi bi-journal-code fs-5"></i>
                       </div>
-                      <span class="fw-semibold text-dark">{{ course.title }}</span>
+                      <span class="fw-semibold text-dark text-nowrap">{{ course.title }}</span>
                     </div>
                   </td>
-                  <td style="color: var(--primary-color); font-weight: 700; font-size: 0.95rem;">
+                  <td style="color: var(--primary-color); font-weight: 700; font-size: 0.95rem; min-width: 100px;" class="text-nowrap">
                     {{ course.price > 0 ? 'Rs. ' + course.price : 'Free' }}
                   </td>
-                  <td>
+                  <td style="min-width: 120px;" class="text-nowrap">
                     <span
                       class="badge rounded-pill px-2 py-1"
                       [style.background]="course.isPublished ? '#dcfce7' : '#fef3c7'"
@@ -480,7 +494,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                       {{ course.isPublished ? 'Published' : 'Draft' }}
                     </span>
                   </td>
-                  <td>
+                  <td style="min-width: 100px;" class="text-nowrap">
                     <button
                       (click)="deleteCourse(course)"
                       class="btn btn-sm btn-light text-danger px-3 py-1 fw-medium hover-lift border"
@@ -563,8 +577,8 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                       x="50"
                       [attr.y]="lvl.y + 4"
                       text-anchor="end"
-                      fill="var(--text-muted)"
-                      style="font-size: 0.7rem; font-weight: 500;"
+                      fill="#94a3b8"
+                      style="font-size: 10px; font-weight: 500; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; letter-spacing: 0.2px;"
                     >
                       {{ lvl.value }}
                     </text>
@@ -617,19 +631,20 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                       [attr.x]="pt.x"
                       y="202"
                       text-anchor="middle"
-                      fill="var(--text-muted)"
-                      style="font-size: 0.72rem; font-weight: 600;"
+                      fill="#94a3b8"
+                      style="font-size: 10px; font-weight: 500; font-family: system-ui, -apple-system, sans-serif;"
                     >
                       {{ pt.month }}
                     </text>
 
                     <!-- Value label (tooltip) -->
                     <text
+                      *ngIf="pt.revenue > 0"
                       [attr.x]="pt.x"
-                      [attr.y]="pt.y - 12"
+                      [attr.y]="pt.y - 14"
                       text-anchor="middle"
-                      fill="var(--text-dark)"
-                      style="font-size: 0.75rem; font-weight: 700;"
+                      fill="#a3e635"
+                      style="font-size: 11px; font-weight: 700; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.5px;"
                     >
                       Rs.{{ pt.revenue }}
                     </text>
@@ -672,47 +687,47 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
         <div class="premium-card p-4">
           <h5 class="fw-bold mb-4 text-dark">Recent Stripe Payments</h5>
           <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" style="min-width: 700px;">
               <thead>
                 <tr>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 180px;">
                     Student
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 180px;">
                     Course
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 120px;">
                     Date
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 100px;">
                     Amount
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 120px;">
                     Status
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let tx of adminReports?.recentTransactions" class="table-row-hover">
-                  <td>
-                    <div>
-                      <div class="fw-semibold text-dark">{{ tx.studentName }}</div>
-                      <small class="text-muted" style="font-size: 0.75rem;">{{
+                  <td style="min-width: 180px;">
+                    <div class="text-nowrap">
+                      <div class="fw-semibold text-dark text-nowrap">{{ tx.studentName }}</div>
+                      <small class="text-muted text-nowrap" style="font-size: 0.75rem;">{{
                         tx.studentEmail
                       }}</small>
                     </div>
                   </td>
-                  <td class="fw-semibold text-dark">{{ tx.courseTitle }}</td>
-                  <td class="text-muted" style="font-size: 0.85rem;">
+                  <td class="fw-semibold text-dark text-nowrap" style="min-width: 180px;">{{ tx.courseTitle }}</td>
+                  <td class="text-muted text-nowrap" style="font-size: 0.85rem; min-width: 120px;">
                     {{ tx.date | date: 'mediumDate' }}
                   </td>
-                  <td class="fw-bold text-dark">Rs. {{ tx.amount }}</td>
-                  <td>
+                  <td class="fw-bold text-dark text-nowrap" style="min-width: 100px;">Rs. {{ tx.amount }}</td>
+                  <td style="min-width: 120px;" class="text-nowrap">
                     <span
                       class="badge rounded-pill px-2.5 py-1"
                       [ngClass]="
                         tx.status === 'Completed' || tx.status === 'Succeeded'
-                          ? 'bg-success-subtle text-success'
+                           ? 'bg-success-subtle text-success'
                           : 'bg-warning-subtle text-warning'
                       "
                       style="font-size: 0.75rem;"
@@ -735,23 +750,23 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
         <div class="premium-card p-4">
           <h5 class="fw-bold mb-4 text-dark">Student Learning Progress</h5>
           <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" style="min-width: 800px;">
               <thead>
                 <tr>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 180px;">
                     Student
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 180px;">
                     Enrolled Course
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 130px;">
                     Completed Lessons
                   </th>
-                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 180px;">
                     Progress Bar
                   </th>
                   <th
-                    style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-align: center;"
+                    style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-align: center; min-width: 130px;"
                   >
                     Certificate
                   </th>
@@ -759,15 +774,15 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
               </thead>
               <tbody>
                 <tr *ngFor="let p of adminReports?.studentProgress" class="table-row-hover">
-                  <td>
-                    <div>
-                      <div class="fw-semibold text-dark">{{ p.studentName }}</div>
-                      <small class="text-muted" style="font-size: 0.75rem;">{{
+                  <td style="min-width: 180px;">
+                    <div class="text-nowrap">
+                      <div class="fw-semibold text-dark text-nowrap">{{ p.studentName }}</div>
+                      <small class="text-muted text-nowrap" style="font-size: 0.75rem;">{{
                         p.studentEmail
                       }}</small>
                     </div>
                   </td>
-                  <td class="fw-medium text-dark">{{ p.courseTitle }}</td>
+                  <td class="fw-medium text-dark text-nowrap" style="min-width: 180px;">{{ p.courseTitle }}</td>
                   <td class="text-muted" style="font-size: 0.85rem;">
                     {{ p.completedLessonsCount }} / {{ p.totalLessonsCount }}
                   </td>
@@ -995,6 +1010,29 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
         transform: translateY(-4px);
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
       }
+      .tabs-scroll-container {
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        margin-bottom: 1.5rem;
+      }
+      .tabs-scroll-container::-webkit-scrollbar {
+        display: none;
+      }
+      .tabs-scroll-container {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .tabs-nav-wrapper {
+        display: inline-flex;
+        background: var(--card-bg-hover);
+        border: 1px solid var(--border-color);
+        padding: 6px;
+        border-radius: 32px;
+        gap: 8px;
+        align-items: center;
+      }
       .custom-tab-btn {
         background: transparent;
         color: var(--text-muted);
@@ -1003,9 +1041,9 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
         color: var(--text-dark);
       }
       .active-tab {
-        background: #fff;
+        background: var(--card-bg);
         color: var(--primary-color) !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       }
       .table-row-hover:hover {
         background-color: rgba(99, 102, 241, 0.02) !important;

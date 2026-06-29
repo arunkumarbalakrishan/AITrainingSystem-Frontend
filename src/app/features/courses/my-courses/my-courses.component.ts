@@ -20,17 +20,19 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
       </div>
 
       <!-- Filter Tabs -->
-      <div class="d-flex gap-2 mb-4 flex-wrap">
-        <button
-          *ngFor="let tab of tabs"
-          (click)="activeTab = tab; filterByTab()"
-          class="btn btn-sm px-3 py-2"
-          [class.btn-lime-active]="activeTab === tab"
-          [class.btn-light]="activeTab !== tab"
-          style="border-radius: var(--border-radius-sm); font-size: 0.85rem; font-weight: 500; transition: all 0.2s ease;"
-        >
-          {{ tab }}
-        </button>
+      <div class="tabs-scroll-container mb-4">
+        <div class="d-flex gap-2 flex-nowrap pb-1">
+          <button
+            *ngFor="let tab of tabs"
+            (click)="activeTab = tab; filterByTab()"
+            class="btn btn-sm px-3 py-2 text-nowrap"
+            [class.btn-lime-active]="activeTab === tab"
+            [class.btn-light]="activeTab !== tab"
+            style="border-radius: var(--border-radius-sm); font-size: 0.85rem; font-weight: 500; transition: all 0.2s ease;"
+          >
+            {{ tab }}
+          </button>
+        </div>
       </div>
 
       <!-- Loading -->
@@ -177,6 +179,19 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
         color: #ffffff !important;
         box-shadow: 0 4px 12px rgba(132, 204, 22, 0.35) !important;
         border: none !important;
+      }
+      .tabs-scroll-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .tabs-scroll-container::-webkit-scrollbar {
+        display: none;
+      }
+      @media (max-width: 576px) {
+        .tabs-scroll-container .btn {
+          padding: 6px 10px !important;
+          font-size: 0.8rem !important;
+        }
       }
     `,
   ],

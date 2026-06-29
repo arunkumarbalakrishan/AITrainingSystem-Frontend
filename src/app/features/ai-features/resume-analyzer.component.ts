@@ -60,9 +60,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
                     (click)="fileInput.click()"
                     style="cursor: pointer;"
                   ></i>
-                  <h5 class="fw-bold mb-1">Drag & Drop Resume</h5>
-                  <p class="text-muted small mb-3">
-                    click the button to browse, or click anywhere to paste text.
+                  <h5 class="fw-bold mb-1 text-center">Drag & Drop Resume</h5>
+                  <p class="text-muted small mb-3 text-center px-4">
+                    Click the button to browse, or click anywhere to paste text.
                   </p>
                   <button
                     type="button"

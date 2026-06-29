@@ -16,8 +16,8 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
           <h3 class="fw-bold mb-1">Explore Courses</h3>
           <p class="text-muted mb-0">Discover AI-powered training programs</p>
         </div>
-        <div class="d-flex gap-3 align-items-center flex-wrap">
-          <div class="modern-input-wrapper shadow-sm">
+        <div class="search-filters-container d-flex gap-2 gap-sm-3 align-items-center">
+          <div class="modern-input-wrapper search-box shadow-sm">
             <i class="bi bi-search text-muted ms-2"></i>
             <input
               type="text"
@@ -25,16 +25,16 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
               placeholder="Search courses..."
               [(ngModel)]="searchQuery"
               (ngModelChange)="filterCourses()"
-              style="width: 220px; color: var(--text-dark);"
+              style="color: var(--text-dark);"
             />
           </div>
-          <div class="modern-input-wrapper shadow-sm">
+          <div class="modern-input-wrapper category-select shadow-sm">
             <i class="bi bi-funnel text-muted ms-2"></i>
             <select
               class="form-select border-0 shadow-none bg-transparent"
               [(ngModel)]="selectedCategory"
               (ngModelChange)="filterCourses()"
-              style="width: 160px; cursor: pointer; color: var(--text-dark);"
+              style="cursor: pointer; color: var(--text-dark);"
             >
               <option value="" style="background: var(--card-bg); color: var(--text-dark);">
                 All Categories
@@ -153,14 +153,30 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
   `,
   styles: [
     `
+      .search-filters-container {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        width: 100%;
+        justify-content: flex-end;
+      }
       .modern-input-wrapper {
         display: flex;
         align-items: center;
         background: var(--card-bg);
-        border: 2px solid rgba(0, 0, 0, 0.06);
+        border: 2px solid var(--border-color);
         border-radius: 20px;
         padding: 2px 8px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        min-width: 0;
+      }
+      .search-box {
+        width: 240px;
+        flex-shrink: 0;
+      }
+      .category-select {
+        width: 180px;
+        flex-shrink: 0;
       }
       .modern-input-wrapper:focus-within {
         border-color: var(--primary-color);
@@ -173,9 +189,35 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
         transform: translateY(-6px);
         box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12) !important;
       }
-      .modern-input-wrapper input:focus,
-      .modern-input-wrapper select:focus {
+      .modern-input-wrapper input,
+      .modern-input-wrapper select {
+        border: none !important;
+        background: transparent !important;
         box-shadow: none !important;
+        outline: none !important;
+        color: var(--text-dark) !important;
+        width: 100%;
+      }
+      @media (max-width: 576px) {
+        .search-filters-container {
+          width: 100% !important;
+          justify-content: space-between !important;
+        }
+        .search-box {
+          width: auto !important;
+          flex: 1.25 !important;
+          flex-shrink: 1 !important;
+        }
+        .category-select {
+          width: auto !important;
+          flex: 0.75 !important;
+          flex-shrink: 1 !important;
+        }
+        .modern-input-wrapper input,
+        .modern-input-wrapper select {
+          font-size: 0.85rem !important;
+          padding: 6px 4px !important;
+        }
       }
     `,
   ],

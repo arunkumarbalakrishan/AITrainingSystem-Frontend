@@ -1,3 +1,3 @@
 export const API_CONFIG = {
-  baseUrl: 'https://localhost:7113/api',
+  baseUrl: 'https://aitrainingsystem.onrender.com/api',
 };

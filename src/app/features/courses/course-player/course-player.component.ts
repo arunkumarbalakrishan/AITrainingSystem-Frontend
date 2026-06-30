@@ -38,7 +38,7 @@ import { API_CONFIG } from '../../../core/config/api-config';
 
         <div class="d-flex gap-2">
           <button
-            class="btn btn-sm"
+            class="btn btn-sm d-none d-md-inline-block"
             [class.btn-dark]="!isTheaterMode"
             [class.btn-light]="isTheaterMode"
             (click)="toggleTheaterMode()"
@@ -461,6 +461,13 @@ import { API_CONFIG } from '../../../core/config/api-config';
       }
       .curriculum-scroll:hover::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.2);
+      }
+      @media (max-width: 991px) {
+        .curriculum-scroll {
+          position: static !important;
+          max-height: none !important;
+          overflow-y: visible !important;
+        }
       }
     `,
   ],

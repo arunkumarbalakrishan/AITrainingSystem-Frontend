@@ -26,7 +26,7 @@ import confetti from 'canvas-confetti';
       >
         <div class="col-md-6 col-lg-5">
           <div class="card premium-card shadow border-0">
-            <div class="card-body p-5 text-center">
+            <div class="card-body p-3 p-sm-4 p-md-5 text-center">
               <div class="mb-4">
                 <div
                   class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle empty-icon"
@@ -99,7 +99,7 @@ import confetti from 'canvas-confetti';
                 </div>
 
                 <div
-                  class="message-bubble p-3 shadow-sm position-relative"
+                  class="message-bubble p-3 shadow-sm"
                   [ngClass]="
                     msg.role === 'user'
                       ? 'bg-primary text-white text-end rounded-4 rounded-bottom-0'
@@ -113,32 +113,33 @@ import confetti from 'canvas-confetti';
                   ></markdown>
                   <div
                     *ngIf="msg.role === 'assistant'"
-                    class="d-flex position-absolute gap-3"
-                    style="bottom: -24px; left: 10px;"
+                    class="d-flex gap-3 mt-2 pt-1 border-top border-secondary-subtle"
+                    style="opacity: 0.8;"
                   >
                     <button
-                      class="btn btn-sm btn-link text-primary p-0"
-                      style="text-decoration: none; opacity: 0.8;"
+                      class="btn btn-sm btn-link text-primary p-0 d-flex align-items-center gap-1"
+                      style="text-decoration: none;"
                       (click)="speak(msg.content)"
                       title="Read aloud"
                     >
-                      <i class="bi bi-volume-up-fill me-1"></i
-                      ><small style="font-size: 0.75rem; font-weight: 500;">Listen</small>
+                      <i class="bi bi-volume-up-fill" style="font-size: 0.85rem;"></i>
+                      <span style="font-size: 0.72rem; font-weight: 500;">Listen</span>
                     </button>
                     <button
-                      class="btn btn-sm btn-link text-primary p-0"
-                      style="text-decoration: none; opacity: 0.8;"
+                      class="btn btn-sm btn-link text-primary p-0 d-flex align-items-center gap-1"
+                      style="text-decoration: none;"
                       (click)="copyToClipboard(msg)"
                       title="Copy to clipboard"
                     >
                       <i
-                        class="bi me-1"
+                        class="bi"
                         [ngClass]="msg.isCopied ? 'bi-check2-all text-success' : 'bi-clipboard'"
+                        style="font-size: 0.85rem;"
                       ></i>
-                      <small
+                      <span
                         [ngClass]="msg.isCopied ? 'text-success' : ''"
-                        style="font-size: 0.75rem; font-weight: 500;"
-                        >{{ msg.isCopied ? 'Copied!' : 'Copy' }}</small
+                        style="font-size: 0.72rem; font-weight: 500;"
+                        >{{ msg.isCopied ? 'Copied!' : 'Copy' }}</span
                       >
                     </button>
                   </div>
@@ -226,16 +227,16 @@ import confetti from 'canvas-confetti';
       </div>
 
       <!-- Results Phase -->
-      <div class="row justify-content-center mt-5" *ngIf="interviewFinished">
+      <div class="row justify-content-center mt-3 mt-sm-5" *ngIf="interviewFinished">
         <div class="col-md-8 col-lg-6">
           <div class="card premium-card shadow border-0 overflow-hidden">
-            <div class="bg-primary text-white text-center py-5">
-              <i class="bi bi-award display-1 mb-3"></i>
+            <div class="bg-primary text-white text-center py-4 py-sm-5">
+              <i class="bi bi-award display-1 mb-2 mb-sm-3"></i>
               <h2 class="fw-bold">Interview Completed</h2>
               <p class="mb-0 fs-5 opacity-75">Topic: {{ courseTopic }}</p>
             </div>
 
-            <div class="card-body p-5">
+            <div class="card-body p-3 p-sm-4 p-md-5">
               <div class="text-center mb-5">
                 <h5 class="text-uppercase text-muted fw-bold mb-3">Your Final Score</h5>
                 <div
@@ -371,6 +372,30 @@ import confetti from 'canvas-confetti';
         }
         100% {
           box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+        }
+      }
+      @media (max-width: 576px) {
+        .message-bubble {
+          max-width: 85% !important;
+          font-size: 0.95rem !important;
+        }
+        .card-body.chat-messages {
+          padding: 1rem !important;
+        }
+        .card-footer.p-3 {
+          padding: 0.75rem !important;
+        }
+        .chat-textarea {
+          font-size: 0.88rem !important;
+          padding: 8px 6px !important;
+        }
+        .btn-send-modern {
+          width: 32px !important;
+          height: 32px !important;
+        }
+        .container-fluid.py-4 {
+          padding-top: 0.5rem !important;
+          padding-bottom: 0.5rem !important;
         }
       }
     `,

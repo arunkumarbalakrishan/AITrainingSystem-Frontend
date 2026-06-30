@@ -4655,3 +4655,41 @@ html:not([data-theme="dark"]) .hamburger-btn:hover {
     right: -65px !important;
   }
 }
+
+/* Floating AI Assistant container positioning & responsive width */
+.floating-assistant-container {
+  bottom: 25px;
+  right: 25px;
+  width: 360px;
+}
+
+@media (max-width: 480px) {
+  .floating-assistant-container {
+    right: 12px !important;
+    left: 12px !important;
+    bottom: 15px !important;
+    width: auto !important;
+  }
+  .floating-assistant-container .card {
+    height: 420px !important;
+  }
+  .floating-assistant-container .card .overflow-auto {
+    height: 290px !important;
+  }
+}
+
+@media (max-height: 600px) {
+  .floating-assistant-container .card {
+    height: 380px !important;
+  }
+  .floating-assistant-container .card .overflow-auto {
+    height: 250px !important;
+  }
+}
+
+/* Header divider responsiveness */
+@media (max-width: 576px) {
+  .header-divider {
+    display: none !important;
+  }
+}

@@ -17,7 +17,7 @@ import { Subscription, interval } from 'rxjs';
       <div class="row mb-4">
         <div class="col-12">
           <div
-            class="live-classes-banner p-5 rounded-4 position-relative overflow-hidden"
+            class="live-classes-banner p-3 p-sm-4 p-md-5 rounded-4 position-relative overflow-hidden"
             style="box-shadow: var(--shadow-md);"
           >
             <div class="position-absolute" style="top: -20px; right: -20px; opacity: 0.15;">

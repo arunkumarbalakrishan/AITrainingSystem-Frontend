@@ -264,7 +264,7 @@
       <div class="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
         <!-- Subscribe Upgrade Button -->
         <a [routerLink]="['/']" fragment="pricing"
-          class="btn btn-sm d-flex align-items-center gap-1.5 px-2.5 px-md-3 py-1.5 py-md-2 rounded-pill fw-bold header-subscribe-btn text-decoration-none flex-shrink-0"
+          class="btn btn-sm d-flex align-items-center gap-2 px-2.5 px-md-3 py-1.5 py-md-2 rounded-pill fw-bold header-subscribe-btn text-decoration-none flex-shrink-0"
           title="Upgrade to Premium Membership">
           <i class="bi bi-star-fill text-warning" style="font-size: 0.85rem;"></i>
           <span style="font-size: 0.8rem;" class="d-none d-sm-inline">Subscribe</span>
@@ -440,12 +440,9 @@
 </div>
 
 <!-- Floating AI Assistant Bubble & Mini-Chat Screen -->
-<div class="position-fixed d-flex flex-column align-items-end" cdkDrag cdkDragBoundary="body" style="
-    bottom: 25px;
-    right: 25px;
+<div class="floating-assistant-container position-fixed d-flex flex-column align-items-end" cdkDrag cdkDragBoundary="body" style="
     z-index: 1060;
     font-family: 'Outfit', sans-serif;
-    width: 360px;
     pointer-events: none;
   ">
   <!-- Mini Chat Box -->

@@ -81,7 +81,7 @@ import { AnimationService } from '../../core/services/animation.service';
       <!-- Stat Cards -->
       <div class="row g-2 g-md-3 mb-4 dashboard-widget-animate delay-2" *ngIf="!loading">
         <!-- Enrolled Courses -->
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
           <div
             class="premium-card p-2.5 p-md-3 h-100 hover-lift stat-card"
             routerLink="/my-courses"
@@ -113,7 +113,7 @@ import { AnimationService } from '../../core/services/animation.service';
         </div>
 
         <!-- Completed Courses -->
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
           <div
             class="premium-card p-2.5 p-md-3 h-100 hover-lift stat-card"
             routerLink="/my-courses"
@@ -145,7 +145,7 @@ import { AnimationService } from '../../core/services/animation.service';
         </div>
 
         <!-- Certificates Earned -->
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
           <div
             class="premium-card p-2.5 p-md-3 h-100 hover-lift stat-card"
             routerLink="/certificates"
@@ -177,7 +177,7 @@ import { AnimationService } from '../../core/services/animation.service';
         </div>
 
         <!-- Hours Learned -->
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-3">
           <div
             class="premium-card p-2.5 p-md-3 h-100 hover-lift stat-card"
             routerLink="/my-courses"
@@ -211,7 +211,7 @@ import { AnimationService } from '../../core/services/animation.service';
 
       <!-- Stat Cards Skeleton -->
       <div class="row g-2 g-md-3 mb-4" *ngIf="loading">
-        <div class="col-6 col-lg-3" *ngFor="let i of [1, 2, 3, 4]">
+        <div class="col-12 col-sm-6 col-lg-3" *ngFor="let i of [1, 2, 3, 4]">
           <div
             class="premium-card p-2.5 p-md-3 h-100 d-flex align-items-center"
             style="border: none; box-shadow: var(--shadow-sm);"

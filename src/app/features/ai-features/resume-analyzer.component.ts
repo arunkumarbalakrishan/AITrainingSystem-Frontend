@@ -84,8 +84,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
                 <button
                   *ngIf="resumeText"
                   type="button"
-                  class="btn btn-sm btn-light position-absolute shadow-sm"
-                  style="top: 10px; right: 10px; z-index: 10;"
+                  class="btn btn-sm btn-light upload-different-btn shadow-sm"
                   (click)="fileInput.click()"
                   [disabled]="isLoading"
                 >
@@ -114,7 +113,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
         <div class="col-lg-6 mb-4">
           <div class="card premium-card shadow-sm border-0 h-100" *ngIf="!result && !isLoading">
             <div
-              class="card-body d-flex flex-column align-items-center justify-content-center text-center p-5 text-muted"
+              class="card-body d-flex flex-column align-items-center justify-content-center text-center p-3 p-sm-5 text-muted"
             >
               <i
                 class="bi bi-file-earmark-person display-1 mb-4 opacity-75 empty-icon"
@@ -227,6 +226,34 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dis
         background-color: var(--background-color);
         transition: all 0.3s ease;
         overflow: hidden;
+      }
+      .upload-different-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+      }
+      @media (max-width: 576px) {
+        .resume-textarea {
+          min-height: 250px !important;
+          padding: 12px !important;
+        }
+        .dropzone-container {
+          min-height: 250px !important;
+        }
+        .upload-different-btn {
+          position: static !important;
+          margin: 10px !important;
+          align-self: flex-start;
+          width: calc(100% - 20px) !important;
+          text-align: center;
+        }
+        .card-header.pt-4 {
+          padding-top: 1rem !important;
+        }
+        .card-body.p-5 {
+          padding: 1.5rem !important;
+        }
       }
       .dropzone-container:focus-within {
         border-color: var(--primary-color);

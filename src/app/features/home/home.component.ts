@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { AnimationService } from '../../core/services/animation.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-home',
@@ -86,7 +87,7 @@ import { AnimationService } from '../../core/services/animation.service';
         </nav>
 
         <div class="landing-auth-buttons">
-          <button (click)="toggleTheme()" class="theme-toggle-btn me-2" aria-label="Toggle Theme">
+          <button (click)="toggleTheme($event)" class="theme-toggle-btn me-2" aria-label="Toggle Theme">
             <i class="bi" [class.bi-sun-fill]="themeMode === 'dark'" [class.bi-moon-fill]="themeMode === 'light'"></i>
           </button>
           <ng-container *ngIf="isAuthenticated(); else guestButtons">
@@ -1074,6 +1075,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private router = inject(Router);
   private toastr = inject(ToastrService);
   private animationService = inject(AnimationService);
+  private themeService = inject(ThemeService);
 
   // Splash screen status
   isLoading = true;
@@ -1097,7 +1099,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private typewriterTimeout: any;
 
   // Theme
-  themeMode = 'dark';
+  get themeMode(): string {
+    return this.themeService.isDarkMode() ? 'dark' : 'light';
+  }
 
   // Stats Counters
   targetStudents = 10450;
@@ -1194,18 +1198,7 @@ console.log("XP Score:", calculateSignalsScore(12));`;
       }, 800);
     }, 800);
 
-    // Sync theme settings
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      this.themeMode = savedTheme;
-      if (savedTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      } else {
-        document.documentElement.removeAttribute('data-theme');
-      }
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
+    // Theme is synchronized reactively via ThemeService
 
     // Auto-advance testimonials
     this.testimonialInterval = setInterval(() => {
@@ -1290,17 +1283,8 @@ console.log("XP Score:", calculateSignalsScore(12));`;
   }
 
   // Toggle Theme
-  toggleTheme() {
-    if (this.themeMode === 'dark') {
-      this.themeMode = 'light';
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem('theme', 'light');
-    } else {
-      this.themeMode = 'dark';
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-    }
-    this.toastr.success(`Switched to ${this.themeMode} theme!`);
+  toggleTheme(event?: MouseEvent) {
+    this.themeService.toggleTheme(event);
   }
 
   // Scroll to Anchor smoothly

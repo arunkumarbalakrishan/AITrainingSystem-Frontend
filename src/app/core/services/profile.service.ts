@@ -5,6 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { API_CONFIG } from '../config/api-config';
 import { AuthService } from './auth.service';
 import { CertificateService } from './certificate.service';
+import { ThemeService } from './theme.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class ProfileService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
   private certService = inject(CertificateService);
+  private themeService = inject(ThemeService);
   
   private profileUrl = `${API_CONFIG.baseUrl}/Users/profile`;
   
@@ -376,15 +378,13 @@ export class ProfileService {
   }
 
   savePreferences(prefs: any): Observable<any> {
-    localStorage.setItem(this.PREFS_KEY, JSON.stringify(prefs));
+    const existing = JSON.parse(localStorage.getItem(this.PREFS_KEY) || '{}');
+    const merged = { ...existing, ...prefs };
+    localStorage.setItem(this.PREFS_KEY, JSON.stringify(merged));
     
-    // Apply theme change instantly if it is saved
-    if (prefs.themeMode === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-    } else if (prefs.themeMode === 'light') {
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem('theme', 'light');
+    // Apply theme change instantly if it is saved via centralized theme service
+    if (prefs.themeMode) {
+      this.themeService.setThemeMode(prefs.themeMode);
     }
     
     return of({ success: true });

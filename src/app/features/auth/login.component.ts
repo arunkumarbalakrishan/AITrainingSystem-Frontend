@@ -157,7 +157,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         // Trigger morph transition before navigating
         this.animationService.performMorphTransition('.login-transition-overlay', () => {
           this.ngZone.run(() => {
-            this.router.navigate(['/dashboard']);
+            const role = this.authService.getUserRole();
+            if (role === 'Admin') {
+              this.router.navigate(['/admin']);
+            } else {
+              this.router.navigate(['/dashboard']);
+            }
           });
         });
       },
@@ -216,7 +221,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         // Trigger morph transition before navigating
         this.animationService.performMorphTransition('.login-transition-overlay', () => {
           this.ngZone.run(() => {
-            this.router.navigate(['/dashboard']);
+            const role = this.authService.getUserRole();
+            if (role === 'Admin') {
+              this.router.navigate(['/admin']);
+            } else {
+              this.router.navigate(['/dashboard']);
+            }
           });
         });
       },

@@ -34,11 +34,11 @@ export const routes: Routes = [
       { path: 'live-classes', loadComponent: () => import('./features/live-classes/live-classes.component').then(m => m.LiveClassesComponent) },
       { path: 'resume-analyzer', loadComponent: () => import('./features/ai-features/resume-analyzer.component').then(m => m.ResumeAnalyzerComponent) },
       { path: 'mock-interview', loadComponent: () => import('./features/ai-features/mock-interview.component').then(m => m.MockInterviewComponent) },
-      { path: 'trainer/create-course', loadComponent: () => import('./features/courses/trainer-course-creator/trainer-course-creator.component').then(m => m.TrainerCourseCreatorComponent) },
-      { path: 'trainer/create-lesson', loadComponent: () => import('./features/courses/trainer-lesson-creator/trainer-lesson-creator').then(m => m.TrainerLessonCreator) },
-      { path: 'trainer/create-quiz', loadComponent: () => import('./features/courses/trainer-quiz-creator/trainer-quiz-creator').then(m => m.TrainerQuizCreator) },
-      { path: 'admin', loadComponent: () => import('./features/admin/admin-dashboard.component').then(m => m.AdminDashboardComponent) },
-      { path: 'admin/diagnostics', loadComponent: () => import('./features/admin/diagnostics/diagnostics.component').then(m => m.DiagnosticsComponent) },
+      { path: 'trainer/create-course', loadComponent: () => import('./features/courses/trainer-course-creator/trainer-course-creator.component').then(m => m.TrainerCourseCreatorComponent), data: { roles: ['Trainer', 'Admin'] } },
+      { path: 'trainer/create-lesson', loadComponent: () => import('./features/courses/trainer-lesson-creator/trainer-lesson-creator').then(m => m.TrainerLessonCreator), data: { roles: ['Trainer', 'Admin'] } },
+      { path: 'trainer/create-quiz', loadComponent: () => import('./features/courses/trainer-quiz-creator/trainer-quiz-creator').then(m => m.TrainerQuizCreator), data: { roles: ['Trainer', 'Admin'] } },
+      { path: 'admin', loadComponent: () => import('./features/admin/admin-dashboard.component').then(m => m.AdminDashboardComponent), data: { roles: ['Admin'] } },
+      { path: 'admin/diagnostics', loadComponent: () => import('./features/admin/diagnostics/diagnostics.component').then(m => m.DiagnosticsComponent), data: { roles: ['Admin'] } },
       { path: 'profile', loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent) }
     ]
   },

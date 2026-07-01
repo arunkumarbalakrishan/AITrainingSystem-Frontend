@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { CourseService } from '../../core/services/course.service';
 import { DashboardService } from '../../core/services/dashboard.service';
@@ -11,7 +12,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   template: `
     <div class="animate-fade-in" style="font-family: 'Outfit', sans-serif;">
       <!-- Top Title and Action -->
@@ -237,7 +238,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
               <div class="col-sm-6 d-flex justify-content-center py-2">
                 <svg width="140" height="140" viewBox="0 0 200 200">
                   <!-- Background Ring -->
-                  <circle cx="100" cy="100" r="70" fill="none" stroke="#e2e8f0" stroke-width="18" />
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="var(--border-color-strong)" stroke-width="18" />
 
                   <!-- Published Ring -->
                   <circle
@@ -286,7 +287,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                   </div>
                   <div class="d-flex align-items-center gap-2">
                     <div
-                      style="width: 12px; height: 12px; background: #e2e8f0; border-radius: 50%;"
+                      style="width: 12px; height: 12px; background: var(--border-color-strong); border-radius: 50%;"
                     ></div>
                     <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-dark);"
                       >Drafts: <strong>{{ draftCoursesCount }}</strong></span
@@ -349,19 +350,29 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                 </button>
               </div>
             </div>
-            <!-- Search bar -->
-            <div class="position-relative" style="width: 250px;">
-              <i
-                class="bi bi-search position-absolute text-muted"
-                style="left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.85rem;"
-              ></i>
-              <input
-                type="text"
-                (input)="onSearchUser($event)"
-                placeholder="Search users..."
-                class="form-control form-control-sm ps-5 rounded-pill border"
-                style="font-size: 0.85rem; padding-top: 6px; padding-bottom: 6px;"
-              />
+            <div class="d-flex align-items-center gap-3">
+              <!-- Search bar -->
+              <div class="position-relative" style="width: 200px;">
+                <i
+                  class="bi bi-search position-absolute text-muted"
+                  style="left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.85rem;"
+                ></i>
+                <input
+                  type="text"
+                  (input)="onSearchUser($event)"
+                  placeholder="Search users..."
+                  class="form-control form-control-sm ps-5 rounded-pill border"
+                  style="font-size: 0.85rem; padding-top: 6px; padding-bottom: 6px;"
+                />
+              </div>
+              <!-- Create User Button -->
+              <button
+                (click)="openCreateUserModal()"
+                class="btn btn-primary btn-sm px-3 py-1.5 fw-semibold hover-lift"
+                style="border-radius: 20px; font-size: 0.82rem; background: var(--primary-color); border: none;"
+              >
+                <i class="bi bi-person-plus me-1"></i> Create User
+              </button>
             </div>
           </div>
 
@@ -983,10 +994,132 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
           </div>
         </div>
       </div>
+
+      <!-- Glassmorphic Create User Modal -->
+      <div *ngIf="showCreateUserModal" class="modal-backdrop-custom d-flex align-items-center justify-content-center" (click)="closeCreateUserModal()">
+        <div class="modal-content-custom premium-card p-4 animate-fade-in" style="width: 100%; max-width: 450px; background: var(--card-bg);" (click)="$event.stopPropagation()">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold mb-0 text-dark">Create New User</h5>
+            <button class="btn-close-custom" (click)="closeCreateUserModal()" aria-label="Close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <form (ngSubmit)="submitCreateUser()" class="inputs-form">
+            <!-- Full Name -->
+            <div class="form-group-custom-admin mb-3">
+              <label class="form-label-custom-admin mb-1 small text-muted">Full Name</label>
+              <div class="input-wrapper-custom">
+                <i class="bi bi-person input-icon-left-admin"></i>
+                <input type="text" [(ngModel)]="newUserName" name="fullName" class="form-input-custom-admin" placeholder="Enter full name" required />
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group-custom-admin mb-3">
+              <label class="form-label-custom-admin mb-1 small text-muted">Email Address</label>
+              <div class="input-wrapper-custom">
+                <i class="bi bi-envelope input-icon-left-admin"></i>
+                <input type="email" [(ngModel)]="newUserEmail" name="email" class="form-input-custom-admin" placeholder="Enter email address" required />
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group-custom-admin mb-3">
+              <label class="form-label-custom-admin mb-1 small text-muted">Temporary Password</label>
+              <div class="input-wrapper-custom">
+                <i class="bi bi-lock input-icon-left-admin"></i>
+                <input type="password" [(ngModel)]="newUserPassword" name="password" class="form-input-custom-admin" placeholder="Enter password (min 4 chars)" required />
+              </div>
+            </div>
+
+            <!-- Role Select -->
+            <div class="form-group-custom-admin mb-4">
+              <label class="form-label-custom-admin mb-1 small text-muted">User Role</label>
+              <div class="input-wrapper-custom">
+                <i class="bi bi-shield-lock input-icon-left-admin"></i>
+                <select [(ngModel)]="newUserRole" name="role" class="form-input-custom-admin form-select-custom-admin" required>
+                  <option value="Student">Student (Access & Learn)</option>
+                  <option value="Trainer">Trainer (Instruct & Author)</option>
+                  <option value="Admin">Admin (System Administrator)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <button type="button" class="btn btn-light px-4 py-2 border fw-semibold" (click)="closeCreateUserModal()" style="border-radius: 8px; font-size: 0.88rem;">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold" [disabled]="isCreatingUser" style="border-radius: 8px; font-size: 0.88rem; background: var(--primary-color); border: none;">
+                {{ isCreatingUser ? 'Creating...' : 'Create User' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   `,
   styles: [
     `
+      .modal-backdrop-custom {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+        backdrop-filter: blur(4px);
+      }
+      .modal-content-custom {
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .btn-close-custom {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+      }
+      .form-group-custom-admin .input-wrapper-custom {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .input-icon-left-admin {
+        position: absolute;
+        left: 12px;
+        color: #94a3b8;
+      }
+      .form-input-custom-admin {
+        width: 100%;
+        padding: 10px 12px 10px 38px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--card-bg-hover);
+        color: var(--text-dark);
+        transition: all 0.2s ease;
+      }
+      .form-input-custom-admin::placeholder {
+        color: var(--text-muted);
+      }
+      .form-input-custom-admin:focus {
+        border-color: var(--primary-color);
+        background: var(--card-bg);
+        outline: none;
+      }
+      .form-input-custom-admin option {
+        background: var(--card-bg);
+        color: var(--text-dark);
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
       .text-indigo {
         color: #65a30d;
       }
@@ -1142,6 +1275,71 @@ export class AdminDashboardComponent implements OnInit {
 
   selectedRoleFilter = 'All';
   userSearchQuery = '';
+
+  showCreateUserModal = false;
+  newUserName = '';
+  newUserEmail = '';
+  newUserPassword = '';
+  newUserRole = 'Student';
+  isCreatingUser = false;
+
+  openCreateUserModal() {
+    this.showCreateUserModal = true;
+    this.newUserName = '';
+    this.newUserEmail = '';
+    this.newUserPassword = '';
+    this.newUserRole = 'Student';
+    this.cdr.detectChanges();
+  }
+
+  closeCreateUserModal() {
+    this.showCreateUserModal = false;
+    this.cdr.detectChanges();
+  }
+
+  submitCreateUser() {
+    if (!this.newUserName || !this.newUserEmail || !this.newUserPassword) {
+      this.toastr.warning('Please fill in all fields.');
+      return;
+    }
+    if (this.newUserPassword.length < 4) {
+      this.toastr.warning('Password must be at least 4 characters.');
+      return;
+    }
+    this.isCreatingUser = true;
+    this.cdr.detectChanges();
+
+    const payload = {
+      fullName: this.newUserName,
+      email: this.newUserEmail,
+      password: this.newUserPassword,
+      role: this.newUserRole
+    };
+
+    this.userService.createUser(payload).subscribe({
+      next: (res) => {
+        this.toastr.success('User created successfully');
+        this.loadUsers();
+        this.loadAdminReports();
+        this.closeCreateUserModal();
+        this.isCreatingUser = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isCreatingUser = false;
+        let msg = 'Failed to create user';
+        if (err.error) {
+          if (typeof err.error === 'string') {
+            msg = err.error;
+          } else if (err.error.message) {
+            msg = err.error.message;
+          }
+        }
+        this.toastr.error(msg);
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   setSelectedRoleFilter(role: string) {
     this.selectedRoleFilter = role;

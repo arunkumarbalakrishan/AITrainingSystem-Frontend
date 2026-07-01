@@ -17,6 +17,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { AuthService } from '../core/services/auth.service';
 import { NotificationService } from '../core/services/notification.service';
 import { AIService } from '../core/services/ai.service';
+import { ThemeService } from '../core/services/theme.service';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 
@@ -44,6 +45,8 @@ export class MainLayoutComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private titleService = inject(Title);
 
+  public themeService = inject(ThemeService);
+
   @ViewChild('searchInput') searchInput!: ElementRef;
   @ViewChild('notifyContainer') notifyContainer!: ElementRef;
   @ViewChild('profileContainer') profileContainer!: ElementRef;
@@ -66,7 +69,9 @@ export class MainLayoutComponent implements OnInit {
   }
 
   // Theme State
-  isDarkMode = false;
+  get isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
+  }
 
   // Floating Mini-Chat State
   showMiniChat = false;
@@ -223,16 +228,6 @@ export class MainLayoutComponent implements OnInit {
 
     this.loadNotifications();
     this.miniChatHistory = this.aiService.getMiniChatHistory();
-
-    // Check system preference or saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (
-      savedTheme === 'dark' ||
-      (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      this.isDarkMode = true;
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
   }
 
   get userNameDisplay(): string {
@@ -264,15 +259,8 @@ export class MainLayoutComponent implements OnInit {
   }
 
 
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    if (this.isDarkMode) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem('theme', 'light');
-    }
+  toggleDarkMode(event: MouseEvent) {
+    this.themeService.toggleTheme(event);
   }
 
   loadNotifications() {

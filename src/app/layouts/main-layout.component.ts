@@ -18,6 +18,7 @@ import { AuthService } from '../core/services/auth.service';
 import { NotificationService } from '../core/services/notification.service';
 import { AIService } from '../core/services/ai.service';
 import { ThemeService } from '../core/services/theme.service';
+import { ProfileService } from '../core/services/profile.service';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 
@@ -46,6 +47,7 @@ export class MainLayoutComponent implements OnInit {
   private titleService = inject(Title);
 
   public themeService = inject(ThemeService);
+  private profileService = inject(ProfileService);
 
   @ViewChild('searchInput') searchInput!: ElementRef;
   @ViewChild('notifyContainer') notifyContainer!: ElementRef;
@@ -194,6 +196,14 @@ export class MainLayoutComponent implements OnInit {
 
     // Start SignalR Connection if authenticated
     if (this.authService.isAuthenticated()) {
+      // Fetch latest profile to sync correct name, role, avatar
+      this.profileService.getProfile().subscribe({
+        next: () => {
+          this.cdr.detectChanges();
+        },
+        error: () => {}
+      });
+
       const token = this.authService.getToken();
       if (token) {
         this.notifyService.startConnection(token);
@@ -235,7 +245,10 @@ export class MainLayoutComponent implements OnInit {
     if (localProfile) {
       try {
         const parsed = JSON.parse(localProfile);
-        if (parsed.fullName) return parsed.fullName;
+        const currentUserEmail = this.authService.getUserEmail();
+        if (parsed.fullName && parsed.email === currentUserEmail) {
+          return parsed.fullName;
+        }
       } catch (e) {}
     }
     return this.authService.getUserName();
@@ -246,15 +259,27 @@ export class MainLayoutComponent implements OnInit {
     if (localProfile) {
       try {
         const parsed = JSON.parse(localProfile);
-        if (parsed.role) return parsed.role;
+        const currentUserEmail = this.authService.getUserEmail();
+        if (parsed.role && parsed.email === currentUserEmail) {
+          return parsed.role;
+        }
       } catch (e) {}
     }
     return this.authService.getUserRole() || 'Student';
   }
 
   getAvatarUrl(): string {
-    const localAvatar = localStorage.getItem('premium_profile_avatar');
-    if (localAvatar) return localAvatar;
+    const localProfile = localStorage.getItem('premium_user_profile');
+    if (localProfile) {
+      try {
+        const parsed = JSON.parse(localProfile);
+        const currentUserEmail = this.authService.getUserEmail();
+        if (parsed.email === currentUserEmail) {
+          const localAvatar = localStorage.getItem('premium_profile_avatar');
+          if (localAvatar) return localAvatar;
+        }
+      } catch (e) {}
+    }
     return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(this.userNameDisplay)}&backgroundColor=a3e635,84cc16,65a30d`;
   }
 

@@ -50,12 +50,25 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/reset-password`, resetData);
   }
 
+  private clearLocalProfileCache(): void {
+    localStorage.removeItem('premium_user_profile');
+    localStorage.removeItem('premium_profile_cover');
+    localStorage.removeItem('premium_profile_avatar');
+    localStorage.removeItem('premium_learning_goals');
+    localStorage.removeItem('premium_account_prefs');
+    localStorage.removeItem('premium_privacy_settings');
+    localStorage.removeItem('premium_active_sessions');
+    localStorage.removeItem('premium_activity_timeline');
+    localStorage.removeItem('premium_2fa_setup');
+  }
+
   login(credentials: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/login`, credentials).pipe(
       tap((res) => {
         const data = res?.data || res;
         if (data && (data.token || data.accessToken)) {
           const token = data.token || data.accessToken;
+          this.clearLocalProfileCache();
           localStorage.setItem('access_token', token);
           if (data.refreshToken) {
             localStorage.setItem('refresh_token', data.refreshToken);
@@ -79,6 +92,7 @@ export class AuthService {
         const data = res?.data || res;
         if (data && (data.token || data.accessToken)) {
           const token = data.token || data.accessToken;
+          this.clearLocalProfileCache();
           localStorage.setItem('access_token', token);
           if (data.refreshToken) {
             localStorage.setItem('refresh_token', data.refreshToken);
@@ -90,6 +104,7 @@ export class AuthService {
   }
 
   logout(): void {
+    this.clearLocalProfileCache();
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     this.currentUserSubject.next(null);

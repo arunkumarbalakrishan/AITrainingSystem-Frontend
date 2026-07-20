@@ -139,12 +139,13 @@ export class AuthService {
     const token = localStorage.getItem('access_token');
     if (!token) return 'Guest';
     const payload = this.decodeToken(token);
-    return (
+    const rawName = (
       payload?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] ||
       payload?.unique_name ||
       payload?.email ||
       'User'
     );
+    return rawName.replace(/(\S)(\()/g, '$1 $2');
   }
 
   getUserEmail(): string {

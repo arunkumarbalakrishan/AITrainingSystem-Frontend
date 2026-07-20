@@ -4743,3 +4743,105 @@ html:not([data-theme="dark"]) .hamburger-btn:hover {
 html[data-magicui-theme-vt="active"]::view-transition-group(root) {
   animation-duration: var(--magicui-theme-toggle-vt-duration);
 }
+
+/* ============================================================
+   ENTERPRISE MULTI-MODAL INTERVIEW GLOBAL THEME OVERRIDES
+   ============================================================ */
+
+/* Dark Mode Overrides */
+html[data-theme="dark"] app-mock-interview .mock-interview-container {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-card {
+  background: #0a0a0a !important;
+  border: 1px solid rgba(159, 239, 0, 0.25) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(159, 239, 0, 0.08) !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-input {
+  background: #050505 !important;
+  border: 1px solid #2a2a2a !important;
+  color: #ffffff !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-input:focus {
+  border-color: #9FEF00 !important;
+  box-shadow: 0 0 0 2px rgba(159, 239, 0, 0.2) !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-chat-body {
+  background: #050505 !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-chat-bubble-assistant {
+  background: #0a0a0a !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(159, 239, 0, 0.2) !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-chat-bubble:not(.bg-primary) {
+  background: #0a0a0a !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(159, 239, 0, 0.2) !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-btn-primary {
+  background: linear-gradient(135deg, #9FEF00, #8ad000) !important;
+  color: #000000 !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-title {
+  background: linear-gradient(135deg, #9FEF00, #ffffff) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-heading-text {
+  color: #ffffff !important;
+}
+html[data-theme="dark"] app-mock-interview .theme-label-text {
+  color: #cbd5e1 !important;
+}
+
+/* Light Mode Overrides */
+html:not([data-theme="dark"]) app-mock-interview .mock-interview-container {
+  background: var(--bg-color) !important;
+  color: var(--text-primary) !important;
+}
+html:not([data-theme="dark"]) app-mock-interview .theme-card {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+html:not([data-theme="dark"]) app-mock-interview .theme-input {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  color: #111827 !important;
+}
+html:not([data-theme="dark"]) app-mock-interview .theme-chat-body {
+  background: #f8fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) app-mock-interview .theme-chat-bubble-assistant {
+  background: #f1f5f9 !important;
+  color: #1e293b !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) app-mock-interview .theme-chat-bubble:not(.bg-primary) {
+  background: #ffffff !important;
+  color: var(--text-primary) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+html:not([data-theme="dark"]) app-mock-interview .theme-btn-primary {
+  background: linear-gradient(135deg, #9FEF00, #75b300) !important;
+  color: #000000 !important;
+  box-shadow: 0 4px 12px rgba(159, 239, 0, 0.3) !important;
+}
+html:not([data-theme="dark"]) app-mock-interview .theme-title {
+  background: linear-gradient(135deg, #75b300, #111827) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html:not([data-theme="dark"]) app-mock-interview .theme-heading-text {
+  color: var(--text-primary) !important;
+}
+html:not([data-theme="dark"]) app-mock-interview .theme-label-text {
+  color: var(--text-secondary) !important;
+}

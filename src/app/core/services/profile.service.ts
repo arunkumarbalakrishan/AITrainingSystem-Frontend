@@ -159,12 +159,18 @@ export class ProfileService {
         const local = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
         // Merge so we retain full backend identity (email/name) + our local premium parameters
         const merged = { ...local, ...backendData };
+        if (merged.fullName) {
+          merged.fullName = merged.fullName.replace(/(\S)(\()/g, '$1 $2');
+        }
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(merged));
         return merged;
       }),
       catchError(() => {
         // Fallback to local storage if API fails or mock setup
         const local = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+        if (local.fullName) {
+          local.fullName = local.fullName.replace(/(\S)(\()/g, '$1 $2');
+        }
         return of(local);
       })
     );
@@ -174,6 +180,9 @@ export class ProfileService {
     // Save locally
     const current = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
     const updated = { ...current, ...profileData };
+    if (updated.fullName) {
+      updated.fullName = updated.fullName.replace(/(\S)(\()/g, '$1 $2');
+    }
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updated));
 
     this.addTimelineEvent('profile', 'Updated personal/professional details');
@@ -338,26 +347,48 @@ export class ProfileService {
 
   // --- ANALYTICS ---
   getAnalytics(): Observable<any> {
-    const role = this.authService.getUserRole();
-    const stats = {
-      aiChatsUsed: 142,
-      recommendationsAccepted: 24,
-      studyPlansGenerated: 8,
-      aiLearningHours: 42.5,
-      // For general dashboard stats
-      coursesEnrolled: 6,
-      coursesCompleted: 3,
-      certificatesEarned: 3,
-      learningHours: 54,
-      currentStreak: 12,
-      // For Trainer
-      coursesCreated: 2,
-      studentsEnrolled: 1280,
-      certificatesIssued: 485,
-      averageRating: 4.85,
-      hoursDelivered: 230
-    };
-    return of(stats);
+    return this.http.get<any>(`${API_CONFIG.baseUrl}/Dashboard/analytics`).pipe(
+      map(res => {
+        const stats = res.data || res;
+        return {
+          aiChatsUsed: 142,
+          recommendationsAccepted: 24,
+          studyPlansGenerated: 8,
+          aiLearningHours: 42.5,
+          // Map real DB stats
+          coursesEnrolled: stats.totalCoursesEnrolled,
+          coursesCompleted: stats.completedCourses,
+          certificatesEarned: stats.certificatesEarned,
+          learningHours: stats.totalHours,
+          currentStreak: stats.streakDays,
+          // For Trainer mock fallback
+          coursesCreated: 2,
+          studentsEnrolled: 1280,
+          certificatesIssued: 485,
+          averageRating: 4.85,
+          hoursDelivered: 230
+        };
+      }),
+      catchError(() => {
+        // Fallback mock
+        return of({
+          aiChatsUsed: 142,
+          recommendationsAccepted: 24,
+          studyPlansGenerated: 8,
+          aiLearningHours: 42.5,
+          coursesEnrolled: 6,
+          coursesCompleted: 3,
+          certificatesEarned: 3,
+          learningHours: 54,
+          currentStreak: 12,
+          coursesCreated: 2,
+          studentsEnrolled: 1280,
+          certificatesIssued: 485,
+          averageRating: 4.85,
+          hoursDelivered: 230
+        });
+      })
+    );
   }
 
   // --- PRIVACY SETTINGS ---

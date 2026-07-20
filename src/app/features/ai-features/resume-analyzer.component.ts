@@ -5,7 +5,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { AIService } from '../../core/services/ai.service';
 import { ToastrService } from 'ngx-toastr';
 import * as pdfjsLib from 'pdfjs-dist';
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 @Component({
   selector: 'app-resume-analyzer',

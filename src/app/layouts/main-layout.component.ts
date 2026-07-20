@@ -247,7 +247,7 @@ export class MainLayoutComponent implements OnInit {
         const parsed = JSON.parse(localProfile);
         const currentUserEmail = this.authService.getUserEmail();
         if (parsed.fullName && parsed.email === currentUserEmail) {
-          return parsed.fullName;
+          return parsed.fullName.replace(/(\S)(\()/g, '$1 $2');
         }
       } catch (e) {}
     }

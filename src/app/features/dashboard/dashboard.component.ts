@@ -5,13 +5,15 @@ import { DashboardService } from '../../core/services/dashboard.service';
 import { ProgressService } from '../../core/services/progress.service';
 import { AuthService } from '../../core/services/auth.service';
 import { AnimationService } from '../../core/services/animation.service';
+import { AIService } from '../../core/services/ai.service';
+import { Chart } from 'chart.js/auto';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="animate-fade-in">
+    <div class="animate-fade-in" style="font-family: 'Inter', sans-serif;">
       <!-- Welcome Banner -->
       <div
         class="premium-card p-4 mb-4 position-relative overflow-hidden dashboard-widget-animate delay-1"
@@ -78,6 +80,7 @@ import { AnimationService } from '../../core/services/animation.service';
           </div>
         </div>
       </div>
+
       <!-- Stat Cards -->
       <div class="row g-2 g-md-3 mb-4 dashboard-widget-animate delay-2" *ngIf="!loading">
         <!-- Enrolled Courses -->
@@ -388,6 +391,162 @@ import { AnimationService } from '../../core/services/animation.service';
           </div>
         </div>
       </div>
+
+      <!-- AI Interview History Section -->
+      <div
+        class="mb-4 dashboard-widget-animate delay-4 animate-fade-in"
+        *ngIf="!loading && mockInterviews.length > 0"
+      >
+        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+          <i class="bi bi-cpu text-primary"></i> AI Interview Workspace History
+        </h5>
+        <div class="row g-3">
+          <div class="col-md-6 col-lg-4" *ngFor="let interview of mockInterviews">
+            <div
+              class="premium-card p-3 d-flex flex-column justify-content-between h-100"
+              style="cursor: pointer; border: 1px solid var(--border-color); background: var(--card-bg);"
+            >
+              <div>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="fw-semibold mb-0 text-truncate" style="max-width: 65%;">
+                    {{ interview.courseTopic }}
+                  </h6>
+                  <span
+                    class="badge rounded-pill"
+                    [ngClass]="interview.overallScore >= 80 ? 'bg-success' : 'bg-warning text-dark'"
+                    style="font-size: 0.75rem;"
+                  >
+                    Score: {{ interview.overallScore }}/100
+                  </span>
+                </div>
+                <small class="text-muted d-block mb-3">
+                  Attempted: {{ interview.createdAt | date: 'mediumDate' }}
+                </small>
+              </div>
+              <button
+                class="btn btn-sm btn-outline-primary mt-auto align-self-start fw-semibold"
+                (click)="viewScorecard(interview)"
+              >
+                <i class="bi bi-bar-chart-line-fill me-1"></i> View Scorecard
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Overlay for Scorecard -->
+      <div
+        class="modal fade show"
+        tabindex="-1"
+        style="display: block; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px);"
+        *ngIf="showScorecardModal && selectedScorecard"
+      >
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div
+            class="modal-content text-white shadow-2xl rounded-4"
+            style="background: #1e293b; border: 1px solid #334155;"
+          >
+            <div class="modal-header border-bottom border-secondary py-3 px-4">
+              <h5 class="modal-title fw-bold text-white">
+                Performance Evaluation Scorecard
+              </h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                (click)="closeScorecard()"
+              ></button>
+            </div>
+            <div class="modal-body p-4">
+              <div class="row align-items-center g-4">
+                <!-- Radar Chart Vector -->
+                <div class="col-md-5 text-center">
+                  <div style="max-width: 260px; margin: 0 auto;">
+                    <canvas id="modalRadarChartCanvas"></canvas>
+                  </div>
+                </div>
+
+                <!-- Structured metrics values -->
+                <div class="col-md-7">
+                  <h6 class="fw-bold mb-3 text-info text-uppercase small" style="letter-spacing: 0.5px;">
+                    Detailed Dimension Mapping
+                  </h6>
+                  <div class="d-flex flex-column gap-3 small">
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Technical Depth & Accuracy</span>
+                        <span class="fw-bold">{{ selectedScorecard.technicalScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-primary" role="progressbar" [style.width.%]="selectedScorecard.technicalScore"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Communication & Eloquence</span>
+                        <span class="fw-bold">{{ selectedScorecard.communicationScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" role="progressbar" [style.width.%]="selectedScorecard.communicationScore"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Confidence Dynamics</span>
+                        <span class="fw-bold">{{ selectedScorecard.confidenceScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning" role="progressbar" [style.width.%]="selectedScorecard.confidenceScore"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Grammar & Structure</span>
+                        <span class="fw-bold">{{ selectedScorecard.grammarScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" role="progressbar" [style.width.%]="selectedScorecard.grammarScore"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Posture & Body Language</span>
+                        <span class="fw-bold">{{ selectedScorecard.bodyLanguageScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-danger" role="progressbar" [style.width.%]="selectedScorecard.bodyLanguageScore"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- AI Feedback -->
+              <div class="mt-4 p-3 rounded" style="background: #0f172a; border: 1px solid #334155;">
+                <h6 class="fw-bold text-warning mb-2">
+                  <i class="bi bi-chat-left-text-fill"></i> AI Constructive Feedback
+                </h6>
+                <p class="small mb-0 text-slate-300" style="white-space: pre-wrap; line-height: 1.6;">
+                  {{ selectedScorecard.feedback }}
+                </p>
+              </div>
+            </div>
+            <div class="modal-footer border-top border-secondary py-3 px-4">
+              <button
+                type="button"
+                class="btn btn-secondary px-4 fw-semibold"
+                (click)="closeScorecard()"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   `,
   styles: [
@@ -421,12 +580,18 @@ export class DashboardComponent implements OnInit {
   private progressService = inject(ProgressService);
   private authService = inject(AuthService);
   private animationService = inject(AnimationService);
+  private aiService = inject(AIService);
   private cdr = inject(ChangeDetectorRef);
 
   userName = '';
   loading = true;
   continueWatching: any[] = [];
   recentlyCompleted: any[] = [];
+  mockInterviews: any[] = [];
+
+  // Scorecard modal state
+  showScorecardModal = false;
+  selectedScorecard: any = null;
 
   // Animate counts
   enrolledCount = 0;
@@ -447,6 +612,7 @@ export class DashboardComponent implements OnInit {
     this.loadAnalytics();
     this.loadContinueWatching();
     this.loadRecentlyCompleted();
+    this.loadInterviewHistory();
   }
 
   loadAnalytics() {
@@ -475,8 +641,8 @@ export class DashboardComponent implements OnInit {
           this.cdr.detectChanges();
         });
 
-        // Set learning streak count-up (e.g. 5 days or retrieved from data)
-        const streakTarget = data.streakDays || 5;
+        // Set learning streak count-up (e.g. 12 days or retrieved from data)
+        const streakTarget = data.streakDays !== undefined ? data.streakDays : 12;
         this.animationService.animateNumber(0, streakTarget, 1500, (val) => {
           this.streakValue = val;
           this.cdr.detectChanges();
@@ -488,7 +654,7 @@ export class DashboardComponent implements OnInit {
         this.completedCount = 0;
         this.certificatesCount = 0;
         this.hoursCount = 0;
-        this.streakValue = 3;
+        this.streakValue = 12;
         this.cdr.detectChanges();
       },
     });
@@ -518,5 +684,83 @@ export class DashboardComponent implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  loadInterviewHistory() {
+    this.aiService.getMockInterviewHistory().subscribe({
+      next: (res: any) => {
+        this.mockInterviews = res.data || [];
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.mockInterviews = [];
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  viewScorecard(interview: any) {
+    this.aiService.getMockInterviewScorecard(interview.id).subscribe({
+      next: (res: any) => {
+        this.selectedScorecard = res.data;
+        this.showScorecardModal = true;
+        this.cdr.detectChanges();
+        this.renderModalRadarChart();
+      }
+    });
+  }
+
+  closeScorecard() {
+    this.showScorecardModal = false;
+    this.selectedScorecard = null;
+    this.cdr.detectChanges();
+  }
+
+  renderModalRadarChart() {
+    setTimeout(() => {
+      const canvas = document.getElementById('modalRadarChartCanvas') as HTMLCanvasElement;
+      if (canvas && this.selectedScorecard) {
+        new Chart(canvas, {
+          type: 'radar',
+          data: {
+            labels: ['Technical', 'Communication', 'Confidence', 'Grammar', 'Body Language'],
+            datasets: [
+              {
+                label: 'Performance Dimensions',
+                data: [
+                  this.selectedScorecard.technicalScore || 70,
+                  this.selectedScorecard.communicationScore || 70,
+                  this.selectedScorecard.confidenceScore || 70,
+                  this.selectedScorecard.grammarScore || 70,
+                  this.selectedScorecard.bodyLanguageScore || 70
+                ],
+                fill: true,
+                backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                borderColor: '#6366f1',
+                pointBackgroundColor: '#6366f1',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#6366f1'
+              }
+            ]
+          },
+          options: {
+            scales: {
+              r: {
+                angleLines: { color: '#475569' },
+                grid: { color: '#475569' },
+                pointLabels: { color: '#f8fafc', font: { size: 10 } },
+                ticks: { backdropColor: 'transparent', color: '#64748b', stepSize: 20 },
+                min: 0,
+                max: 100
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+    }, 100);
   }
 }

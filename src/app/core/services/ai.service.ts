@@ -61,6 +61,52 @@ export class AIService {
     });
   }
 
+  // --- Advanced Mock Interview API Methods ---
+  startMockInterview(payload: {
+    courseTopic: string;
+    difficulty: string;
+    questionCount: number;
+    language: string;
+    resumeText?: string;
+    jobDescriptionText?: string;
+    mode: string;
+  }): Observable<any> {
+    return this.http.post<any>(`${this.aiUrl}/mock-interview/start`, payload);
+  }
+
+  submitMockInterviewStep(payload: {
+    sessionId: string;
+    studentAnswer: string | null;
+    eyeContactRate: number;
+    slouchCount: number;
+    volumeVariance: number;
+    wordCount: number;
+    fillerWords: string[];
+    detectedEmotions: string[];
+    tabSwitched: boolean;
+    forceFinish?: boolean;
+  }): Observable<any> {
+    return this.http.post<any>(`${this.aiUrl}/mock-interview/step`, payload);
+  }
+
+  getMockInterviewHistory(): Observable<any> {
+    return this.http.get<any>(`${this.aiUrl}/mock-interview/history`);
+  }
+
+  getMockInterviewScorecard(id: string): Observable<any> {
+    return this.http.get<any>(`${this.aiUrl}/mock-interview/${id}/scorecard`);
+  }
+
+  uploadMockInterviewVideo(id: string, videoBlob: Blob): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', videoBlob, 'replay.mp4');
+    return this.http.post<any>(`${this.aiUrl}/mock-interview/${id}/video`, formData);
+  }
+
+  getGlobalMockInterviews(): Observable<any> {
+    return this.http.get<any>(`${this.aiUrl}/admin/mock-interviews`);
+  }
+
   // --- Local Storage History Management ---
   private readonly SESSIONS_KEY = 'ai_chat_sessions';
   private readonly MINI_CHAT_KEY = 'ai_mini_chat_history';

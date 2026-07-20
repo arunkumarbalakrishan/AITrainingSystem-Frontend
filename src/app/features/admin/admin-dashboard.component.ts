@@ -8,6 +8,8 @@ import { DashboardService } from '../../core/services/dashboard.service';
 import { CertificateService } from '../../core/services/certificate.service';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { AIService } from '../../core/services/ai.service';
+import { Chart } from 'chart.js/auto';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -119,7 +121,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                 style="font-size: 0.7rem; letter-spacing: 0.5px; line-height: 1.1;"
                 >Certificates</span
               >
-              <h5 class="fw-bold mb-0 text-dark mt-1" style="line-height: 1.1; font-size: 1.25rem;">{{ getCertificateCount() }}</h5>
+              <h5 class="fw-bold mb-0 text-dark mt-1" style="line-height: 1.1; font-size: 1.25rem;">{{ certificateCount }}</h5>
             </div>
           </div>
         </div>
@@ -158,7 +160,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 
                   <!-- Segments -->
                   <circle
-                    *ngFor="let seg of getRoleDoughnutSegments()"
+                    *ngFor="let seg of roleSegments"
                     cx="100"
                     cy="100"
                     r="70"
@@ -195,7 +197,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
               <div class="col-sm-6 py-2">
                 <div class="d-flex flex-column gap-2">
                   <div
-                    *ngFor="let seg of getRoleDoughnutSegments()"
+                    *ngFor="let seg of roleSegments"
                     class="d-flex align-items-center justify-content-between"
                   >
                     <div class="d-flex align-items-center gap-2">
@@ -248,7 +250,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                     fill="none"
                     stroke="#10b981"
                     stroke-width="18"
-                    [attr.stroke-dasharray]="getStrokeDashArray()"
+                    [attr.stroke-dasharray]="strokeDashArray"
                     stroke-dashoffset="0"
                     stroke-linecap="round"
                     transform="rotate(-90 100 100)"
@@ -395,7 +397,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let user of getFilteredUsers()" class="table-row-hover">
+                <tr *ngFor="let user of filteredUsers" class="table-row-hover">
                   <td style="min-width: 180px;">
                     <div class="d-flex align-items-center gap-3">
                       <div
@@ -451,7 +453,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                 </tr>
               </tbody>
             </table>
-            <div *ngIf="getFilteredUsers().length === 0" class="text-center text-muted py-4">
+            <div *ngIf="filteredUsers.length === 0" class="text-center text-muted py-4">
               No users found
             </div>
           </div>
@@ -574,7 +576,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                   </defs>
 
                   <!-- Horizontal Grid Lines and Y-Axis Labels -->
-                  <g *ngFor="let lvl of getGridLevels()">
+                  <g *ngFor="let lvl of gridLevels">
                     <line
                       x1="60"
                       [attr.y1]="lvl.y"
@@ -606,11 +608,11 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                   />
 
                   <!-- Area Fill Under Curve -->
-                  <path [attr.d]="getMonthlyChartData().areaPath" fill="url(#chartAreaGrad)" />
+                  <path [attr.d]="monthlyChartData.areaPath" fill="url(#chartAreaGrad)" />
 
                   <!-- Curve Line -->
                   <path
-                    [attr.d]="getMonthlyChartData().linePath"
+                    [attr.d]="monthlyChartData.linePath"
                     fill="none"
                     stroke="url(#lineGrad)"
                     stroke-width="4"
@@ -618,7 +620,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
                   />
 
                   <!-- Data Dots & Hover Labels -->
-                  <g *ngFor="let pt of getMonthlyChartData().points; let idx = index">
+                  <g *ngFor="let pt of monthlyChartData.points; let idx = index">
                     <!-- Outer glow/shadow for dot -->
                     <circle
                       [attr.cx]="pt.x"
@@ -995,6 +997,185 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
         </div>
       </div>
 
+      <!-- AI Interviews Management Tab -->
+      <div *ngIf="activeTab === 'AI Interviews' && !reportsLoading">
+        <div class="premium-card p-4">
+          <h5 class="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
+            <i class="bi bi-cpu text-primary"></i> Global Candidate AI Interviews
+          </h5>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="min-width: 800px;">
+              <thead>
+                <tr>
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 180px;">Candidate</th>
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 180px;">Interview Topic</th>
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 120px;">Overall Score</th>
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 120px;">Date Attempted</th>
+                  <th style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; min-width: 120px; text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let interview of aiInterviews" class="table-row-hover">
+                  <td style="min-width: 180px;">
+                    <div>
+                      <div class="fw-semibold text-dark text-nowrap">{{ interview.candidateName }}</div>
+                      <small class="text-muted text-nowrap" style="font-size: 0.75rem;">{{ interview.candidateEmail }}</small>
+                    </div>
+                  </td>
+                  <td class="fw-semibold text-dark text-nowrap" style="min-width: 180px;">{{ interview.courseTopic }}</td>
+                  <td style="min-width: 120px;" class="text-nowrap">
+                    <span class="badge rounded-pill px-2.5 py-1" [ngClass]="interview.overallScore >= 80 ? 'bg-success' : 'bg-warning text-dark'" style="font-size: 0.75rem;">
+                      {{ interview.overallScore }}/100
+                    </span>
+                  </td>
+                  <td class="text-muted text-nowrap" style="font-size: 0.85rem; min-width: 120px;">
+                    {{ interview.createdAt | date: 'mediumDate' }}
+                  </td>
+                  <td style="text-align: center; min-width: 120px;" class="text-nowrap">
+                    <button (click)="viewAdminScorecard(interview)" class="btn btn-sm btn-light text-primary px-3 py-1 fw-medium hover-lift border" style="font-size: 0.8rem; border-radius: 8px;">
+                      <i class="bi bi-bar-chart-line-fill me-1"></i> Audit Performance
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="aiInterviews.length === 0">
+                  <td colspan="5" class="text-center text-muted py-4">No AI mock interview sessions recorded.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Overlay for Admin Audit Scorecard -->
+      <div
+        class="modal fade show animate-fade-in"
+        tabindex="-1"
+        style="display: block; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); z-index: 1060;"
+        *ngIf="showAdminScorecardModal && selectedAdminScorecard"
+      >
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div
+            class="modal-content text-white shadow-2xl rounded-4"
+            style="background: #1e293b; border: 1px solid #334155;"
+          >
+            <div class="modal-header border-bottom border-secondary py-3 px-4">
+              <h5 class="modal-title fw-bold text-white">
+                Candidate Performance Evaluation Audit
+              </h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                (click)="closeAdminScorecard()"
+              ></button>
+            </div>
+            <div class="modal-body p-4">
+              <div class="row align-items-center g-4">
+                <!-- Radar Chart Vector -->
+                <div class="col-md-5 text-center">
+                  <div style="max-width: 260px; margin: 0 auto;">
+                    <canvas id="adminRadarChartCanvas"></canvas>
+                  </div>
+                </div>
+
+                <!-- Metrics breakdown values -->
+                <div class="col-md-7">
+                  <h6 class="fw-bold mb-3 text-info text-uppercase small" style="letter-spacing: 0.5px;">
+                    Evaluation Metrics Mapping
+                  </h6>
+                  <div class="d-flex flex-column gap-3 small">
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Technical Depth & Accuracy</span>
+                        <span class="fw-bold">{{ selectedAdminScorecard.technicalScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-primary" role="progressbar" [style.width.%]="selectedAdminScorecard.technicalScore"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Communication Skills</span>
+                        <span class="fw-bold">{{ selectedAdminScorecard.communicationScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" role="progressbar" [style.width.%]="selectedAdminScorecard.communicationScore"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Confidence Score</span>
+                        <span class="fw-bold">{{ selectedAdminScorecard.confidenceScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning" role="progressbar" [style.width.%]="selectedAdminScorecard.confidenceScore"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Grammar & Structure</span>
+                        <span class="fw-bold">{{ selectedAdminScorecard.grammarScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" role="progressbar" [style.width.%]="selectedAdminScorecard.grammarScore"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-slate-300">Body Language & Posture</span>
+                        <span class="fw-bold">{{ selectedAdminScorecard.bodyLanguageScore }}/100</span>
+                      </div>
+                      <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-danger" role="progressbar" [style.width.%]="selectedAdminScorecard.bodyLanguageScore"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- AI Feedback -->
+              <div class="mt-4 p-3 rounded" style="background: #0f172a; border: 1px solid #334155;">
+                <h6 class="fw-bold text-warning mb-2">
+                  <i class="bi bi-chat-left-text-fill"></i> AI Constructive Feedback
+                </h6>
+                <p class="small mb-0 text-slate-300" style="white-space: pre-wrap; line-height: 1.6;">
+                  {{ selectedAdminScorecard.feedback }}
+                </p>
+              </div>
+
+              <!-- Turn-by-Turn Dialog Logs -->
+              <div class="mt-4" *ngIf="selectedAdminScorecard.questionByQuestionLogs">
+                <h6 class="fw-bold text-info mb-3">
+                  <i class="bi bi-card-list"></i> Full Interview Dialog Logs
+                </h6>
+                <div class="d-flex flex-column gap-3" style="max-height: 250px; overflow-y: auto; padding-right: 8px;">
+                  <div *ngFor="let turn of selectedAdminScorecard.questionByQuestionLogs; let i = index" class="p-3 rounded border border-secondary" style="background: #0f172a;">
+                    <div class="fw-bold text-warning small mb-1">Question {{ i + 1 }}:</div>
+                    <div class="small mb-2 text-white">{{ turn.question }}</div>
+                    <div class="fw-bold text-success small mb-1">Candidate Answer:</div>
+                    <div class="small mb-2 text-slate-300">{{ turn.answer || '[No response / skipped]' }}</div>
+                    <div class="fw-bold text-info small mb-1">AI Critique:</div>
+                    <div class="small text-slate-400 italic">{{ turn.critique }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer border-top border-secondary py-3 px-4">
+              <button
+                type="button"
+                class="btn btn-secondary px-4 fw-semibold"
+                (click)="closeAdminScorecard()"
+              >
+                Close Audit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Glassmorphic Create User Modal -->
       <div *ngIf="showCreateUserModal" class="modal-backdrop-custom d-flex align-items-center justify-content-center" (click)="closeCreateUserModal()">
         <div class="modal-content-custom premium-card p-4 animate-fade-in" style="width: 100%; max-width: 450px; background: var(--card-bg);" (click)="$event.stopPropagation()">
@@ -1263,12 +1444,25 @@ export class AdminDashboardComponent implements OnInit {
   private dashboardService = inject(DashboardService);
   private certificateService = inject(CertificateService);
   private toastr = inject(ToastrService);
+  private aiService = inject(AIService);
   private cdr = inject(ChangeDetectorRef);
 
-  tabs = ['Users', 'Courses', 'Revenue Reports', 'Student Progress', 'Top Courses', 'Certificates'];
+  tabs = ['Users', 'Courses', 'Revenue Reports', 'Student Progress', 'Top Courses', 'Certificates', 'AI Interviews'];
   activeTab = 'Users';
   users: any[] = [];
   courses: any[] = [];
+  aiInterviews: any[] = [];
+
+  roleSegments: any[] = [];
+  monthlyRevenueList: any[] = [];
+  monthlyChartData: any = { linePath: '', areaPath: '', points: [], maxVal: 100 };
+  gridLevels: any[] = [];
+  strokeDashArray = '0 440';
+  certificateCount = 0;
+  filteredUsers: any[] = [];
+
+  selectedAdminScorecard: any = null;
+  showAdminScorecardModal = false;
 
   adminReports: any = null;
   reportsLoading = false;
@@ -1343,18 +1537,23 @@ export class AdminDashboardComponent implements OnInit {
 
   setSelectedRoleFilter(role: string) {
     this.selectedRoleFilter = role;
+    this.updateFilteredUsers();
     this.cdr.detectChanges();
   }
 
   onSearchUser(event: Event) {
     const input = event.target as HTMLInputElement;
     this.userSearchQuery = input.value;
+    this.updateFilteredUsers();
     this.cdr.detectChanges();
   }
 
-  getFilteredUsers(): any[] {
-    if (!this.users) return [];
-    return this.users.filter((user) => {
+  updateFilteredUsers() {
+    if (!this.users) {
+      this.filteredUsers = [];
+      return;
+    }
+    this.filteredUsers = this.users.filter((user) => {
       const matchesRole =
         this.selectedRoleFilter === 'All' || user.role === this.selectedRoleFilter;
       const matchesSearch =
@@ -1373,7 +1572,100 @@ export class AdminDashboardComponent implements OnInit {
 
   setTab(tab: string) {
     this.activeTab = tab;
+    if (tab === 'AI Interviews') {
+      this.loadGlobalMockInterviews();
+    }
     this.cdr.detectChanges();
+  }
+
+  loadGlobalMockInterviews() {
+    this.reportsLoading = true;
+    this.cdr.detectChanges();
+    this.aiService.getGlobalMockInterviews().subscribe({
+      next: (res: any) => {
+        this.aiInterviews = res.data || [];
+        this.reportsLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.aiInterviews = [];
+        this.reportsLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  viewAdminScorecard(interview: any) {
+    this.aiService.getMockInterviewScorecard(interview.id).subscribe({
+      next: (res: any) => {
+        const data = res.data;
+        if (data && data.questionByQuestionLogsJson) {
+          try {
+            data.questionByQuestionLogs = JSON.parse(data.questionByQuestionLogsJson);
+          } catch (e) {
+            data.questionByQuestionLogs = [];
+          }
+        }
+        this.selectedAdminScorecard = data;
+        this.showAdminScorecardModal = true;
+        this.cdr.detectChanges();
+        this.renderAdminRadarChart();
+      }
+    });
+  }
+
+  closeAdminScorecard() {
+    this.showAdminScorecardModal = false;
+    this.selectedAdminScorecard = null;
+    this.cdr.detectChanges();
+  }
+
+  renderAdminRadarChart() {
+    setTimeout(() => {
+      const canvas = document.getElementById('adminRadarChartCanvas') as HTMLCanvasElement;
+      if (canvas && this.selectedAdminScorecard) {
+        new Chart(canvas, {
+          type: 'radar',
+          data: {
+            labels: ['Technical', 'Communication', 'Confidence', 'Grammar', 'Body Language'],
+            datasets: [
+              {
+                label: 'Candidate Performance',
+                data: [
+                  this.selectedAdminScorecard.technicalScore || 70,
+                  this.selectedAdminScorecard.communicationScore || 70,
+                  this.selectedAdminScorecard.confidenceScore || 70,
+                  this.selectedAdminScorecard.grammarScore || 70,
+                  this.selectedAdminScorecard.bodyLanguageScore || 70
+                ],
+                fill: true,
+                backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                borderColor: '#6366f1',
+                pointBackgroundColor: '#6366f1',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#6366f1'
+              }
+            ]
+          },
+          options: {
+            scales: {
+              r: {
+                angleLines: { color: '#475569' },
+                grid: { color: '#475569' },
+                pointLabels: { color: '#f8fafc', font: { size: 10 } },
+                ticks: { backdropColor: 'transparent', color: '#64748b', stepSize: 20 },
+                min: 0,
+                max: 100
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+    }, 100);
   }
 
   // Helper getters for analytics values
@@ -1505,7 +1797,8 @@ export class AdminDashboardComponent implements OnInit {
     return { linePath, areaPath, points, maxVal };
   }
 
-  getRoleDoughnutSegments() {
+  updateAnalyticsCalculations() {
+    // 1. Role segments
     const s = this.studentCount;
     const t = this.trainerCount;
     const a = this.adminCount;
@@ -1521,7 +1814,7 @@ export class AdminDashboardComponent implements OnInit {
     const tOffset = -sDash;
     const aOffset = -(sDash + tDash);
 
-    return [
+    this.roleSegments = [
       {
         name: 'Students',
         count: s,
@@ -1544,6 +1837,75 @@ export class AdminDashboardComponent implements OnInit {
         offset: aOffset,
       },
     ];
+
+    // 2. Stroke Dash Array for Course Publishing Health
+    const courseTotal = this.courses.length;
+    if (courseTotal === 0) {
+      this.strokeDashArray = '0 440';
+    } else {
+      const published = this.publishedCoursesCount;
+      const percentage = (published / courseTotal) * 440;
+      this.strokeDashArray = `${percentage} ${440 - percentage}`;
+    }
+
+    // 3. Monthly Revenue list
+    const list = this.adminReports?.monthlyRevenue || [];
+    const monthsList = [];
+    const today = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const monthStr = `${year}-${month}`;
+
+      const match = list.find((m: any) => m.month === monthStr);
+      monthsList.push({
+        month: monthStr,
+        revenue: match ? match.revenue : 0,
+      });
+    }
+    this.monthlyRevenueList = monthsList;
+
+    // 4. Grid Levels
+    const maxVal = Math.max(...monthsList.map((m) => m.revenue), 100);
+    this.gridLevels = [
+      { y: 30, value: `Rs.${Math.round(maxVal)}` },
+      { y: 67.5, value: `Rs.${Math.round(maxVal * 0.75)}` },
+      { y: 105, value: `Rs.${Math.round(maxVal * 0.5)}` },
+      { y: 142.5, value: `Rs.${Math.round(maxVal * 0.25)}` },
+      { y: 180, value: '0' },
+    ];
+
+    // 5. Monthly Chart Data
+    if (monthsList.length === 0) {
+      this.monthlyChartData = { linePath: '', areaPath: '', points: [], maxVal: 100 };
+    } else {
+      const points = monthsList.map((m, i) => {
+        const x = 60 + i * (420 / 5);
+        const y = 180 - (m.revenue / maxVal) * 150;
+        return { x, y, month: this.getMonthName(m.month), revenue: m.revenue };
+      });
+
+      let linePath = `M ${points[0].x} ${points[0].y}`;
+      for (let i = 0; i < points.length - 1; i++) {
+        const p0 = points[i];
+        const p1 = points[i + 1];
+        const cp1x = p0.x + (p1.x - p0.x) / 2;
+        const cp1y = p0.y;
+        const cp2x = p1.x - (p1.x - p0.x) / 2;
+        const cp2y = p1.y;
+        linePath += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p1.x} ${p1.y}`;
+      }
+
+      const areaPath = `${linePath} L ${points[points.length - 1].x} 180 L ${points[0].x} 180 Z`;
+
+      this.monthlyChartData = { linePath, areaPath, points, maxVal };
+    }
+
+    // 6. Certificate count
+    this.certificateCount = this.adminReports?.studentProgress
+      ? this.adminReports.studentProgress.filter((p: any) => p.hasCertificate).length
+      : 0;
   }
 
   loadUsers() {
@@ -1551,9 +1913,15 @@ export class AdminDashboardComponent implements OnInit {
       next: (res: any) => {
         const data = res.data?.items || res.data || res;
         this.users = Array.isArray(data) ? data : [];
+        this.updateAnalyticsCalculations();
+        this.updateFilteredUsers();
+        this.cdr.detectChanges();
       },
       error: () => {
         this.users = [];
+        this.updateAnalyticsCalculations();
+        this.updateFilteredUsers();
+        this.cdr.detectChanges();
       },
     });
   }
@@ -1577,23 +1945,30 @@ export class AdminDashboardComponent implements OnInit {
       next: (res: any) => {
         const data = res.data || res;
         this.courses = Array.isArray(data) ? data : [];
+        this.updateAnalyticsCalculations();
+        this.cdr.detectChanges();
       },
       error: () => {
         this.courses = [];
+        this.updateAnalyticsCalculations();
+        this.cdr.detectChanges();
       },
     });
   }
 
   loadAdminReports() {
     this.reportsLoading = true;
+    this.cdr.detectChanges();
     this.dashboardService.getAdminReports().subscribe({
       next: (res: any) => {
         this.adminReports = res.data || res;
         this.reportsLoading = false;
+        this.updateAnalyticsCalculations();
         this.cdr.detectChanges();
       },
       error: () => {
         this.reportsLoading = false;
+        this.updateAnalyticsCalculations();
         this.cdr.detectChanges();
       },
     });

@@ -1,4 +1,6 @@
 export const API_CONFIG = {
-  // baseUrl: 'https://aitrainingsystem.onrender.com/api',
-  baseUrl: 'https://localhost:7113/api',
+  baseUrl: typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'https://localhost:7113/api'
+    : 'https://aitrainingsystem.onrender.com/api',
 };
+

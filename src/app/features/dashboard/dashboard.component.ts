@@ -641,8 +641,8 @@ export class DashboardComponent implements OnInit {
           this.cdr.detectChanges();
         });
 
-        // Set learning streak count-up (e.g. 12 days or retrieved from data)
-        const streakTarget = data.streakDays !== undefined ? data.streakDays : 12;
+        // Set learning streak count-up retrieved from data
+        const streakTarget = data.streakDays ?? 0;
         this.animationService.animateNumber(0, streakTarget, 1500, (val) => {
           this.streakValue = val;
           this.cdr.detectChanges();
@@ -654,7 +654,7 @@ export class DashboardComponent implements OnInit {
         this.completedCount = 0;
         this.certificatesCount = 0;
         this.hoursCount = 0;
-        this.streakValue = 12;
+        this.streakValue = 0;
         this.cdr.detectChanges();
       },
     });

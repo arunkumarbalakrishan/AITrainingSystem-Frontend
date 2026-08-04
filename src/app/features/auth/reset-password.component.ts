@@ -468,6 +468,9 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       if (params['email']) {
         this.resetFormModel.email = params['email'];
       }
+      if (params['token']) {
+        this.resetFormModel.token = params['token'];
+      }
     });
   }
 

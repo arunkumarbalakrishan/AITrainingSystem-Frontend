@@ -106,7 +106,7 @@ export class LearningStatisticsComponent implements OnInit, OnChanges {
         { label: 'Completed', displayVal: String(this.stats.coursesCompleted || 3), subtext: 'Finalized courses', icon: 'bi-journal-check', color: '#00D26A' },
         { label: 'Certificates', displayVal: String(this.stats.certificatesEarned || 3), subtext: 'LMS credentials', icon: 'bi-award-fill', color: '#FFB800' },
         { label: 'Study Hours', displayVal: String(this.stats.learningHours || 54) + 'h', subtext: 'Total logs', icon: 'bi-clock-fill', color: '#9FEF00' },
-        { label: 'Daily Streak', displayVal: String(this.stats.currentStreak || 12) + 'd', subtext: 'Consecutive days', icon: 'bi-lightning-charge-fill', color: '#e879f9' }
+        { label: 'Daily Streak', displayVal: String(this.stats.currentStreak ?? 0) + 'd', subtext: 'Consecutive days', icon: 'bi-lightning-charge-fill', color: '#e879f9' }
       ];
     }
   }

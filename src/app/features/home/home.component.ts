@@ -6,6 +6,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { AnimationService } from '../../core/services/animation.service';
 import { ThemeService } from '../../core/services/theme.service';
+import { ProfileService } from '../../core/services/profile.service';
 
 @Component({
   selector: 'app-home',
@@ -461,14 +462,14 @@ import { ThemeService } from '../../core/services/theme.service';
                       👨‍💻
                     </div>
                     <div>
-                      <h4 class="text-white mb-0 font-weight-700">Welcome back, Alex!</h4>
+                      <h4 class="text-white mb-0 font-weight-700">Welcome back, {{ isAuthenticated() ? getUserName() : 'Alex' }}!</h4>
                       <p class="text-white-50 small mb-0">Track your weekly AI engineering milestone targets.</p>
                     </div>
                   </div>
                   <!-- Streak Flame indicator -->
                   <div class="d-flex align-items-center gap-2 bg-dark-accent px-3 py-2 rounded-xl border border-secondary" style="background: rgba(255,255,255,0.02)">
                     <span style="font-size: 1.2rem; animation: float-hero 2s infinite alternate; display: inline-block;">🔥</span>
-                    <strong class="text-white">12 Day Streak</strong>
+                    <strong class="text-white">{{ getHeroStreakDays() }} Day Streak</strong>
                   </div>
                 </div>
 
@@ -1175,12 +1176,26 @@ console.log("XP Score:", calculateSignalsScore(12));`;
   cursorX = -1000;
   cursorY = -1000;
 
+  private profileService = inject(ProfileService);
+  heroStreakDays = 0;
+
   // Scroll Reveal elements
   private observer!: IntersectionObserver;
 
   ngOnInit(): void {
     // Initial scroll setup
     window.scrollTo({ top: 0 });
+
+    if (this.isAuthenticated()) {
+      this.profileService.getAnalytics().subscribe({
+        next: (data: any) => {
+          this.heroStreakDays = data?.currentStreak ?? data?.streakDays ?? 0;
+        },
+        error: () => {
+          this.heroStreakDays = 0;
+        }
+      });
+    }
 
     // Handle splash screen simulation
     setTimeout(() => {
@@ -1511,6 +1526,10 @@ Sandbox compilation successful.`;
 
   getUserName(): string {
     return this.authService.getUserName();
+  }
+
+  getHeroStreakDays(): number {
+    return this.isAuthenticated() ? this.heroStreakDays : 0;
   }
 
   logout(): void {

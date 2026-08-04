@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LiveClassService } from '../../core/services/live-class.service';
 import { CourseService } from '../../core/services/course.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -35,14 +36,14 @@ import { Subscription, interval } from 'rxjs';
             <h2 class="fw-bold mb-2">Interactive Scheduled Lectures</h2>
             <p class="mb-0 live-banner-desc max-w-xl">
               Learn directly from industry experts, ask questions, and engage in real-time
-              discussions with fellow students.
+              discussions with fellow students via In-App WebRTC or Zoom.
             </p>
           </div>
         </div>
       </div>
 
       <div class="row">
-        <!-- Upcoming Sessions (Left Side/Full Width if student) -->
+        <!-- Upcoming Sessions List -->
         <div [class]="isTrainer || isAdmin ? 'col-lg-8' : 'col-12'">
           <div
             class="card border-0 shadow-sm p-4 mb-4"
@@ -54,7 +55,7 @@ import { Subscription, interval } from 'rxjs';
                   Upcoming Live Sessions
                 </h5>
                 <p class="text-muted small mb-0">
-                  Join sessions to interact live with the instructors.
+                  Join sessions to interact live with instructors and peers.
                 </p>
               </div>
               <button
@@ -98,7 +99,7 @@ import { Subscription, interval } from 'rxjs';
                 No Live Sessions Scheduled
               </h6>
               <p class="text-muted small max-w-sm mx-auto mb-0">
-                Check back later or check with your trainer for the upcoming live class schedule.
+                Check back later or ask your trainer to schedule a live lecture.
               </p>
             </div>
 
@@ -117,21 +118,29 @@ import { Subscription, interval } from 'rxjs';
                   style="background: var(--background-color); border-radius: 14px; box-shadow: var(--shadow-sm); transition: transform 0.2s;"
                 >
                   <div class="d-flex justify-content-between align-items-start mb-3">
-                    <span
-                      class="badge text-uppercase px-2.5 py-1.5 fw-semibold"
-                      [ngClass]="
-                        item.isActive
-                          ? 'bg-success-subtle text-success'
-                          : item.isSoon
-                            ? 'bg-warning-subtle text-warning'
-                            : 'bg-primary-subtle text-primary'
-                      "
-                      style="font-size: 0.7rem;"
-                    >
-                      {{
-                        item.isActive ? 'Active Now' : item.isSoon ? 'Starting Soon' : 'Upcoming'
-                      }}
-                    </span>
+                    <div class="d-flex align-items-center gap-1.5">
+                      <span
+                        class="badge text-uppercase px-2.5 py-1.5 fw-semibold"
+                        [ngClass]="
+                          item.isActive
+                            ? 'bg-success-subtle text-success'
+                            : item.isSoon
+                              ? 'bg-warning-subtle text-warning'
+                              : 'bg-primary-subtle text-primary'
+                        "
+                        style="font-size: 0.7rem;"
+                      >
+                        {{
+                          item.isActive ? 'Active Now' : item.isSoon ? 'Starting Soon' : 'Upcoming'
+                        }}
+                      </span>
+                      <span
+                        class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1"
+                        style="font-size: 0.68rem;"
+                      >
+                        <i class="bi bi-broadcast me-1"></i>{{ item.provider || 'Jitsi' }}
+                      </span>
+                    </div>
                     <span class="text-muted small fw-semibold">{{ item.countdown }}</span>
                   </div>
 
@@ -179,8 +188,19 @@ import { Subscription, interval } from 'rxjs';
                     >
                       <i class="bi bi-camera-video"></i>
                       <span>{{
-                        item.isActive || item.isSoon ? 'Join Live Class' : 'Meeting Details'
+                        item.isActive || item.isSoon
+                          ? (item.provider === 'Jitsi' ? 'Join In-App Video Room' : 'Join Zoom Meeting')
+                          : 'Meeting Details'
                       }}</span>
+                    </button>
+                    <button
+                      *ngIf="item.meetingLink"
+                      (click)="openExternalLink(item)"
+                      class="btn btn-light px-3"
+                      title="Open External Tab"
+                      style="border-radius: 8px;"
+                    >
+                      <i class="bi bi-box-arrow-up-right"></i>
                     </button>
                     <button
                       *ngIf="isTrainer || isAdmin"
@@ -197,14 +217,14 @@ import { Subscription, interval } from 'rxjs';
           </div>
         </div>
 
-        <!-- Schedule Form (Right Side - Trainer/Admin only) -->
+        <!-- Schedule Form (Trainer/Admin only) -->
         <div *ngIf="isTrainer || isAdmin" class="col-lg-4">
           <div
             class="card border-0 shadow-sm p-4 mb-4"
             style="background: var(--card-bg); border-radius: 16px;"
           >
             <h5 class="fw-bold mb-1" style="color: var(--text-dark);">Schedule Live Session</h5>
-            <p class="text-muted small mb-4">Create a new live lecture session for students.</p>
+            <p class="text-muted small mb-4">Create a new live lecture for students.</p>
 
             <form (ngSubmit)="scheduleLiveClass()" #scheduleForm="ngForm">
               <div class="mb-3">
@@ -215,7 +235,7 @@ import { Subscription, interval } from 'rxjs';
                   name="title"
                   [(ngModel)]="newClass.title"
                   required
-                  placeholder="e.g. AWS Deployment Live Lab"
+                  placeholder="e.g. AWS & Microservices Live Q&A"
                   style="border-radius: 8px;"
                 />
               </div>
@@ -228,9 +248,23 @@ import { Subscription, interval } from 'rxjs';
                   [(ngModel)]="newClass.description"
                   required
                   rows="3"
-                  placeholder="Brief outline of topics to cover..."
+                  placeholder="Brief outline of topics..."
                   style="border-radius: 8px;"
                 ></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Streaming Provider</label>
+                <select
+                  class="form-select"
+                  name="provider"
+                  [(ngModel)]="newClass.provider"
+                  style="border-radius: 8px;"
+                >
+                  <option value="Auto">Jitsi WebRTC (In-App Video Room)</option>
+                  <option value="Zoom">Zoom OAuth API (Server Meeting)</option>
+                  <option value="Custom">Custom Link Entry</option>
+                </select>
               </div>
 
               <div class="mb-3">
@@ -276,21 +310,16 @@ import { Subscription, interval } from 'rxjs';
                 </select>
               </div>
 
-              <div class="mb-4">
-                <label class="form-label small fw-bold text-muted"
-                  >Custom Zoom/Meet URL (Optional)</label
-                >
+              <div *ngIf="newClass.provider === 'Custom'" class="mb-4">
+                <label class="form-label small fw-bold text-muted">Custom Meeting URL</label>
                 <input
                   type="url"
                   class="form-control"
                   name="meetingLink"
                   [(ngModel)]="newClass.meetingLink"
-                  placeholder="Leave empty to auto-generate"
+                  placeholder="https://zoom.us/j/..."
                   style="border-radius: 8px;"
                 />
-                <small class="text-muted" style="font-size: 0.7rem;"
-                  >Leave empty to automatically generate a simulated premium meeting room.</small
-                >
               </div>
 
               <button
@@ -304,6 +333,52 @@ import { Subscription, interval } from 'rxjs';
                 <span>Schedule Session</span>
               </button>
             </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- In-App WebRTC Video Room Modal -->
+      <div
+        *ngIf="showInAppRoomModal"
+        class="modal fade show d-block"
+        tabindex="-1"
+        style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 1050;"
+      >
+        <div class="modal-dialog modal-xl modal-dialog-centered" style="max-width: 92vw;">
+          <div class="modal-content border-0 shadow-lg bg-dark text-white rounded-4 overflow-hidden">
+            <div class="modal-header border-secondary p-3 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-danger rounded-pill px-3 py-1 animate-pulse">
+                  <i class="bi bi-record-circle me-1"></i> LIVE
+                </span>
+                <h5 class="modal-title fw-bold mb-0 text-white">
+                  {{ selectedMeetingRoom?.title }}
+                </h5>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button
+                  (click)="openExternalLink(selectedMeetingRoom)"
+                  class="btn btn-sm btn-outline-light rounded-pill px-3"
+                >
+                  <i class="bi bi-box-arrow-up-right me-1"></i> Open External
+                </button>
+                <button
+                  (click)="closeInAppRoomModal()"
+                  class="btn btn-sm btn-danger rounded-circle p-2 d-flex align-items-center justify-content-center"
+                  style="width: 32px; height: 32px;"
+                >
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+            </div>
+            <div class="modal-body p-0" style="height: 78vh; background: #000;">
+              <iframe
+                *ngIf="safeMeetingUrl"
+                [src]="safeMeetingUrl"
+                allow="camera; microphone; display-capture; autoplay; clipboard-write"
+                style="width: 100%; height: 100%; border: none;"
+              ></iframe>
+            </div>
           </div>
         </div>
       </div>
@@ -341,6 +416,13 @@ import { Subscription, interval } from 'rxjs';
       .hover-translate:hover {
         transform: translateY(-4px);
       }
+      .animate-pulse {
+        animation: opacity-pulse 1.5s infinite ease-in-out;
+      }
+      @keyframes opacity-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
     `,
   ],
 })
@@ -349,6 +431,7 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
   private courseService = inject(CourseService);
   private authService = inject(AuthService);
   private toastr = inject(ToastrService);
+  private sanitizer = inject(DomSanitizer);
 
   liveClasses: any[] = [];
   courses: any[] = [];
@@ -358,20 +441,26 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
   isTrainer = false;
   isAdmin = false;
 
+  selectedMeetingRoom: any = null;
+  safeMeetingUrl: SafeResourceUrl | null = null;
+  showInAppRoomModal = false;
+
   newClass = {
     title: '',
     description: '',
     startTime: '',
     durationInMinutes: 60,
     courseId: null as string | null,
+    provider: 'Auto',
     meetingLink: '',
   };
 
-  private timerSub?: Subscription;
+  private timerSub!: Subscription;
 
   ngOnInit() {
-    this.isTrainer = this.authService.getUserRole() === 'Trainer';
-    this.isAdmin = this.authService.getUserRole() === 'Admin';
+    const userRole = this.authService.getUserRole();
+    this.isTrainer = userRole === 'Trainer';
+    this.isAdmin = userRole === 'Admin';
 
     this.loadLiveClasses();
     if (this.isTrainer || this.isAdmin) {
@@ -396,7 +485,6 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         const list = res.data || res || [];
         this.liveClasses = list.map((item: any) => {
-          // Keep local dates for UI display
           return {
             ...item,
             startTimeLocal: new Date(item.startTime),
@@ -446,6 +534,7 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
       startTime: start.toISOString(),
       durationInMinutes: this.newClass.durationInMinutes,
       courseId: this.newClass.courseId || null,
+      provider: this.newClass.provider,
       meetingLink: this.newClass.meetingLink || null,
     };
 
@@ -460,6 +549,7 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
           startTime: '',
           durationInMinutes: 60,
           courseId: null,
+          provider: 'Auto',
           meetingLink: '',
         };
         this.scheduling = false;
@@ -487,14 +577,31 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
 
   joinMeeting(item: any) {
     if (item.isActive || item.isSoon) {
-      if (item.meetingLink) {
+      if (item.provider === 'Jitsi' || (item.meetingLink && item.meetingLink.includes('meet.jit.si'))) {
+        this.selectedMeetingRoom = item;
+        const iframeUrl = `${item.meetingLink}#config.prejoinPageEnabled=false`;
+        this.safeMeetingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
+        this.showInAppRoomModal = true;
+      } else if (item.meetingLink) {
         window.open(item.meetingLink, '_blank');
       } else {
         this.toastr.error('Meeting link is not available yet.');
       }
     } else {
-      this.toastr.info('The meeting link will be available shortly before the session starts.', 'Not Active Yet');
+      this.toastr.info('The meeting link will activate 15 minutes before session start time.', 'Not Active Yet');
     }
+  }
+
+  openExternalLink(item: any) {
+    if (item && item.meetingLink) {
+      window.open(item.meetingLink, '_blank');
+    }
+  }
+
+  closeInAppRoomModal() {
+    this.showInAppRoomModal = false;
+    this.selectedMeetingRoom = null;
+    this.safeMeetingUrl = null;
   }
 
   updateCountdowns() {

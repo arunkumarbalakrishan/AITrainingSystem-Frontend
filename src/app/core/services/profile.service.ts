@@ -380,7 +380,7 @@ export class ProfileService {
           coursesCompleted: 3,
           certificatesEarned: 3,
           learningHours: 54,
-          currentStreak: 12,
+          currentStreak: 0,
           coursesCreated: 2,
           studentsEnrolled: 1280,
           certificatesIssued: 485,

@@ -754,13 +754,13 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
   autoHandsFreeMode: boolean = true;
   private silenceTimeout: any = null;
   currentUtterance: SpeechSynthesisUtterance | null = null;
-  
+
   // States
   interviewStarted: boolean = false;
   interviewFinished: boolean = false;
   isLoading: boolean = false;
   activeSessionId: string = '';
-  
+
   // Media Status
   webcamStatus: boolean = false;
   micStatus: boolean = false;
@@ -770,11 +770,11 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
   recordedChunks: Blob[] = [];
   videoReplayUrl: string | null = null;
   voices: SpeechSynthesisVoice[] = [];
-  
+
   // Dialog log
   chatHistory: any[] = [];
   chatInput: string = '';
-  
+
   // RAG parsed files
   resumeText: string = '';
   resumeFileName: string = '';
@@ -785,7 +785,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
   isSlouching: boolean = false;
   faceCount: number = 1;
   tabSwitchCount: number = 0;
-  
+
   // Web Audio Variables
   currentVolume: number = 0;
   audioStream: MediaStream | null = null;
@@ -795,7 +795,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
 
   // Keywords list
   currentHints: Array<{ word: string; mentioned: boolean }> = [];
-  
+
   // Text analysis
   realTimeWordCount: number = 0;
   realTimeFillerCount: number = 0;
@@ -862,7 +862,10 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
   // Request Permissions & Setup Media Stream fallbacks
   async requestMediaPermissions() {
     try {
-      this.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      const tempStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      tempStream.getTracks().forEach(track => track.stop()); // Release hardware lock immediately after verification
+
+      this.audioStream = null;
       this.webcamStatus = true;
       this.micStatus = true;
       this.toastr.success('Camera & Microphone verified successfully.');
@@ -957,7 +960,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
           this.speak(data.nextQuestionOrFeedback);
           this.updateHints(data.hints);
           this.startTimer();
-          
+
           // Switch to workspace view now that we have data
           this.interviewStarted = true;
           this.cdr.detectChanges();
@@ -968,30 +971,43 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
               this.videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
               if (this.videoElement && this.videoElement.nativeElement) {
                 this.videoElement.nativeElement.srcObject = this.videoStream;
+                this.videoElement.nativeElement.muted = true; // Ensure local preview is muted to prevent audio feedback
               }
               this.startFacePostureSimulation();
               this.startRecording(this.videoStream);
+
+              // Reuse this videoStream's audio track for the volume analyser
+              this.initAudioAnalyser(this.videoStream);
             } catch (err) {
               console.error('Failed to connect webcam feed with audio. Trying video-only feed.', err);
               try {
                 this.videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
                 if (this.videoElement && this.videoElement.nativeElement) {
                   this.videoElement.nativeElement.srcObject = this.videoStream;
+                  this.videoElement.nativeElement.muted = true; // Ensure local preview is muted
                 }
                 this.startFacePostureSimulation();
                 this.startRecording(this.videoStream);
+
+                // Get audio separately for the volume analyser since videoStream is video-only
+                try {
+                  const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                  this.initAudioAnalyser(micStream);
+                } catch (errAudio) {
+                  console.error('Audio analytics initialization bypassed (no audio device).');
+                }
               } catch (err2) {
                 console.error('Failed to connect video-only feed.', err2);
               }
             }
-          }
-
-          // Try starting microphone amplitude analyzer
-          try {
-            const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            this.initAudioAnalyser(micStream);
-          } catch (err) {
-            console.error('Audio analytics initialization bypassed.');
+          } else {
+            // Webcam is disabled, request only audio for the analyser
+            try {
+              const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              this.initAudioAnalyser(micStream);
+            } catch (err) {
+              console.error('Audio analytics initialization bypassed.');
+            }
           }
         } else {
           this.toastr.error('Error starting mock interview session.');
@@ -1031,7 +1047,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
         this.recordedChunks.push(event.data);
       }
     };
-    
+
     this.mediaRecorder.start(1000); // 1-second slices
   }
 
@@ -1047,7 +1063,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
       this.analyser = this.audioContext.createAnalyser();
       this.analyser.fftSize = 256;
       source.connect(this.analyser);
-      
+
       this.pollVolume();
     } catch (e) {
       console.error(e);
@@ -1086,7 +1102,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
       if (this.interviewStarted && !this.interviewFinished) {
         // Random eye contact shift
         this.eyeContactActive = Math.random() > 0.08;
-        
+
         // Random posture slump (5% chance)
         if (Math.random() > 0.95) {
           this.isSlouching = true;
@@ -1157,7 +1173,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
             transcriptParts.push(part);
           }
         }
-        
+
         const fullTranscript = transcriptParts.join(' ');
         if (fullTranscript) {
           this.chatInput = fullTranscript;
@@ -1186,7 +1202,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
           this.cdr.detectChanges();
         }
       };
-      
+
       this.recognition.onend = () => {
         // If isListening is still true, the user did not click stop. 
         // Restart speech recognition so pauses (no-speech) don't shut the microphone off.
@@ -1300,8 +1316,8 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
       this.recognition.stop();
     }
 
-    const studentAnswer = forceFinish 
-      ? 'I want to end this interview session early.' 
+    const studentAnswer = forceFinish
+      ? 'I want to end this interview session early.'
       : this.chatInput.trim();
 
     this.chatHistory.push({ role: 'user', content: studentAnswer });
@@ -1349,7 +1365,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
         if (result.isFinished) {
           this.interviewFinished = true;
           this.finalResult = result;
-          
+
           const hasRecording = this.mediaRecorder && this.mediaRecorder.state !== 'inactive';
           if (hasRecording) {
             this.mediaRecorder.onstop = () => {
@@ -1496,13 +1512,13 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
               r: {
                 angleLines: { color: gridColor },
                 grid: { color: gridColor },
-                pointLabels: { 
-                  color: textColor, 
-                  font: { 
+                pointLabels: {
+                  color: textColor,
+                  font: {
                     family: "'Inter', sans-serif",
                     size: 12,
                     weight: 'bold'
-                  } 
+                  }
                 },
                 ticks: { backdropColor: 'transparent', color: textColor, stepSize: 20 },
                 min: 0,
@@ -1591,7 +1607,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
       this.videoStream = null;
     }
     if (this.audioContext) {
-      this.audioContext.close().catch(() => {});
+      this.audioContext.close().catch(() => { });
       this.audioContext = null;
     }
   }
@@ -1608,7 +1624,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
     if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
       try {
         this.mediaRecorder.stop();
-      } catch (e) {}
+      } catch (e) { }
     }
     this.cleanupMediaTracks();
   }
@@ -1679,7 +1695,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
     // Store in class instance to prevent Chrome garbage-collecting the utterance mid-speech
     const utterance = new SpeechSynthesisUtterance(cleanText);
     this.currentUtterance = utterance;
-    
+
     // Choose the best matching natural/premium voice
     let langCode = 'en-US';
     if (this.interviewLanguage === 'Spanish') {
@@ -1687,24 +1703,24 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
     } else if (this.interviewLanguage === 'French') {
       langCode = 'fr-FR';
     }
-    
+
     const matchingVoices = this.voices.filter(v => v.lang.toLowerCase().replace('_', '-').startsWith(langCode.toLowerCase().split('-')[0]));
-    
+
     // Prioritize natural/neural/premium voices
-    const bestVoice = matchingVoices.find(v => 
-      v.name.toLowerCase().includes('google') || 
-      v.name.toLowerCase().includes('natural') || 
-      v.name.toLowerCase().includes('premium') || 
+    const bestVoice = matchingVoices.find(v =>
+      v.name.toLowerCase().includes('google') ||
+      v.name.toLowerCase().includes('natural') ||
+      v.name.toLowerCase().includes('premium') ||
       v.name.toLowerCase().includes('neural')
     ) || matchingVoices[0] || null;
 
     if (bestVoice) {
       utterance.voice = bestVoice;
     }
-    
+
     utterance.rate = 0.95; // Slightly slower for a professional, natural pace
     utterance.pitch = 1.0;
-    
+
     utterance.onend = () => {
       if (this.currentUtterance !== utterance) {
         return;
@@ -1719,7 +1735,7 @@ export class MockInterviewComponent implements OnInit, OnDestroy, AfterViewCheck
               recognitionLang = 'fr-FR';
             }
             this.recognition.lang = recognitionLang;
-            
+
             try {
               this.recognition.start();
               this.isListening = true;

@@ -26,11 +26,9 @@ import { ToastrService } from 'ngx-toastr';
           <div class="aws-cert-card h-100 d-flex flex-column position-relative">
             <!-- Badge Graphic (Hexagon) -->
             <div class="d-flex justify-content-center mb-4 mt-2">
-              <div class="cert-hexagon">
-                <div
-                  class="hex-content d-flex flex-column align-items-center justify-content-center h-100 text-center"
-                  *ngIf="getHexagonData(cert.courseName) as hexData"
-                >
+              <div *ngIf="getHexagonData(cert.courseName) as hexData" 
+                   [class]="'cert-hexagon ' + (hexData.isAws ? 'aws' : 'default')">
+                <div class="hex-content d-flex flex-column align-items-center justify-content-center h-100 text-center">
                   <!-- AWS Style -->
                   <ng-container *ngIf="hexData.isAws">
                     <div class="d-flex flex-column align-items-center mb-1">
@@ -69,22 +67,28 @@ import { ToastrService } from 'ngx-toastr';
                     >
                   </ng-container>
 
-                  <!-- Default Style -->
+                  <!-- Default Style (Premium Maroon & Gold) -->
                   <ng-container *ngIf="!hexData.isAws">
                     <div class="d-flex align-items-center mb-1 mt-1">
                       <span
                         class="text-white fw-bold me-1"
-                        style="font-size: 0.85rem; letter-spacing: -0.5px;"
+                        style="font-size: 0.75rem; letter-spacing: -0.5px; text-transform: uppercase;"
                         >{{ hexData.issuer }}</span
                       >
                       <i
-                        class="bi bi-patch-check-fill text-warning"
-                        style="font-size: 0.75rem;"
+                        class="bi bi-patch-check-fill"
+                        style="font-size: 0.75rem; color: #c5a059;"
                       ></i>
                     </div>
                     <span
-                      class="text-white fw-bold text-uppercase mt-2"
-                      style="font-size: 0.55rem; letter-spacing: 1.5px;"
+                      class="fw-bold text-white lh-sm"
+                      style="font-size: 0.78rem; max-width: 75px; text-wrap: balance;"
+                    >
+                      {{ hexData.title }}
+                    </span>
+                    <span
+                      class="text-warning mt-2 fw-bold text-uppercase"
+                      style="font-size: 0.45rem; letter-spacing: 1px; color: #c5a059 !important;"
                       >{{ hexData.subtitle }}</span
                     >
                   </ng-container>
@@ -198,17 +202,23 @@ import { ToastrService } from 'ngx-toastr';
       .aws-cert-card:hover {
         transform: translateY(-4px);
         box-shadow: var(--shadow-md);
+        border-color: #c5a059 !important;
       }
       .cert-hexagon {
         width: 95px;
         height: 110px;
-        background: #cbd5e1;
         position: relative;
         clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+      }
+      .cert-hexagon.aws {
+        background: linear-gradient(135deg, #ff9900, #ffc800);
+      }
+      .cert-hexagon.default {
+        background: linear-gradient(135deg, #c5a059, #b99128);
       }
       .cert-hexagon::before {
         content: '';
@@ -217,9 +227,14 @@ import { ToastrService } from 'ngx-toastr';
         left: 4px;
         right: 4px;
         bottom: 4px;
-        background: #232f3e;
         clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         z-index: 0;
+      }
+      .cert-hexagon.aws::before {
+        background: #232f3e;
+      }
+      .cert-hexagon.default::before {
+        background: linear-gradient(135deg, #7a1c1c, #4a1010);
       }
       .hex-content {
         z-index: 1;

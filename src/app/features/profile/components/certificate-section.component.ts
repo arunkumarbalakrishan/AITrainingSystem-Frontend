@@ -157,26 +157,26 @@ import { ToastrService } from 'ngx-toastr';
             <button class="btn-close btn-close-white" (click)="closePreview()"></button>
           </div>
           
-          <!-- Mock Certificate Layout -->
+          <!-- Mock Certificate Layout (Premium Maroon & Gold) -->
           <div class="certificate-mockup p-4 mb-3 position-relative overflow-hidden">
             <div class="cert-border"></div>
             <div class="cert-bg-graphic"></div>
             
-            <h6 class="text-uppercase text-secondary fw-semibold mt-3" style="letter-spacing: 2px; font-size: 0.65rem;">Certificate of Course Completion</h6>
+            <h6 class="text-uppercase fw-semibold mt-3" style="letter-spacing: 2px; font-size: 0.65rem; color: #c5a059;">Certificate of Course Completion</h6>
             <h4 class="text-white fw-bold my-3 text-shadow" style="font-family: serif; font-size: 1.5rem;">{{ selectedCert()?.courseName }}</h4>
-            <p class="text-secondary small italic px-3">This certifies that the user has successfully completed all evaluation modules and quizzes for the course path.</p>
+            <p class="text-secondary small italic px-3" style="font-size: 0.8rem; color: #94a3b8 !important;">This certifies that the user has successfully completed all evaluation modules and quizzes for the course path.</p>
             
-            <div class="d-flex justify-content-around align-items-center mt-4 pt-2 border-top border-light border-opacity-5">
+            <div class="d-flex justify-content-around align-items-center mt-4 pt-2 border-top border-light border-opacity-10">
               <div>
-                <small class="text-secondary d-block" style="font-size: 0.6rem;">COMPLETION DATE</small>
-                <span class="text-light fw-medium small">{{ selectedCert()?.completionDate }}</span>
+                <small class="text-secondary d-block" style="font-size: 0.6rem; color: #94a3b8;">COMPLETION DATE</small>
+                <span class="text-light fw-medium small" style="color: #f8fafc !important;">{{ selectedCert()?.completionDate }}</span>
               </div>
               <div class="px-2">
-                <i class="bi bi-shield-check text-primary" style="font-size: 2.5rem;"></i>
+                <i class="bi bi-award-fill" style="font-size: 2.5rem; color: #c5a059;"></i>
               </div>
               <div>
-                <small class="text-secondary d-block" style="font-size: 0.6rem;">CREDENTIAL ID</small>
-                <span class="text-light fw-medium small" style="font-family: monospace;">{{ selectedCert()?.certificateNumber }}</span>
+                <small class="text-secondary d-block" style="font-size: 0.6rem; color: #94a3b8;">CREDENTIAL ID</small>
+                <span class="text-light fw-medium small" style="font-family: monospace; color: #f8fafc !important;">{{ selectedCert()?.certificateNumber }}</span>
               </div>
             </div>
           </div>
@@ -384,8 +384,8 @@ import { ToastrService } from 'ngx-toastr';
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
     .certificate-mockup {
-      background: linear-gradient(135deg, #161b22, #0d1117);
-      border: 2px solid rgba(159, 239, 0, 0.2);
+      background: linear-gradient(135deg, #2b0a0a, #0d0404);
+      border: 2px solid #c5a059;
       border-radius: 12px;
       min-height: 220px;
     }
@@ -395,7 +395,7 @@ import { ToastrService } from 'ngx-toastr';
       left: 8px;
       right: 8px;
       bottom: 8px;
-      border: 1px dashed rgba(159, 239, 0, 0.15);
+      border: 1px dashed rgba(197, 160, 89, 0.35);
       border-radius: 8px;
       pointer-events: none;
     }
@@ -405,7 +405,7 @@ import { ToastrService } from 'ngx-toastr';
       right: 0;
       width: 150px;
       height: 150px;
-      background: radial-gradient(circle, rgba(159, 239, 0, 0.05) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(197, 160, 89, 0.04) 0%, transparent 70%);
       pointer-events: none;
     }
     .text-shadow {
@@ -466,8 +466,8 @@ export class CertificateSectionComponent implements OnInit, OnChanges {
   filteredCerts = computed(() => {
     const q = this.searchQuery.trim().toLowerCase();
     if (!q) return this.certificates;
-    return this.certificates.filter(c => 
-      c.courseName.toLowerCase().includes(q) || 
+    return this.certificates.filter(c =>
+      c.courseName.toLowerCase().includes(q) ||
       c.certificateNumber.toLowerCase().includes(q)
     );
   });
@@ -497,7 +497,7 @@ export class CertificateSectionComponent implements OnInit, OnChanges {
 
   downloadPdf(cert: any) {
     this.toastr.success(`Initiated secure PDF download for ${cert.certificateNumber}`);
-    
+
     // Simulate downloading PDF file
     const docText = `Verified LMS Certificate\n\nCourse: ${cert.courseName}\nCredential ID: ${cert.certificateNumber}\nCompletion Date: ${cert.completionDate}`;
     const blob = new Blob([docText], { type: 'text/plain' });

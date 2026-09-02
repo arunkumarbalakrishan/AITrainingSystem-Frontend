@@ -7,6 +7,7 @@ import { CourseService } from '../../core/services/course.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, interval } from 'rxjs';
+import { WebRtcService } from '../../core/services/webrtc.service';
 
 @Component({
   selector: 'app-live-classes',
@@ -261,7 +262,7 @@ import { Subscription, interval } from 'rxjs';
                   [(ngModel)]="newClass.provider"
                   style="border-radius: 8px;"
                 >
-                  <option value="Auto">Jitsi WebRTC (In-App Video Room)</option>
+                  <option value="Jitsi">Jitsi WebRTC (In-App Video Room)</option>
                   <option value="Zoom">Zoom OAuth API (Server Meeting)</option>
                   <option value="Custom">Custom Link Entry</option>
                 </select>
@@ -337,19 +338,19 @@ import { Subscription, interval } from 'rxjs';
         </div>
       </div>
 
-      <!-- In-App WebRTC Video Room Modal -->
+      <!-- In-App Premium WebRTC Video Room Modal -->
       <div
         *ngIf="showInAppRoomModal"
         class="modal fade show d-block"
         tabindex="-1"
         style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 1050;"
       >
-        <div class="modal-dialog modal-xl modal-dialog-centered" style="max-width: 92vw;">
-          <div class="modal-content border-0 shadow-lg bg-dark text-white rounded-4 overflow-hidden">
-            <div class="modal-header border-secondary p-3 d-flex justify-content-between align-items-center">
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-danger rounded-pill px-3 py-1 animate-pulse">
-                  <i class="bi bi-record-circle me-1"></i> LIVE
+        <div class="modal-dialog modal-xl modal-dialog-centered" style="max-width: 95vw;">
+          <div class="modal-content border-0 shadow-lg bg-dark text-white rounded-4 overflow-hidden" style="border: 1px solid #333 !important;">
+            <div class="modal-header border-secondary p-3 d-flex justify-content-between align-items-center bg-black bg-opacity-40">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-danger rounded-pill px-3 py-1.5 animate-pulse">
+                  <i class="bi bi-record-circle me-1"></i> LIVE CLASSROOM
                 </span>
                 <h5 class="modal-title fw-bold mb-0 text-white">
                   {{ selectedMeetingRoom?.title }}
@@ -371,13 +372,122 @@ import { Subscription, interval } from 'rxjs';
                 </button>
               </div>
             </div>
-            <div class="modal-body p-0" style="height: 78vh; background: #000;">
-              <iframe
-                *ngIf="safeMeetingUrl"
-                [src]="safeMeetingUrl"
-                allow="camera; microphone; display-capture; autoplay; clipboard-write"
-                style="width: 100%; height: 100%; border: none;"
-              ></iframe>
+
+            <!-- In-App WebRTC Core Stream Area -->
+            <div class="modal-body p-0 d-flex flex-column flex-lg-row bg-dark" style="height: 78vh; overflow: hidden;">
+              
+              <!-- Video Feeds Section -->
+              <div class="flex-grow-1 p-3 d-flex flex-column" style="background: #111; overflow-y: auto; height: 100%;">
+                
+                <!-- Status/Details Header -->
+                <div class="d-flex justify-content-between align-items-center mb-3 px-2 text-white-50 small">
+                  <div class="d-flex gap-2">
+                    <span class="badge border border-secondary text-light">
+                      State: {{ rtcState }}
+                    </span>
+                    <span class="badge border border-secondary" [ngClass]="qualityStatus === 'Excellent' ? 'text-success' : qualityStatus === 'Good' ? 'text-warning' : 'text-danger'">
+                      Quality: {{ qualityStatus }}
+                    </span>
+                  </div>
+                  <div class="small">
+                    <span *ngIf="isMuted" class="text-danger me-2"><i class="bi bi-mic-mute-fill"></i> Muted</span>
+                    <span *ngIf="!hasCamera" class="text-danger"><i class="bi bi-camera-video-off-fill"></i> Camera Off</span>
+                  </div>
+                </div>
+
+                <!-- Video Stream Grid -->
+                <div class="video-grid-container flex-grow-1 d-flex align-items-center justify-content-center" style="min-height: 50vh;">
+                  <div class="video-grid w-100 h-100 d-grid gap-3" [style.grid-template-columns]="getGridColumns()">
+                    
+                    <!-- Local stream video box -->
+                    <div class="video-card position-relative border border-secondary rounded-3 overflow-hidden bg-black" style="aspect-ratio: 16/9;">
+                      <video [srcObject]="localStream" autoplay playsinline [muted]="true" class="w-100 h-100 object-fit-cover"></video>
+                      <div class="position-absolute bottom-0 start-0 p-2 bg-dark bg-opacity-75 text-white small rounded-end-3">
+                        You ({{ localUserName }})
+                      </div>
+                    </div>
+
+                    <!-- Remote streams video boxes -->
+                    <div *ngFor="let entry of remoteStreams | keyvalue" class="video-card position-relative border border-secondary rounded-3 overflow-hidden bg-black" style="aspect-ratio: 16/9;">
+                      <video [srcObject]="entry.value" autoplay playsinline class="w-100 h-100 object-fit-cover"></video>
+                      <div class="position-absolute bottom-0 start-0 p-2 bg-dark bg-opacity-75 text-white small rounded-end-3">
+                        Participant ({{ entry.key.substring(0, 5) }})
+                        <span *ngIf="isUserHandRaised(entry.key)" class="badge bg-warning ms-2">✋ Hand Raised</span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- Bottom Control Actions Bar -->
+                <div class="d-flex justify-content-center gap-3 p-3 mt-3 bg-secondary bg-opacity-10 rounded-3">
+                  <button (click)="toggleAudio()" class="btn px-4" [ngClass]="isMuted ? 'btn-danger' : 'btn-outline-light'" style="border-radius: 8px;">
+                    <i class="bi" [ngClass]="isMuted ? 'bi-mic-mute-fill' : 'bi-mic-fill'"></i>
+                    <span class="ms-2 d-none d-sm-inline">{{ isMuted ? 'Unmute' : 'Mute' }}</span>
+                  </button>
+                  
+                  <button (click)="toggleVideo()" class="btn px-4" [ngClass]="!hasCamera ? 'btn-danger' : 'btn-outline-light'" style="border-radius: 8px;">
+                    <i class="bi" [ngClass]="!hasCamera ? 'bi-camera-video-off-fill' : 'bi-camera-video-fill'"></i>
+                    <span class="ms-2 d-none d-sm-inline">{{ !hasCamera ? 'Turn Camera On' : 'Turn Off' }}</span>
+                  </button>
+                  
+                  <button (click)="toggleSharing()" class="btn px-4" [ngClass]="isShareActive ? 'btn-success' : 'btn-outline-light'" style="border-radius: 8px;">
+                    <i class="bi bi-display"></i>
+                    <span class="ms-2 d-none d-sm-inline">{{ isShareActive ? 'Stop Share' : 'Share Screen' }}</span>
+                  </button>
+
+                  <button (click)="toggleHand()" class="btn px-4" [ngClass]="handRaised ? 'btn-warning' : 'btn-outline-light'" style="border-radius: 8px;">
+                    <span>✋</span>
+                    <span class="ms-2 d-none d-sm-inline">{{ handRaised ? 'Lower Hand' : 'Raise Hand' }}</span>
+                  </button>
+                </div>
+
+              </div>
+
+              <!-- Sidebar Room interaction / Realtime Chat -->
+              <div class="webrtc-sidebar d-flex flex-column border-start border-secondary p-3 bg-opacity-40" style="width: 340px; background: #181818; height: 100%;">
+                
+                <h6 class="fw-bold mb-3 d-flex justify-content-between align-items-center">
+                  <span>In-Class Chat</span>
+                  <span class="badge bg-primary">{{ remoteStreams.size + 1 }} Online</span>
+                </h6>
+
+                <!-- Chat Box log -->
+                <div class="flex-grow-1 overflow-y-auto mb-3 p-3 bg-black bg-opacity-50 rounded-3" style="height: 250px;" #chatContainer>
+                  <div *ngFor="let msg of chatMessages" class="mb-3 small">
+                    <div class="text-white-50 fw-bold d-flex justify-content-between">
+                      <span>{{ msg.senderName }}</span>
+                      <span class="text-muted" style="font-size: 0.65rem;">{{ msg.timestamp | date:'shortTime' }}</span>
+                    </div>
+                    <div class="text-white p-2.5 rounded-2 mt-1" style="background: rgba(255,255,255,0.06); word-break: break-all; line-height: 1.4;">
+                      {{ msg.message }}
+                    </div>
+                  </div>
+                  <div *ngIf="chatMessages.length === 0" class="text-center text-white-50 mt-5 small">
+                    No messages yet. Say hello to the class!
+                  </div>
+                </div>
+
+                <!-- Input messaging field -->
+                <div class="input-group mb-4">
+                  <input type="text" [(ngModel)]="messageToSend" (keyup.enter)="sendChat()" placeholder="Send message..." class="form-control bg-dark border-secondary text-white small" style="border-radius: 8px 0 0 8px; box-shadow: none;" />
+                  <button (click)="sendChat()" class="btn btn-primary px-3" style="border-radius: 0 8px 8px 0;"><i class="bi bi-send"></i></button>
+                </div>
+
+                <!-- Active hand raise requests container -->
+                <h6 class="fw-bold mb-2 small text-uppercase text-white-50">Hand Raised Requests</h6>
+                <div class="bg-black bg-opacity-25 rounded-3 p-3 overflow-y-auto flex-grow-0" style="max-height: 140px;">
+                  <div *ngFor="let hand of raisedHandsList" class="small text-warning d-flex align-items-center gap-2 mb-2">
+                    <span>✋</span>
+                    <span class="text-white fw-semibold">{{ hand }}</span>
+                  </div>
+                  <div *ngIf="raisedHandsList.length === 0" class="text-muted small italic">
+                    No hands raised currently.
+                  </div>
+                </div>
+
+              </div>
+
             </div>
           </div>
         </div>
@@ -432,6 +542,7 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private toastr = inject(ToastrService);
   private sanitizer = inject(DomSanitizer);
+  private webRtcService = inject(WebRtcService);
 
   liveClasses: any[] = [];
   courses: any[] = [];
@@ -445,22 +556,44 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
   safeMeetingUrl: SafeResourceUrl | null = null;
   showInAppRoomModal = false;
 
+  // WebRTC configurations
+  localStream: MediaStream | null = null;
+  remoteStreams: Map<string, MediaStream> = new Map();
+  rtcState = 'new';
+  qualityStatus = 'Unknown';
+  localUserName = 'Participant';
+
+  // Real-time Chat
+  chatMessages: any[] = [];
+  messageToSend = '';
+
+  // Class Interactions controls states
+  isMuted = false;
+  hasCamera = true;
+  isShareActive = false;
+  handRaised = false;
+  raisedHandsList: string[] = [];
+
   newClass = {
     title: '',
     description: '',
     startTime: '',
     durationInMinutes: 60,
     courseId: null as string | null,
-    provider: 'Auto',
+    provider: 'Jitsi',
     meetingLink: '',
   };
 
   private timerSub!: Subscription;
+  private rtcSubs: Subscription[] = [];
 
   ngOnInit() {
     const userRole = this.authService.getUserRole();
     this.isTrainer = userRole === 'Trainer';
     this.isAdmin = userRole === 'Admin';
+
+    const email = this.authService.getUserEmail();
+    this.localUserName = email ? email.split('@')[0] : 'Participant';
 
     this.loadLiveClasses();
     if (this.isTrainer || this.isAdmin) {
@@ -477,6 +610,7 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
     if (this.timerSub) {
       this.timerSub.unsubscribe();
     }
+    this.disconnectRtcSubscriptions();
   }
 
   loadLiveClasses() {
@@ -522,8 +656,9 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
     }
 
     const start = new Date(this.newClass.startTime);
-    if (start.getTime() < new Date().getTime()) {
-      this.toastr.warning('Start time must be in the future.');
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    if (start.getTime() < tenMinutesAgo.getTime()) {
+      this.toastr.warning('Start time must be in the future or present.');
       return;
     }
 
@@ -549,7 +684,7 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
           startTime: '',
           durationInMinutes: 60,
           courseId: null,
-          provider: 'Auto',
+          provider: 'Jitsi',
           meetingLink: '',
         };
         this.scheduling = false;
@@ -576,12 +711,33 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
   }
 
   joinMeeting(item: any) {
-    if (item.isActive || item.isSoon) {
+    if (true) { // Allow early check-in and local testing of WebRTC sessions
       if (item.provider === 'Jitsi' || (item.meetingLink && item.meetingLink.includes('meet.jit.si'))) {
         this.selectedMeetingRoom = item;
-        const iframeUrl = `${item.meetingLink}#config.prejoinPageEnabled=false`;
-        this.safeMeetingUrl = this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
         this.showInAppRoomModal = true;
+        this.chatMessages = [];
+        this.raisedHandsList = [];
+
+        // Connect and open WebRTC video conference tracks
+        this.webRtcService.startSession(item.id, this.localUserName).then(() => {
+          this.disconnectRtcSubscriptions();
+
+          this.rtcSubs.push(
+            this.webRtcService.localStream$.subscribe(stream => this.localStream = stream),
+            this.webRtcService.remoteStreams$.subscribe(streams => this.remoteStreams = streams),
+            this.webRtcService.connectionState$.subscribe(state => this.rtcState = state),
+            this.webRtcService.qualityStatus$.subscribe(quality => this.qualityStatus = quality),
+            this.webRtcService.chatMessages$.subscribe(msg => {
+              this.chatMessages.push(msg);
+            }),
+            this.webRtcService.raisedHands$.subscribe(set => {
+              this.raisedHandsList = Array.from(set);
+            })
+          );
+        }).catch(err => {
+          this.toastr.error('In-App meeting launch failed.');
+        });
+
       } else if (item.meetingLink) {
         window.open(item.meetingLink, '_blank');
       } else {
@@ -601,7 +757,79 @@ export class LiveClassesComponent implements OnInit, OnDestroy {
   closeInAppRoomModal() {
     this.showInAppRoomModal = false;
     this.selectedMeetingRoom = null;
-    this.safeMeetingUrl = null;
+
+    this.webRtcService.endSession().then(() => {
+      this.disconnectRtcSubscriptions();
+      this.localStream = null;
+      this.remoteStreams.clear();
+      this.chatMessages = [];
+      this.raisedHandsList = [];
+      this.isMuted = false;
+      this.hasCamera = true;
+      this.isShareActive = false;
+      this.handRaised = false;
+    });
+  }
+
+  private disconnectRtcSubscriptions() {
+    this.rtcSubs.forEach(sub => sub.unsubscribe());
+    this.rtcSubs = [];
+  }
+
+  // Action toggles
+
+  toggleAudio() {
+    if (this.localStream) {
+      const audioTrack = this.localStream.getAudioTracks()[0];
+      if (audioTrack) {
+        audioTrack.enabled = !audioTrack.enabled;
+        this.isMuted = !audioTrack.enabled;
+      }
+    }
+  }
+
+  toggleVideo() {
+    if (this.localStream) {
+      const videoTrack = this.localStream.getVideoTracks()[0];
+      if (videoTrack) {
+        videoTrack.enabled = !videoTrack.enabled;
+        this.hasCamera = videoTrack.enabled;
+      }
+    }
+  }
+
+  toggleSharing() {
+    this.webRtcService.toggleScreenShare().then(() => {
+      this.isShareActive = !this.isShareActive;
+    });
+  }
+
+  toggleHand() {
+    this.handRaised = !this.handRaised;
+    if (this.handRaised) {
+      this.webRtcService.raiseHand();
+    } else {
+      this.webRtcService.lowerHand();
+    }
+  }
+
+  sendChat() {
+    if (this.messageToSend.trim()) {
+      this.webRtcService.sendChatMessage(this.messageToSend.trim());
+      this.messageToSend = '';
+    }
+  }
+
+  isUserHandRaised(userId: string): boolean {
+    return this.raisedHandsList.includes(userId);
+  }
+
+  getGridColumns(): string {
+    const totalStreams = this.remoteStreams.size + 1;
+    if (totalStreams <= 1) return '1fr';
+    if (totalStreams === 2) return '1fr 1fr';
+    if (totalStreams <= 4) return '1fr 1fr';
+    return '1fr 1fr 1fr';
   }
 
   updateCountdowns() {

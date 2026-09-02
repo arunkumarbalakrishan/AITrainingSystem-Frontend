@@ -1157,7 +1157,7 @@ console.log('New count:', count());`;
   showDemoModal = false;
   demoModalActiveTab = 0;
   customChatInputText = '';
-  customDemoChats: Array<{sender: string, text: string}> = [];
+  customDemoChats: Array<{ sender: string, text: string }> = [];
   customDemoAiReply = '';
   isCustomDemoReplying = false;
 

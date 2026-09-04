@@ -32,7 +32,9 @@
     "pdfjs-dist": "^6.0.227",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.26.25",
+    "three": "^0.185.1",
     "tslib": "^2.3.0",
+    "vanta": "^0.5.24",
     "zone.js": "^0.16.2"
   },
   "devDependencies": {
@@ -40,6 +42,7 @@
     "@angular/cli": "^21.2.14",
     "@angular/compiler-cli": "^21.2.0",
     "@types/canvas-confetti": "^1.9.0",
+    "@types/three": "^0.185.4",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",

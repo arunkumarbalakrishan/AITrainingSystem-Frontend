@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, HostListener, signal, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, HostListener, signal, ElementRef, ViewChild, AfterViewInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,9 @@ import { ToastrService } from 'ngx-toastr';
 import { AnimationService } from '../../core/services/animation.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { ProfileService } from '../../core/services/profile.service';
+import * as THREE from 'three';
+// @ts-ignore
+import NET from 'vanta/dist/vanta.net.min';
 
 @Component({
   selector: 'app-home',
@@ -149,14 +152,12 @@ import { ProfileService } from '../../core/services/profile.service';
 
       <!-- Hero Section with Typewriter Heading and Floating Badges -->
       <section class="landing-hero">
+        <!-- Vanta NET Animated Background Canvas Container -->
+        <div #vantaContainer class="vanta-background"></div>
+
         <div class="landing-grid-overlay"></div>
         <div class="landing-skyline-glow"></div>
 
-        <!-- Floating Hero Chips representing active system logs -->
-        <div class="floating-hero-chip f-chip-1"><i class="bi bi-robot" style="color: #9FEF00"></i> AI Tutor active</div>
-        <div class="floating-hero-chip f-chip-2"><i class="bi bi-lightning-fill" style="color: #FFB800"></i> +15 XP Gained</div>
-        <div class="floating-hero-chip f-chip-3"><i class="bi bi-patch-check-fill" style="color: #00D26A"></i> Angular Signals Passed</div>
-        <div class="floating-hero-chip f-chip-4"><i class="bi bi-award-fill" style="color: #6c63ff"></i> Certificate Earned</div>
 
         <div class="container position-relative" style="z-index: 10;">
           <div class="landing-hero-logo">
@@ -1072,11 +1073,21 @@ import { ProfileService } from '../../core/services/profile.service';
   `]
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('vantaContainer', { static: false }) vantaContainer!: ElementRef;
+  private vantaEffect: any;
+
   private authService = inject(AuthService);
   private router = inject(Router);
   private toastr = inject(ToastrService);
   private animationService = inject(AnimationService);
   private themeService = inject(ThemeService);
+
+  constructor() {
+    effect(() => {
+      const isDark = this.themeService.isDarkMode();
+      this.updateVantaTheme(isDark);
+    });
+  }
 
   // Splash screen status
   isLoading = true;
@@ -1257,9 +1268,75 @@ console.log("XP Score:", calculateSignalsScore(12));`;
     // Find and observe reveal elements
     const revealElements = document.querySelectorAll('.reveal-on-scroll');
     revealElements.forEach(el => this.observer.observe(el));
+
+    // Initialize Vanta NET animated WebGL background effect
+    if (this.vantaContainer && this.vantaContainer.nativeElement) {
+      try {
+        this.vantaEffect = NET({
+          el: this.vantaContainer.nativeElement,
+          THREE: THREE,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          color: 0x9FEF00,
+          backgroundColor: 0x050505,
+          points: 10.00,
+          maxDistance: 20.00,
+          spacing: 22.00,
+          showDots: true
+        });
+
+        // Initial theme check and setup
+        const isDark = this.themeService.isDarkMode();
+        this.updateVantaTheme(isDark);
+      } catch (err) {
+        console.warn('Vanta NET background initialization fallback:', err);
+      }
+    }
+  }
+
+  private updateVantaTheme(isDark: boolean): void {
+    if (!this.vantaEffect) return;
+
+    const targetBg = isDark ? 0x050505 : 0xf8fafc;
+    const targetColor = isDark ? 0x9FEF00 : 0x65a30d;
+
+    try {
+      this.vantaEffect.setOptions({
+        backgroundColor: targetBg,
+        color: targetColor
+      });
+
+      if (this.vantaEffect.renderer && typeof this.vantaEffect.renderer.setClearColor === 'function') {
+        this.vantaEffect.renderer.setClearColor(targetBg);
+      }
+
+      if (this.vantaEffect.linesMesh && this.vantaEffect.linesMesh.material) {
+        // Disable vertex color lerping to background color so lines stay crisp lime green
+        this.vantaEffect.linesMesh.material.vertexColors = false;
+        this.vantaEffect.linesMesh.material.color = new THREE.Color(isDark ? 0x9FEF00 : 0x65a30d);
+        this.vantaEffect.linesMesh.material.opacity = isDark ? 0.65 : 0.55;
+        this.vantaEffect.linesMesh.material.transparent = true;
+        this.vantaEffect.linesMesh.material.blending = THREE.NormalBlending;
+        this.vantaEffect.linesMesh.material.needsUpdate = true;
+      }
+    } catch (e) {
+      // Safe fallback
+    }
   }
 
   ngOnDestroy(): void {
+    if (this.vantaEffect) {
+      try {
+        this.vantaEffect.destroy();
+      } catch (e) {
+        // Safe disposal fallback
+      }
+    }
     if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
     if (this.chatSimTimeout) clearTimeout(this.chatSimTimeout);
     if (this.testimonialInterval) clearInterval(this.testimonialInterval);

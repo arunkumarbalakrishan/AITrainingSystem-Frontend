@@ -2209,6 +2209,31 @@ html:not([data-theme="dark"]) .gradient-orb {
   text-align: center;
   overflow: hidden;
   z-index: 2;
+  background-color: #050505;
+}
+
+.vanta-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.vanta-background canvas {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.landing-hero>.container,
+.landing-hero .floating-hero-chip {
+  position: relative;
+  z-index: 10;
 }
 
 .landing-grid-overlay {
@@ -2301,50 +2326,6 @@ html:not([data-theme="dark"]) .gradient-orb {
   position: relative;
 }
 
-/* Floating Hero Chips */
-.floating-hero-chip {
-  position: absolute;
-  background: rgba(20, 20, 20, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 8px 16px;
-  border-radius: 99px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #ffffff;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  animation: float-hero 6s ease-in-out infinite;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.f-chip-1 {
-  top: 25%;
-  left: 8%;
-  animation-delay: 0s;
-}
-
-.f-chip-2 {
-  top: 45%;
-  right: 6%;
-  animation-delay: 1.5s;
-}
-
-.f-chip-3 {
-  top: 70%;
-  left: 12%;
-  animation-delay: 3s;
-}
-
-.f-chip-4 {
-  top: 20%;
-  right: 15%;
-  animation-delay: 4.5s;
-}
 
 @keyframes float-hero {
 

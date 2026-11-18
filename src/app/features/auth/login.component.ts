@@ -237,6 +237,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.error('Google Login Error details:', err);
         console.error('Error Body:', err.error);
 
+        // If user simply closed the popup, don't show a jarring toast error
+        if (err?.code === 'auth/popup-closed-by-user' || err?.code === 'auth/cancelled-popup-request') {
+          this.sadState.set(false);
+          this.cdr.detectChanges();
+          return;
+        }
+
         let msg = 'Google Login failed. Please try again.';
         if (err.error) {
           if (typeof err.error === 'string') {

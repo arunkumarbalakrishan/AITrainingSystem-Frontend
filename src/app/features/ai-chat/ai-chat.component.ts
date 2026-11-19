@@ -703,10 +703,12 @@ export class AiChatComponent implements AfterViewChecked {
         }
         this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err: any) => {
+        console.error('AI Tutor request failed:', err);
+        const serverMsg = err?.error?.message || err?.message || 'An error occurred while connecting to the AI service. Please try again later.';
         this.chatHistory.push({
           role: 'assistant',
-          content: 'An error occurred while connecting to the AI service. Please try again later.',
+          content: serverMsg,
         });
         this.aiLoading = false;
         this.cdr.detectChanges();
